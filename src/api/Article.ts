@@ -32,3 +32,10 @@ export const getArticlePagingAPI = (data?: QueryData) => Request<Paginate<Articl
     ...data?.pagination
   }
 })
+
+// 批量导出文章
+export const batchArticleDataAPI = (data: React.Key[]) =>
+  Request('POST', `/article/export`, {
+    data: data,
+    responseType: 'blob',
+  });

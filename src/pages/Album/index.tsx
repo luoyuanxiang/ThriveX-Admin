@@ -162,10 +162,10 @@ export default () => {
    * 处理滚动事件，实现下拉加载更多
    * @param e 滚动事件对象
    */
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+  const handleScroll = async (e: React.UIEvent<HTMLDivElement>) => {
     const { scrollTop, scrollHeight, clientHeight } = e.currentTarget
     if (scrollHeight - scrollTop - clientHeight < 50 && hasMore && !loading && currentAlbum.id) {
-      getImageList(currentAlbum.id, true)
+      await getImageList(currentAlbum.id, true)
     }
   }
 
@@ -173,9 +173,9 @@ export default () => {
    * 打开相册
    * @param album 相册数据
    */
-  const openAlbum = (album: AlbumCate) => {
+  const openAlbum = async (album: AlbumCate) => {
     setCurrentAlbum(album)
-    getImageList(album.id!)
+    await getImageList(album.id!)
   }
 
   // 组件挂载时获取相册列表
@@ -224,7 +224,7 @@ export default () => {
       }
 
       setOpenAlbumModal(false);
-      getAlbumList();
+      await getAlbumList();
       setAlbumFormLoading(false);
     } catch (error) {
       setAlbumFormLoading(false);
@@ -266,7 +266,7 @@ export default () => {
       message.success("🎉 上传照片成功");
       setIsAddAlbumModalOpen(false);
       uploadForm.resetFields();
-      getImageList(currentAlbum.id!);
+      await getImageList(currentAlbum.id!);
       setUploadLoading(false);
     } catch (error) {
       setUploadLoading(false);

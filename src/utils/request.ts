@@ -45,13 +45,35 @@ instance.interceptors.request.use(
 // 响应拦截
 instance.interceptors.response.use(
     (res: AxiosResponse) => {
+      const contentDisposition = res.headers['content-disposition']
+      console.log(res)
+      const contentType = res.headers['content-type']
+      if (contentDisposition && contentDisposition.includes('attachment') && res.data instanceof Blob) {
+        // 提取文件名
+        const fileName = extractFileName(contentDisposition)
+        // 触发文件下载
+        const blob = new Blob([res.data], { type: contentType })
+        const url = window.URL.createObjectURL(blob)
+        const link = document.createElement('a')
+        link.href = url
+        link.setAttribute('download', fileName)
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        window.URL.revokeObjectURL(url)
+        // 返回处理后的响应，避免后续处理错误
+        return {
+          ...res,
+          data: { success: true, message: '🎉 导出成功' },
+        }
+      }
+
         // 只要code不等于200, 就相当于响应失败
         if (res.data?.code !== 200) {
             notification.error({
                 message: '响应异常',
                 description: res.data?.message || "未知错误",
             })
-
             return Promise.reject(res.data);
         }
 
@@ -98,5 +120,32 @@ const Request = <T>(method: string, url: string, reqParams?: object) => {
         cancelToken: source.token
     });
 };
+
+// 提取文件名函数
+function extractFileName(contentDisposition: string) {
+  let fileName = ''
+  // 处理filename*编码的情况（如UTF-8）
+  const filenameRegex = /filename\*?=([^;]+)/gi
+  let matches = filenameRegex.exec(contentDisposition)
+  if (matches && matches[1]) {
+    fileName = matches[1]
+    // 去除可能的前后引号
+    fileName = fileName.replace(/^['"]|['"]$/g, '')
+    // 处理UTF-8编码的文件名（例如：filename*=UTF-8''example.txt）
+    if (fileName.startsWith("UTF-8''")) {
+      fileName = decodeURIComponent(fileName.split("UTF-8''")[1])
+    }
+  } else {
+    // 回退到普通filename处理
+    const fallbackRegex = /filename=([^;]+)/gi
+    matches = fallbackRegex.exec(contentDisposition)
+    if (matches && matches[1]) {
+      fileName = matches[1].replace(/^['"]|['"]$/g, '')
+    }
+  }
+  // 移除路径（确保只保留文件名）
+  fileName = fileName.replace(/^.*[\\/]/, '')
+  return fileName
+}
 
 export default Request;
