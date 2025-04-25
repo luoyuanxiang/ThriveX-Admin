@@ -156,6 +156,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               name: "文章管理"
             },
             {
+              to: "/assistant",
+              path: "assistant",
+              name: "助手管理"
+            },
+            {
               to: "/record",
               path: "record",
               name: "说说管理"

@@ -75,7 +75,6 @@ const EditorMD = ({ value, onChange }: Props) => {
             </Spin>
 
             <Material
-                uploadDir="article"
                 open={isMaterialModalOpen}
                 onClose={() => setIsMaterialModalOpen(false)}
                 onSelect={(urls) => {

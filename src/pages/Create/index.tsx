@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { Button, Card, Drawer, Dropdown, MenuProps, message, Spin } from 'antd';
 
 import Title from '@/components/Title';
+import useAssistant from '@/hooks/useAssistant';
 import Editor from './components/Editor';
 import PublishForm from './components/PublishForm';
 
@@ -92,86 +93,112 @@ export default () => {
     };
   }, [content])
 
-  // 解析接口数据
-  const parsingData = async (command: string) => {
-    try {
-      setLoading(true)
+  const {
+    assistants,
+    selectedAssistant,
+    callAssistant
+  } = useAssistant();
 
-      const res = await fetch(`/ai/v1/chat/completions`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${import.meta.env.VITE_AI_APIPASSWORD}`
-        },
-        body: JSON.stringify({
-          model: import.meta.env.VITE_AI_MODEL,
-          messages: [{
-            role: "user",
-            content: `${command}${content}`
-          }],
-          stream: true
-        })
-      });
-
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder("utf-8");
-
-      let receivedText = "";
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        receivedText += decoder.decode(value, { stream: true });
-
-        // 处理每一块数据
-        const lines = receivedText.split("\n");
-        for (let i = 0; i < lines.length - 1; i++) {
-          const line = lines[i].trim();
-          if (line.startsWith("data:")) {
-            const jsonString = line.substring(5).trim();
-            if (jsonString !== "[DONE]") {
-              const data = JSON.parse(jsonString);
-              console.log("Received chunk:", data.choices[0].delta.content);
-              setContent((content) => content + data.choices[0].delta.content);
-              // 在这里处理每一块数据
-            } else {
-              console.log("Stream finished.");
-              return;
-            }
-          }
-        }
-
-        // 保留最后一行未处理的数据
-        receivedText = lines[lines.length - 1];
-
-        setLoading(false)
-      }
-    } catch (error) {
-      setLoading(false)
-    }
-  }
-
-  // AI功能
+  // 助手功能菜单
   const items: MenuProps['items'] = [
     {
       key: '1',
-      label: 'AI 续写',
+      label: '续写',
       onClick: async () => {
-        parsingData("帮我续写：")
+        try {
+          setLoading(true);
+          const reader = await callAssistant([
+            { 
+              role: "system", 
+              content: "你是 Kimi，由 Moonshot AI 提供的人工智能助手，你更擅长中文和英文的对话。你会为用户提供安全，有帮助，准确的回答。"
+            },
+            {
+              role: "user",
+              content: `帮我续写：${content}`
+            }
+          ], { stream: true, temperature: 0.3 });
+          
+          if (!reader) return;
+
+          let fullResponse = '';
+          const decoder = new TextDecoder();
+          
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            const chunk = decoder.decode(value);
+            const lines = chunk.split('\n').filter(line => line.trim());
+            
+            for (const line of lines) {
+              if (line.startsWith('data: ') && !line.includes('[DONE]')) {
+                try {
+                  const data = JSON.parse(line.replace('data: ', ''));
+                  if (data.choices[0]?.delta?.content) {
+                    fullResponse += data.choices[0].delta.content;
+                    setContent(content + fullResponse);
+                  }
+                } catch (e) {
+                  console.error('Error parsing stream chunk:', e);
+                }
+              }
+            }
+          }
+        } catch (error) {
+          message.error('调用助手失败');
+        } finally {
+          setLoading(false);
+        }
       },
     },
     {
       key: '2',
-      label: 'AI 优化',
+      label: '优化',
       onClick: async () => {
-        parsingData("帮我优化该文章，意思不变：")
-      },
-    },
-    {
-      key: '3',
-      label: 'AI 生成',
-      onClick: async () => {
-        parsingData("")
+        try {
+          setLoading(true);
+          const reader = await callAssistant([
+            { 
+              role: "system", 
+              content: "你是 Kimi，由 Moonshot AI 提供的人工智能助手，你更擅长中文和英文的对话。你会为用户提供安全，有帮助，准确的回答。"
+            },
+            {
+              role: "user",
+              content: `帮我优化该文章，意思不变：${content}`
+            }
+          ], { stream: true, temperature: 0.3 });
+          
+          if (!reader) return;
+
+          let fullResponse = '';
+          const decoder = new TextDecoder();
+          
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            const chunk = decoder.decode(value);
+            const lines = chunk.split('\n').filter(line => line.trim());
+            
+            for (const line of lines) {
+              if (line.startsWith('data: ') && !line.includes('[DONE]')) {
+                try {
+                  const data = JSON.parse(line.replace('data: ', ''));
+                  if (data.choices[0]?.delta?.content) {
+                    fullResponse += data.choices[0].delta.content;
+                    setContent(fullResponse);
+                  }
+                } catch (e) {
+                  console.error('Error parsing stream chunk:', e);
+                }
+              }
+            }
+          }
+        } catch (error) {
+          message.error('调用助手失败');
+        } finally {
+          setLoading(false);
+        }
       },
     },
   ];
@@ -180,8 +207,18 @@ export default () => {
     <div>
       <Title value="创作">
         <div className='flex items-center space-x-4 w-[360px]'>
-          <Dropdown.Button menu={{ items }}>
-            <AiOutlineEdit className='text-base' /> 创作神器
+          <Dropdown.Button 
+            menu={{ items }}
+            onClick={() => {
+              if (assistants.length === 0) {
+                message.error('请先在助手管理中添加助手');
+              }
+            }}
+          >
+            <AiOutlineEdit className='text-base' /> 
+            {selectedAssistant 
+              ? assistants.find((a: { id: string | null }) => a.id === selectedAssistant)?.name || '选择助手'
+              : '选择助手'}
           </Dropdown.Button>
 
           <Button className='w-full flex justify-between' onClick={saveBtn} >

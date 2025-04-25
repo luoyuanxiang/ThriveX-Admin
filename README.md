@@ -11,22 +11,21 @@
 ![](https://bu.dusays.com/2024/11/25/67445b7df3742.png)
 
 
-项目预览：[https://liuyuyang.net/](https://liuyuyang.net/)
+## 项目部署
 
-项目官网：[https://thrivex.liuyuyang.net/](https://thrivex.liuyuyang.net/)
+[部署文档-Admin管理后台前端-容器方式](DockerInstall.md)
 
-项目文档：[https://docs.liuyuyang.net/](https://docs.liuyuyang.net/)
-
-
-# 后续开发计划
-
-![image](https://github.com/user-attachments/assets/c8acfe33-8376-43d6-a2da-f4bfd046fc39)
+[部署文档-Admin管理后台前端-手动部署](HandMovement.md)
 
 
 
 # 🎉 ThriveX 现代化博客管理系统
 
 🎉 `ThriveX` 是一个年轻、高颜值、全开源、永不收费的现代化博客管理系统，它是一个基于 `NextJS` + `Spring Boot` 的产物，所有技术栈都是目前市面上最主流的
+
+
+🗂️ **项目预览：** [https://liuyuyang.net/](https://liuyuyang.net/)
+
 
 
 🛠️ **技术架构：**
@@ -58,108 +57,6 @@
 
 ![数据分析](https://bu.dusays.com/2024/09/17/66e97035726ae.png)
 ![文件系统](https://bu.dusays.com/2024/09/17/66e97031cd456.png)
-
-
-
-## 项目运行
-
-最近比较忙，过段时间写一篇详细的项目部署教程，这里先简单教大家在本地跑起来
-
-**前端 or 控制端**
-
-环境：Nodejs18 及以上
-
-```
-npm i
-npm run dev
-```
-
-后台账号：`admin`   密码：`123456`
-
-
-
-在控制端项目根目录下创建 `.env` 文件，添加如下配置
-
-```bash
-# 百度统计相关配置
-VITE_BAIDU_TONGJI_KEY=
-VITE_BAIDU_TONGJI_SECRET_KEY=
-VITE_BAIDU_TONGJI_SITE_ID=
-VITE_BAIDU_TONGJI_ACCESS_TOKEN=
-VITE_BAIDU_TONGJI_REFRESH_TOKEN=
-
-# 星火AI相关配置
-VITE_AI_APIPassword=
-VITE_AI_MODEL=
-```
-
-百度接口申请地址：[https://tongji.baidu.com/api/manual/Chapter2/openapi.html](https://tongji.baidu.com/api/manual/Chapter2/openapi.html)
-
-星火大模型接口申请地址：[https://www.xfyun.cn/](https://www.xfyun.cn/)
-
-
-
-**后端**
-
-环境：Java8 + MySQL8
-
-安装 `maven` 依赖，配置 `application-dev.yml` 相关的信息
-
-```yml
-lyy:
-  email:
-    host: smtp.qq.com
-    port: 465
-    username: 你的邮箱账号
-    password: 你的邮箱授权码
-
-  oss:
-    accessKey: 七牛云的accessKey
-    secretKey: 七牛云的secretKey
-    bucket: thrive
-```
-
-导入后端根目录的 `ThriveX.sql` 数据库文件，最后运行项目即可
-
-
-
-## 项目部署
-
-前端：[https://docs.liuyuyang.net/docs/项目部署/前端.html](https://docs.liuyuyang.net/docs/项目部署/前端.html)
-控制端：[https://docs.liuyuyang.net/docs/项目部署/控制端.html](https://docs.liuyuyang.net/docs/项目部署/控制端.html)
-后端：[https://docs.liuyuyang.net/docs/项目部署/后端.html](https://docs.liuyuyang.net/docs/项目部署/后端.html)
-
-
-
-## 项目结构
-
-```
-├── public // 存放公共资源
-├── src // 核心源码
-│   ├── api // 所有API接口
-│   ├── app
-│   │   ├── error.tsx // 自定义错误页
-│   │   ├── favicon.ico // 项目图标
-│   │   ├── layout.tsx // 网站布局
-│   │   ├── loading.tsx // 自定义加载页
-│   │   ├── not-found.tsx // 自定义404页
-│   │   ├── page.tsx // 首页
-│   ├── assets // 存放项目所有资源
-│   │   ├── font
-│   │   ├── image
-│   │   └── svg
-│   ├── components // 公共组件
-│   ├── stores // 数据全局共享
-│   ├── styles // 全局样式
-│   ├── types // 全局类型
-│   └── utils // 通用方法
-├── package-lock.json
-├── package.json
-├── postcss.config.mjs
-├── tailwind.config.ts
-└── tsconfig.json
-```
-
 
 
 
@@ -282,10 +179,3 @@ lyy:
 ## 项目后续的开发计划
 
 ![PixPin_2024-11-11_18-03-02.png](https://bu.dusays.com/2024/11/11/6731d7056b4ee.png)
-
-
-
-## 官方交流群
-
-![image](https://github.com/user-attachments/assets/f6256565-872c-4ea4-bc85-d6d29c636a99)
-

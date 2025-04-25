@@ -200,7 +200,6 @@ export default () => {
             </div>
 
             <Material
-                uploadDir="config"
                 open={isMaterialModalOpen}
                 onClose={() => {
                     setIsMaterialModalOpen(false);

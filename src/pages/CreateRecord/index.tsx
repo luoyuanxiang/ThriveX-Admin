@@ -189,7 +189,6 @@ export default () => {
 
             <Material
                 maxCount={4 - imageList.length}
-                uploadDir="record"
                 open={isMaterialModalOpen}
                 onClose={() => setIsMaterialModalOpen(false)}
                 onSelect={(url) => {

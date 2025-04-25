@@ -274,7 +274,8 @@ export default () => {
         "swiper": "轮播图管理",
         "tag": "标签管理",
         "wall": "留言管理",
-        "permission": "权限管理"
+        "permission": "权限管理",
+        "assistant": "助手管理",
     };
 
     // 让n改变 触发Transfer重新渲染

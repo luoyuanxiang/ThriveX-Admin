@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
-import { Image, Card, Space, Spin, message, Popconfirm, Button, Drawer, Divider, Modal, Form, Input } from 'antd'
+import { Image, Card, Space, Spin, message, Popconfirm, Button, Drawer, Divider, Modal, Form, Input, DatePicker } from 'antd'
 import Title from '@/components/Title'
 import { getAlbumCateListAPI, getImagesByAlbumIdAPI, delAlbumCateDataAPI, addAlbumCateDataAPI, editAlbumCateDataAPI } from '@/api/Album'
 import { delAlbumImageDataAPI, addAlbumImageDataAPI } from '@/api/AlbumImage'
@@ -10,6 +10,7 @@ import errorImg from '../File/image/error.png'
 import albumSvg from '../File/image/file.svg'
 import Material from '@/components/Material'
 import Masonry from "react-masonry-css";
+import TextArea from 'antd/es/input/TextArea'
 import "./index.scss"
 
 // Masonry布局的响应式断点配置
@@ -84,6 +85,7 @@ export default () => {
    */
   const getImageList = async (albumId: number, isLoadMore = false) => {
     if (loadingRef.current) return
+    
     try {
       loadingRef.current = true
       setLoading(true)
@@ -254,8 +256,11 @@ export default () => {
       setUploadLoading(true);
 
       await addAlbumImageDataAPI({
-        ...values,
-        cateId: currentAlbum.id!
+        name: values.name,
+        description: values.description,
+        image: values.image,
+        cateId: currentAlbum.id!,
+        createTime: values.date.valueOf()
       });
 
       message.success("🎉 上传照片成功");
@@ -526,6 +531,13 @@ export default () => {
             <Input placeholder="请输入照片名称" />
           </Form.Item>
 
+          <Form.Item
+            name="description"
+            label="照片描述"
+          >
+            <TextArea rows={2} placeholder="请输入照片描述" />
+          </Form.Item>
+
           <div>
             <Form.Item
               name="image"
@@ -542,12 +554,19 @@ export default () => {
               <Input placeholder="请输入照片链接" prefix={<PictureOutlined />} addonAfter={<CloudUploadOutlined className='text-xl cursor-pointer' onClick={() => setIsUploadModalOpen(true)} />} className='customizeAntdInputAddonAfter' />
             </Form.Item>
           </div>
+
+          <Form.Item
+            name="date"
+            label="照片日期"
+            rules={[{ required: true, message: '请选择照片日期' }]}
+          >
+            <DatePicker className='w-full' placeholder="请选择照片日期" />
+          </Form.Item>
         </Form>
       </Modal>
 
       {/* Material组件 */}
       <Material
-        uploadDir="album"
         open={isUploadModalOpen}
         onClose={() => setIsUploadModalOpen(false)}
         onSelect={(url) => {

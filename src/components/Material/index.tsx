@@ -22,13 +22,12 @@ const breakpointColumnsObj = {
 interface Props {
   multiple?: boolean
   maxCount?: number
-  uploadDir: string
   open: boolean
   onClose: () => void
   onSelect?: (files: string[]) => void
 }
 
-export default ({ multiple, uploadDir = 'default', open, onClose, onSelect, maxCount }: Props) => {
+export default ({ multiple, open, onClose, onSelect, maxCount }: Props) => {
   // 加载状态
   const [loading, setLoading] = useState(false)
   // 当前页码
@@ -105,11 +104,6 @@ export default ({ multiple, uploadDir = 'default', open, onClose, onSelect, maxC
 
       // 判断是否还有更多数据
       setHasMore(data.result.length === 15)
-
-      // 首次加载且没有数据时显示提示
-      if (!fileList.length && !data.result.length && !isLoadMore) {
-        message.error("该目录中没有文件")
-      }
 
       setLoading(false)
       loadingRef.current = false
@@ -207,7 +201,7 @@ export default ({ multiple, uploadDir = 'default', open, onClose, onSelect, maxC
     >
       <div className='flex justify-between mb-4 px-4'>
         {
-          !fileList.length
+          !fileList.length && !dirName
             ? <PiKeyReturnFill className='text-4xl text-[#E0DFDF] cursor-pointer' />
             : <PiKeyReturnFill className='text-4xl text-primary cursor-pointer' onClick={reset} />
         }
@@ -223,7 +217,7 @@ export default ({ multiple, uploadDir = 'default', open, onClose, onSelect, maxC
           onScroll={handleScroll}
         >
           {
-            fileList.length
+            fileList.length || !fileList.length && dirName
               ? (
                 <Masonry
                   breakpointCols={breakpointColumnsObj}
@@ -272,7 +266,7 @@ export default ({ multiple, uploadDir = 'default', open, onClose, onSelect, maxC
       {/* 文件上传弹窗 */}
       <FileUpload
         multiple={multiple}
-        dir={uploadDir}
+        dir={dirName}
         open={isUploadModalOpen}
         onSuccess={onUpdateSuccess}
         onCancel={() => setIsUploadModalOpen(false)}

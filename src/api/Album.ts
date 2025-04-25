@@ -1,5 +1,5 @@
 import Request from '@/utils/request'
-import { AlbumCate } from '@/types/app/album'
+import { AlbumCate, AlbumImage } from '@/types/app/album'
 
 // 新增相册
 export const addAlbumCateDataAPI = (data: AlbumCate) => Request("POST", "/album/cate", { data })
@@ -28,7 +28,7 @@ export const getAlbumCatePagingAPI = (data?: QueryData) => Request<Paginate<Albu
 
 // 获取指定相册中的所有照片
 export const getImagesByAlbumIdAPI = (id: number, page: number = 1, size: number = 10) =>
-  Request<Paginate<any[]>>("GET", `/album/cate/${id}/images`, {
+  Request<Paginate<AlbumImage[]>>("GET", `/album/cate/${id}/images`, {
     params: {
       page,
       size

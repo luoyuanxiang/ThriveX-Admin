@@ -7,6 +7,7 @@ import { RuleObject } from "antd/es/form";
 
 import { addArticleDataAPI, editArticleDataAPI } from '@/api/Article'
 import { getCateListAPI } from '@/api/Cate'
+import useAssistant from '@/hooks/useAssistant';
 import { addTagDataAPI, getTagListAPI } from '@/api/Tag'
 
 import { Cate } from "@/types/app/cate";
@@ -200,95 +201,170 @@ const PublishForm = ({ data, closeModel }: Props) => {
         createTime: dayjs(new Date())
     }
 
-    return (
-        <div>
-            <Form
-                form={form}
-                name="basic"
-                size="large"
-                layout="vertical"
-                onFinish={onSubmit}
-                autoComplete="off"
-                initialValues={initialValues}
-            >
-                <Form.Item label="文章标题" name="title" rules={[{ required: true, message: "请输入文章标题" }]}>
-                    <Input placeholder="请输入文章标题" />
-                </Form.Item>
+  const { callAssistant } = useAssistant();
+  const [generating, setGenerating] = useState(false);
 
-                <Form.Item label="文章封面" name="cover" rules={[{ validator: validateURL }]}>
-                    <Input placeholder="请输入文章封面" />
-                </Form.Item>
+  // 调用助手API生成标题和简介
+  const generateTitleAndDescription = async () => {
+    try {
+      setGenerating(true);
+      
+      const content = data.content || '';
+      if (!content) {
+        message.error('请先输入文章内容');
+        return;
+      }
 
-                <Form.Item label="文章简介" name="description">
-                    <TextArea autoSize={{ minRows: 2, maxRows: 5 }} showCount placeholder="请输入文章简介" />
-                </Form.Item>
+      const prompt = `请根据以下文章内容生成一个合适的标题和简短的简介：
+文章内容：
+${content}
 
-                <Form.Item label="选择分类" name="cateIds" rules={[{ required: true, message: '请选择文章分类' }]}>
-                    <Cascader
-                        options={cateList}
-                        maxTagCount="responsive"
-                        multiple
-                        fieldNames={{ label: "name", value: "id" }}
-                        placeholder="请选择文章分类"
-                        className="w-full"
-                    />
-                </Form.Item>
+要求：
+1. 标题要简洁有力，不超过20个字
+2. 简介要概括文章主要内容，不超过100字
+3. 返回格式为JSON对象，包含title和description字段`;
 
-                <Form.Item label="选择标签" name="tagIds">
-                    <Select
-                        allowClear
-                        mode="tags"
-                        options={tagList}
-                        fieldNames={{ label: 'name', value: 'id' }}
-                        filterOption={(input, option) => !!option?.name.includes(input)}
-                        placeholder="请选择文章标签"
-                        className="w-full"
-                    />
-                </Form.Item>
+      const response = await callAssistant([
+        { 
+          role: "system", 
+          content: "你是 Kimi，由 Moonshot AI 提供的人工智能助手，你更擅长中文和英文的对话。你会为用户提供安全，有帮助，准确的回答。"
+        },
+        { role: "user", content: prompt }
+      ], { max_tokens: 200, temperature: 0.3 });
 
-                <Form.Item label="选择发布时间" name="createTime">
-                    <DatePicker showTime placeholder="选择文章发布时间" className="w-full" />
-                </Form.Item>
+      if (response) {
+          const result = response.choices[0]?.message?.content?.trim();
+          if (result) {
+            try {
+              let jsonStr = result;
+              if (jsonStr.startsWith('```json')) {
+                jsonStr = jsonStr.replace(/```json/g, '').replace(/```/g, '').trim();
+              }
+              
+              const { title, description } = JSON.parse(jsonStr);
+              form.setFieldsValue({ 
+                title: title || '',
+                description: description || '' 
+              });
+              message.success('标题和简介生成成功');
+            } catch (e) {
+              console.error('Failed to parse response:', e);
+              message.error('解析生成结果失败，请检查助手返回格式');
+            }
+        } else {
+          message.error('生成失败，请重试');
+        }
+      }
+    } catch (error) {
+      message.error('调用助手失败');
+    } finally {
+      setGenerating(false);
+    }
+  };
 
-                <Form.Item label="是否置顶" name={["config", "top"]} valuePropName="checked">
-                    <Switch />
-                </Form.Item>
+  return (
+    <div>
+      <Form
+        form={form}
+        name="basic"
+        size="large"
+        layout="vertical"
+        onFinish={onSubmit}
+        autoComplete="off"
+        initialValues={initialValues}
+      >
+        <Form.Item label="文章标题" name="title" rules={[{ required: true, message: "请输入文章标题" }]}>
+          <Input placeholder="请输入文章标题" />
+        </Form.Item>
 
-                <Form.Item label="状态" name={["config", "status"]}>
-                    <Radio.Group>
-                        <Radio value="default">正常</Radio>
-                        <Radio value="no_home">不在首页显示</Radio>
-                        <Radio value="hide">全站隐藏</Radio>
-                    </Radio.Group>
-                </Form.Item>
+        <Form.Item label="文章简介" name="description">
+          <TextArea 
+            autoSize={{ minRows: 2, maxRows: 5 }} 
+            showCount 
+            placeholder="请输入文章简介" 
+          />
+        </Form.Item>
 
-                <Form.Item label="是否加密" name={["config", "isEncrypt"]} valuePropName="checked">
-                    <Switch onChange={(checked: boolean) => setIsEncryptEnabled(checked)} />
-                </Form.Item>
+        <Form.Item>
+          <Button 
+            type="primary" 
+            onClick={generateTitleAndDescription}
+            loading={generating}
+          >
+            一键生成标题和简介
+          </Button>
+        </Form.Item>
 
-                {isEncryptEnabled && (
-                    <Form.Item
-                        label="访问密码"
-                        name={["config", "password"]}
-                        rules={[{ required: isEncryptEnabled, message: '请输入访问密码' }]}
-                    >
-                        <Input.Password placeholder="请输入访问密码" />
-                    </Form.Item>
-                )}
+        <Form.Item label="文章封面" name="cover" rules={[{ validator: validateURL }]}>
+          <Input placeholder="请输入文章封面" />
+        </Form.Item>
 
-                <Form.Item className="!mb-0">
-                    <Button type="primary" htmlType="submit" loading={btnLoading} className="w-full">{(id && !isDraftParams) ? "编辑文章" : "发布文章"}</Button>
-                </Form.Item>
+        <Form.Item label="选择分类" name="cateIds" rules={[{ required: true, message: '请选择文章分类' }]}>
+          <Cascader
+            options={cateList}
+            maxTagCount="responsive"
+            multiple
+            fieldNames={{ label: "name", value: "id" }}
+            placeholder="请选择文章分类"
+            className="w-full"
+          />
+        </Form.Item>
 
-                {/* 草稿和编辑状态下不再显示保存草稿按钮 */}
-                {((isDraftParams && id) || !id) && (
-                    <Form.Item className="!mt-2 !mb-0">
-                        <Button className="w-full" onClick={() => form.validateFields().then(values => onSubmit(values, true))}>{isDraftParams ? '保存' : '保存为草稿'}</Button>
-                    </Form.Item>
-                )}
-            </Form>
-        </div>
-    );
+        <Form.Item label="选择标签" name="tagIds">
+          <Select
+            allowClear
+            mode="tags"
+            options={tagList}
+            fieldNames={{ label: 'name', value: 'id' }}
+            filterOption={(input, option) => !!option?.name.includes(input)}
+            placeholder="请选择文章标签"
+            className="w-full"
+          />
+        </Form.Item>
+
+        <Form.Item label="选择发布时间" name="createTime">
+          <DatePicker showTime placeholder="选择文章发布时间" className="w-full" />
+        </Form.Item>
+
+        <Form.Item label="是否置顶" name={["config", "top"]} valuePropName="checked">
+          <Switch />
+        </Form.Item>
+
+        <Form.Item label="状态" name={["config", "status"]}>
+          <Radio.Group>
+            <Radio value="default">正常</Radio>
+            <Radio value="no_home">不在首页显示</Radio>
+            <Radio value="hide">全站隐藏</Radio>
+          </Radio.Group>
+        </Form.Item>
+
+        <Form.Item label="是否加密" name={["config", "isEncrypt"]} valuePropName="checked">
+          <Switch onChange={(checked: boolean) => setIsEncryptEnabled(checked)} />
+        </Form.Item>
+
+        {isEncryptEnabled && (
+          <Form.Item
+            label="访问密码"
+            name={["config", "password"]}
+            rules={[{ required: isEncryptEnabled, message: '请输入访问密码' }]}
+          >
+            <Input.Password placeholder="请输入访问密码" />
+          </Form.Item>
+        )}
+
+        <Form.Item className="!mb-0">
+          <Button type="primary" htmlType="submit" loading={btnLoading} className="w-full">{(id && !isDraftParams) ? "编辑文章" : "发布文章"}</Button>
+        </Form.Item>
+
+        {/* 草稿和编辑状态下不再显示保存草稿按钮 */}
+        {((isDraftParams && id) || !id) && (
+          <Form.Item className="!mt-2 !mb-0">
+            <Button className="w-full" onClick={() => form.validateFields().then(values => onSubmit(values, true))}>{isDraftParams ? '保存' : '保存为草稿'}</Button>
+          </Form.Item>
+        )}
+      </Form>
+    </div>
+  );
 };
 
 export default PublishForm;

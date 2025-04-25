@@ -27,6 +27,7 @@ import Decycle from "@/pages/Decycle";
 import Record from "@/pages/Record";
 import Oss from "@/pages/Oss";
 import Album from "@/pages/Album";
+import Assistant from "@/pages/Assistant";
 
 import PageTitle from "../PageTitle";
 
@@ -67,6 +68,7 @@ export default () => {
         { path: "/file", title: "文件管理", component: <File /> },
         { path: "/iter", title: "项目更新记录", component: <Iterative /> },
         { path: "/work", title: "工作台", component: <Work /> },
+        { path: "/assistant", title: "助手管理", component: <Assistant /> },
     ];
 
     const [routes, setRoutes] = useState<typeof routesAll | null>(null);

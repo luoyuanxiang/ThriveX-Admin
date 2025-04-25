@@ -8,6 +8,8 @@ export interface AlbumCate {
 export interface AlbumImage {
   id?: number;
   name: string;
+  description: string;
   image: string;
   cateId: number;
+  createTime: number;
 }
