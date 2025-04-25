@@ -330,6 +330,10 @@ ${content}
           <Switch />
         </Form.Item>
 
+        <Form.Item label="是否开启评论" name={["config", "comment"]} valuePropName="checked">
+          <Switch />
+        </Form.Item>
+
         <Form.Item label="状态" name={["config", "status"]}>
           <Radio.Group>
             <Radio value="default">正常</Radio>

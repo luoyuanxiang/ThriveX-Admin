@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Form, Input, Button, message } from 'antd';
+import { Form, Input, Button, message, Radio } from 'antd';
 import { editConfigDataAPI } from '@/api/Project';
 import { Web } from '@/types/app/project'
 import { useWebStore } from '@/stores';
@@ -39,6 +39,24 @@ export default () => {
                 initialValues={web}
                 className="w-full lg:w-[500px] md:ml-10"
             >
+              <Form.Item name="confetti" label="是否开启礼花">
+                <Radio.Group
+                  value="confetti"
+                  options={[
+                    { value: 'true', label: '开启' },
+                    { value: 'false', label: '关闭' },
+                  ]}
+                />
+              </Form.Item>
+              <Form.Item label="是否全局开启评论" name="globalComment">
+                <Radio.Group
+                  value="globalComment"
+                  options={[
+                    { value: 'true', label: '开启' },
+                    { value: 'false', label: '关闭' },
+                  ]}
+                />
+              </Form.Item>
                 <Form.Item
                     label="网站名称"
                     name="title"

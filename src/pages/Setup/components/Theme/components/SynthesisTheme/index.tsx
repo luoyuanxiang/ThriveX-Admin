@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { notification, Divider, Input, Alert, Button, Form } from 'antd';
+import { notification, Divider, Input, Alert, Button, Form, Radio } from 'antd';
 import { PictureOutlined, CloudUploadOutlined } from '@ant-design/icons';
 import { editConfigDataAPI, getConfigDataAPI } from '@/api/Project';
 import { Theme } from '@/types/app/project';
@@ -37,6 +37,7 @@ export default () => {
                 social: data.social,
                 covers: data.covers ? JSON.parse(data.covers).join("\n") : '',
                 reco_article: data.reco_article ? JSON.parse(data.reco_article).join("\n") : '',
+                lantern: data.lantern
             });
 
             setLoading(false);
@@ -94,6 +95,15 @@ export default () => {
 
             <div className='w-full lg:w-[500px] md:ml-10'>
                 <Form form={form} onFinish={editThemeData} layout="vertical">
+                  <Form.Item name="lantern" label="是否开启红灯笼">
+                    <Radio.Group
+                      value="lantern"
+                      options={[
+                        { value: 'true', label: '开启' },
+                        { value: 'false', label: '关闭' },
+                      ]}
+                    />
+                  </Form.Item>
                     <Divider orientation="left">亮色主题 Logo</Divider>
                     <Form.Item name="light_logo" label="亮色主题 Logo">
                         <Input
