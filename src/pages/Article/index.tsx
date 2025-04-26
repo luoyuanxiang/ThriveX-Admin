@@ -9,7 +9,7 @@ import {
   Form,
   Input,
   Select,
-  DatePicker,
+  // DatePicker,
   message,
 } from 'antd';
 import { titleSty } from '@/styles/sty';
@@ -49,7 +49,7 @@ export default () => {
   const [current, setCurrent] = useState<number>(1);
   const [articleList, setArticleList] = useState<Article[]>([]);
   const [openFile, setOpenFile] = useState<boolean>(false);
-  const { RangePicker } = DatePicker;
+  // const { RangePicker } = DatePicker;
 
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
@@ -70,7 +70,6 @@ export default () => {
       // @ts-ignore
       message.success(data.message);
     } catch (error) {
-      console.error(error)
       message.error('❌ 导出失败');
     }
     setTimeout(() => {
@@ -193,15 +192,34 @@ export default () => {
       sorter: (a: Article, b: Article) => a.comment! - b.comment!,
     },
     {
+      title: '是否开启评论',
+      dataIndex: 'config',
+      key: 'config',
+      align: 'center',
+      render: (config: Config) => (
+        <span style={config.comment ? { color: '#2db7f5' } : { color: '#f50' }}>
+          {config.comment ? '是' : '否'}
+        </span>
+      ),
+    },
+    {
       title: '状态',
       dataIndex: 'config',
       key: 'config',
       align: 'center',
       render: (config: Config) =>
-        (config.status === 'default' && <span>正常</span>) ||
-        (config.status === 'no_home' && <span>不在首页显示</span>) ||
-        (config.status === 'hide' && <span>隐藏</span>) ||
-        (config.password.trim().length && <span>文章加密</span>),
+        (config.status === 'default' && (
+          <span style={{ color: '#2db7f5' }}>正常</span>
+        )) ||
+        (config.status === 'no_home' && (
+          <span style={{ color: '#1d5670' }}>不在首页显示</span>
+        )) ||
+        (config.status === 'hide' && (
+          <span style={{ color: '#2df587' }}>隐藏</span>
+        )) ||
+        (config.password.trim().length && (
+          <span style={{ color: '#f50' }}>文章加密</span>
+        )),
     },
     {
       title: '发布时间',
@@ -330,14 +348,13 @@ export default () => {
             />
           </Form.Item>
 
-          <Form.Item
-            label="时间范围"
-            name="createTime"
-            className="min-w-[250px]"
-          >
-            <RangePicker placeholder={['选择起始时间', '选择结束时间']} />
-          </Form.Item>
-
+          {/*<Form.Item*/}
+          {/*  label="时间范围"*/}
+          {/*  name="createTime"*/}
+          {/*  className="min-w-[250px]"*/}
+          {/*>*/}
+          {/*  <RangePicker placeholder={['选择起始时间', '选择结束时间']} />*/}
+          {/*</Form.Item>*/}
           <Form.Item className="pr-6">
             <Button type="primary" htmlType="submit">
               查询
