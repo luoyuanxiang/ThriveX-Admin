@@ -1,0 +1,17 @@
+version: '3.7'
+services:
+  dashboard:
+    image: dashboard
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - VITE_PROJECT_API=http://192.168.101.100:9999/api
+        - VITE_VERSION=2.4.5
+        - VITE_BAIDU_TONGJI_SITE_ID=
+        - VITE_BAIDU_TONGJI_ACCESS_TOKEN=
+        - VITE_AI_APIPASSWORD=
+        - VITE_AI_MODEL=lite
+        - VITE_GAODE_WEB_API=
+    ports:
+        - "9000:80"
