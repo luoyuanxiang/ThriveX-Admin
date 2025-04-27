@@ -23,6 +23,7 @@ export interface Web {
   footer: string;
   confetti: string;
   globalComment: string;
+  icp: string;
 }
 
 export type ArticleLayout = 'classics' | 'card' | 'waterfall' | '';

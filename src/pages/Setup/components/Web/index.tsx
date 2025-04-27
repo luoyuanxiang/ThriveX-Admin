@@ -111,6 +111,12 @@ export default () => {
                 >
                     <Input placeholder="记录前端、Python、Java点点滴滴" />
                 </Form.Item>
+              <Form.Item
+                label="ICP"
+                name="icp"
+              >
+                <Input placeholder="备案号，留空则不显示" />
+              </Form.Item>
 
                 <Form.Item>
                     <Button type="primary" htmlType="submit" loading={loading} block>保存</Button>
