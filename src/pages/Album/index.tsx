@@ -12,6 +12,7 @@ import Material from '@/components/Material'
 import Masonry from "react-masonry-css";
 import TextArea from 'antd/es/input/TextArea'
 import "./index.scss"
+import { downloadFile } from '@/utils'
 
 // Masonry布局的响应式断点配置
 const breakpointColumnsObj = {
@@ -137,21 +138,11 @@ export default () => {
    * 下载照片
    * @param data 要下载的照片数据
    */
-  const onDownloadImage = (data: any) => {
+  const onDownloadImage = async (data: any) => {
+
     try {
       setDownloadLoading(true)
-      fetch(data.image)
-        .then((response) => response.blob())
-        .then((blob) => {
-          const url = URL.createObjectURL(new Blob([blob]));
-          const link = document.createElement<'a'>('a');
-          link.href = url;
-          link.download = data.name;
-          document.body.appendChild(link);
-          link.click();
-          URL.revokeObjectURL(url);
-          link.remove();
-        });
+      await downloadFile(data.image, '')
       setDownloadLoading(false)
     } catch (error) {
       setDownloadLoading(false)
