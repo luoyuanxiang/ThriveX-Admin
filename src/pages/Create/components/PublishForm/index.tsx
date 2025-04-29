@@ -146,11 +146,13 @@ const PublishForm = ({ data, closeModel }: Props) => {
                 message.success("🎉 编辑成功")
             } else {
                 if (!isDraftParams) {
-                    await addArticleDataAPI({
+
+                  await addArticleDataAPI({
                         id,
                         ...values,
                         content: data.content,
                         tagIds,
+                        // @ts-ignore
                         config: {
                             isDraft: isDraft ? 1 : 0,
                             isDel: 0,

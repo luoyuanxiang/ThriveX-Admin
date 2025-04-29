@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import dayjs from 'dayjs';
 import { Spin } from 'antd';
+import { getBaiduStatisticsAPI } from '@/api/BaiduStatistics.ts';
+import { BaiduStatistics } from '@/types/app/baiduStatistics.ts';
 
 interface ChartThreeState {
   series: number[];
@@ -51,41 +53,47 @@ const options: ApexOptions = {
 };
 
 export default () => {
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
 
-  const [result, setResult] = useState({ newVisitors: 0, oldVisitors: 0 })
-  const [date, setDate] = useState(dayjs(new Date()).format("YYYY/MM/DD"));
+  const [result, setResult] = useState({ newVisitors: 0, oldVisitors: 0 });
+  const [date] = useState(dayjs(new Date()).format('YYYY/MM/DD'));
 
   const [state, setState] = useState<ChartThreeState>({
     series: [0, 0],
   });
 
   const getDataList = async () => {
-    setLoading(true)
+    setLoading(true);
 
     try {
-      const siteId = import.meta.env.VITE_BAIDU_TONGJI_SITE_ID;
-      const token = import.meta.env.VITE_BAIDU_TONGJI_ACCESS_TOKEN;
+      const res = await getBaiduStatisticsAPI();
+      const baidu: BaiduStatistics = res.data;
+      const siteId = baidu.siteId;
+      const token = baidu.accessToken;
 
-      const response = await fetch(`/baidu/rest/2.0/tongji/report/getData?access_token=${token}&site_id=${siteId}&start_date=${date}&end_date=${date}&metrics=new_visitor_count%2Cnew_visitor_ratio&method=trend%2Ftime%2Fa&gran=day&area=`);
+      const response = await fetch(
+        `/baidu/rest/2.0/tongji/report/getData?access_token=${token}&site_id=${siteId}&start_date=${date}&end_date=${date}&metrics=new_visitor_count%2Cnew_visitor_ratio&method=trend%2Ftime%2Fa&gran=day&area=`,
+      );
       const data = await response.json();
       const { result } = data;
 
-      const newVisitors = result.items[1][0][1] !== "--" ? result.items[1][0][1] : 0
-      const oldVisitors = result.items[1][0][1] !== "--" ? 100 - result.items[1][0][1] : 0
+      const newVisitors =
+        result.items[1][0][1] !== '--' ? result.items[1][0][1] : 0;
+      const oldVisitors =
+        result.items[1][0][1] !== '--' ? 100 - result.items[1][0][1] : 0;
 
-      setState({ series: [newVisitors, oldVisitors] })
-      setResult({ newVisitors, oldVisitors })
+      setState({ series: [newVisitors, oldVisitors] });
+      setResult({ newVisitors, oldVisitors });
     } catch (error) {
-      setLoading(false)
+      setLoading(false);
     }
 
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
   useEffect(() => {
-    getDataList()
-  }, [])
+    getDataList();
+  }, []);
 
   return (
     <div className="sm:px-7.5 col-span-12 rounded-lg border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark xl:col-span-4">
@@ -100,7 +108,11 @@ export default () => {
 
         <div className="mb-2">
           <div id="chartThree" className="mx-auto flex justify-center">
-            <ReactApexChart options={options} series={state.series} type="donut" />
+            <ReactApexChart
+              options={options}
+              series={state.series}
+              type="donut"
+            />
           </div>
         </div>
 

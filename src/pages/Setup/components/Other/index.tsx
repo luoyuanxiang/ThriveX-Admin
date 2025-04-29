@@ -1,29 +1,17 @@
 import { useState } from "react";
 import { Segmented } from "antd";
 import { HiOutlineMail } from "react-icons/hi";
-import Email from './components/Email'
+import BaiduStatistics from './components/BaiduStatistics'
 
 type Tab = "email" | "statis" | "storage" | string
 
 export default () => {
-    const [tab, setTab] = useState<Tab>("email")
+    const [tab, setTab] = useState<Tab>("statis")
 
     const tabList = [
         {
-            label: "邮箱配置",
-            value: "email",
-            icon: <HiOutlineMail />,
-            className: "[&>div]:flex [&>div]:items-center [&>div]:!px-4"
-        },
-        {
-            label: "统计配置",
+            label: "百度统计",
             value: "statis",
-            icon: <HiOutlineMail />,
-            className: "[&>div]:flex [&>div]:items-center [&>div]:!px-4"
-        },
-        {
-            label: "存储配置",
-            value: "storage",
             icon: <HiOutlineMail />,
             className: "[&>div]:flex [&>div]:items-center [&>div]:!px-4"
         }
@@ -38,7 +26,7 @@ export default () => {
                 className="ml-10"
             />
 
-            {tab === "email" && <Email />}
+            {tab === "statis" && <BaiduStatistics />}
         </div>
     )
 }
