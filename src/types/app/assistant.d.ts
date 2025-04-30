@@ -1,5 +1,5 @@
 export interface Assistant {
-  id: string;
+  id: number;
   name: string;
   baseUrl: string;
   apiKey: string;

@@ -11,7 +11,7 @@ export const instance = axios.create({
     // 项目API根路径
     baseURL,
     // 请求超时的时间
-    timeout: 10000,
+    timeout: 1000000,
 });
 
 // 用于取消请求
@@ -46,7 +46,6 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
     (res: AxiosResponse) => {
       const contentDisposition = res.headers['content-disposition']
-      console.log(res)
       const contentType = res.headers['content-type']
       if (contentDisposition && contentDisposition.includes('attachment') && res.data instanceof Blob) {
         // 提取文件名
@@ -67,16 +66,6 @@ instance.interceptors.response.use(
           data: { success: true, message: '🎉 导出成功' },
         }
       }
-
-        // 只要code不等于200, 就相当于响应失败
-        if (res.data?.code !== 200) {
-            notification.error({
-                message: '响应异常',
-                description: res.data?.message || "未知错误",
-            })
-            return Promise.reject(res.data);
-        }
-
         return res.data;
     },
     (err: AxiosError) => {
