@@ -86,6 +86,7 @@ export default () => {
                 >
                     <Input placeholder="https://liuyuyang.net/logo.png" />
                 </Form.Item>
+              <img src={form.getFieldValue('avatar')} alt="" className="w-1/3 mt-4 rounded" />
 
                 <Form.Item
                     label="介绍"

@@ -104,27 +104,6 @@ export default () => {
                       ]}
                     />
                   </Form.Item>
-                    <Divider orientation="left">亮色主题 Logo</Divider>
-                    <Form.Item name="light_logo" label="亮色主题 Logo">
-                        <Input
-                            prefix={<PictureOutlined />}
-                            addonAfter={<UploadBtn type="light_logo" />}
-                            size='large'
-                            placeholder="请输入亮色Logo地址"
-                        />
-                    </Form.Item>
-                    <img src={form.getFieldValue('light_logo')} alt="" className="w-1/3 mt-4 rounded" />
-
-                    <Divider orientation="left">暗色主题 Logo</Divider>
-                    <Form.Item name="dark_logo" label="暗色主题 Logo">
-                        <Input
-                            prefix={<PictureOutlined />}
-                            addonAfter={<UploadBtn type="dark_logo" />}
-                            size='large'
-                            placeholder="请输入暗色Logo地址"
-                        />
-                    </Form.Item>
-                    <img src={form.getFieldValue('dark_logo')} alt="" className="w-1/3 mt-4 rounded" />
 
                     <Divider orientation="left">首页背景图</Divider>
                     <Form.Item name="swiper_image" label="首页背景图">
