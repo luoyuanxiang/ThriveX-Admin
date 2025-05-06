@@ -96,7 +96,7 @@ export default () => {
                     path="/login"
                     element={
                         <>
-                            <PageTitle title="ThriveX | 现代化博客管理系统" />
+                            <PageTitle title="墨韵云阁 | 现代化博客管理系统" />
                             <Login />
                         </>
                     }
@@ -116,7 +116,7 @@ export default () => {
                         path={path}
                         element={
                             <>
-                                <PageTitle title={`Thrive - ${title}`} />
+                                <PageTitle title={`墨韵云阁 - ${title}`} />
                                 {component}
                             </>
                         }

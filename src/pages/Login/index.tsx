@@ -49,7 +49,7 @@ export default () => {
         <div className="w-screen h-screen flex justify-center items-center">
             <div className="overflow-hidden relative w-[400px] h-[380px] rounded-lg bg-white shadow-[4px_6px_200px_200px_rgba(121,122,243,0.1)]">
                 <div className="flex flex-col justify-center items-center h-25 bg-primary text-white">
-                    <h3 className="text-3xl">Thrive</h3>
+                    <h3 className="text-3xl">墨韵云阁</h3>
                     <p className="text-gray-300 mt-2">现代化博客管理系统</p>
                 </div>
 
