@@ -6,13 +6,15 @@ import CardDataStats from '@/components/CardDataStats';
 
 import {
   AiOutlineEye,
+  AiOutlineFieldTime,
   AiOutlineMeh,
   AiOutlineStock,
-  AiOutlineFieldTime,
 } from 'react-icons/ai';
 import dayjs from 'dayjs';
 import { getBaiduStatisticsAPI } from '@/api/BaiduStatistics.ts';
 import { BaiduStatistics } from '@/types/app/baiduStatistics.ts';
+import ChartTwo from '@/pages/Dashboard/components/Stats/components/NewOldVisitors/ChartTwo.tsx';
+import ChatCard from '@/components/Chat/ChatCard.tsx';
 
 export default () => {
   const [loading, setLoading] = useState(false);
@@ -152,8 +154,8 @@ export default () => {
       <div className="rounded-lg mt-2 grid grid-cols-12 gap-2">
         <VisitorsStatisChat />
         <NewOldVisitors />
-        {/* <ChartTwo />
-                <ChatCard /> */}
+        <ChartTwo />
+        <ChatCard />
       </div>
     </Spin>
   );

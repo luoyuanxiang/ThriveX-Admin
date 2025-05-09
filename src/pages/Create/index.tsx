@@ -12,7 +12,7 @@ import { getArticleDataAPI } from '@/api/Article';
 import { BiSave } from 'react-icons/bi';
 import { AiOutlineEdit, AiOutlineSend } from 'react-icons/ai';
 import { titleSty } from '@/styles/sty';
-import { processDocument, getAssistantListAPI } from '@/api/Assistant.ts';
+import { getAssistantListAPI, processDocument } from '@/api/Assistant.ts';
 import { Assistant } from '@/types/app/assistant';
 
 export default () => {

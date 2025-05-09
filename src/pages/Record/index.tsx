@@ -4,7 +4,7 @@ import { titleSty } from '@/styles/sty'
 import Title from '@/components/Title';
 import { Link } from 'react-router-dom';
 
-import { delRecordDataAPI, getRecordListAPI } from '@/api/Record';
+import { delRecordDataAPI, getRecordPagingAPI } from '@/api/Record';
 import type { Record } from '@/types/app/record';
 
 import dayjs from 'dayjs';
@@ -22,12 +22,35 @@ export default () => {
   const [form] = Form.useForm();
   const { RangePicker } = DatePicker;
 
-  const getRecordList = async () => {
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 10,
+    total: 0,
+  });
+
+  const getRecordList = async (current: number, pageSize: number) => {
     try {
       setLoading(true);
-
-      const { data } = await getRecordListAPI();
-      setRecordList(data as Record[]);
+      const values = form.getFieldsValue();
+      const query = {
+        key: values.content ? values.content : null,
+        startDate: values.createTime && values.createTime[0].valueOf() + null,
+        endDate: values.createTime && values.createTime[1].valueOf() + null
+      }
+      const { data } = await getRecordPagingAPI({
+        query: query,
+        pagination: {
+          current,
+          size: pageSize
+        }
+      });
+      setRecordList(data.records);
+      setPagination({
+        ...pagination,
+        current: data.current,
+        pageSize: data.size,
+        total: data.total,
+      });
 
       setLoading(false);
     } catch (error) {
@@ -36,7 +59,7 @@ export default () => {
   };
 
   useEffect(() => {
-    getRecordList()
+    getRecordList(1, 10)
   }, []);
 
   const delRecordData = async (id: number) => {
@@ -44,7 +67,7 @@ export default () => {
       setBtnLoading(true);
 
       await delRecordDataAPI(id);
-      getRecordList();
+      await getRecordList(1, 10);
       form.resetFields()
       notification.success({ message: '🎉 删除说说成功' })
 
@@ -52,6 +75,12 @@ export default () => {
     } catch (error) {
       setBtnLoading(false);
     }
+  };
+
+  // 处理分页变化
+  const handleTableChange = async (pagination: any) => {
+    const pager = { ...pagination };
+    await getRecordList(pager.current, pager.pageSize);
   };
 
   const columns = [
@@ -119,23 +148,8 @@ export default () => {
     },
   ];
 
-  const onFilterSubmit = async (values: FilterForm) => {
-    try {
-      setLoading(true);
-
-      const query = {
-        key: values.content,
-        startDate: values.createTime && values.createTime[0].valueOf() + '',
-        endDate: values.createTime && values.createTime[1].valueOf() + ''
-      }
-
-      const { data } = await getRecordListAPI({ query });
-      setRecordList(data);
-
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-    }
+  const onFilterSubmit = async (_: FilterForm) => {
+    await getRecordList(1, 10)
   }
 
   return (
@@ -167,8 +181,14 @@ export default () => {
           scroll={{ x: 'max-content' }}
           pagination={{
             position: ['bottomCenter'],
-            defaultPageSize: 8,
+            showSizeChanger: true,
+            showTitle: true,
+            showTotal(total, _) {
+              return `共 ${total} 条数据`;
+            },
+            ...pagination,
           }}
+          onChange={handleTableChange}
         />
       </Card>
     </div>

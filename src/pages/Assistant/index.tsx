@@ -8,16 +8,16 @@ import {
   Modal,
   Popconfirm,
 } from 'antd';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import Title from '@/components/Title';
 import {
-  getAssistantListAPI,
-  editAssistantDataAPI,
-  delAssistantDataAPI,
-  setDefaultAssistantDataAPI,
   addAssistantDataAPI,
+  delAssistantDataAPI,
+  editAssistantDataAPI,
+  getAssistantListAPI,
   processDocument,
+  setDefaultAssistantDataAPI,
 } from '@/api/Assistant.ts';
 import { Assistant } from '@/types/app/assistant';
 

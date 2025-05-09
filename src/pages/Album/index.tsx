@@ -1,40 +1,72 @@
-import { useEffect, useState, useRef } from 'react'
-import { Image, Card, Space, Spin, message, Popconfirm, Button, Drawer, Divider, Modal, Form, Input, DatePicker } from 'antd'
-import Title from '@/components/Title'
-import { getAlbumCateListAPI, getImagesByAlbumIdAPI, delAlbumCateDataAPI, addAlbumCateDataAPI, editAlbumCateDataAPI } from '@/api/Album'
-import { delAlbumImageDataAPI, addAlbumImageDataAPI } from '@/api/AlbumImage'
-import { AlbumCate } from '@/types/app/album'
-import { PiKeyReturnFill } from "react-icons/pi";
-import { DeleteOutlined, DownloadOutlined, RotateLeftOutlined, RotateRightOutlined, SwapOutlined, UndoOutlined, ZoomInOutlined, ZoomOutOutlined, EditOutlined, PictureOutlined, CloudUploadOutlined } from '@ant-design/icons';
-import errorImg from '../File/image/error.png'
-import albumSvg from '../File/image/file.svg'
-import Material from '@/components/Material'
-import Masonry from "react-masonry-css";
-import TextArea from 'antd/es/input/TextArea'
-import "./index.scss"
-import { downloadFile } from '@/utils'
+import { useEffect, useRef, useState } from 'react';
+import {
+  Button,
+  Card,
+  DatePicker,
+  Divider,
+  Drawer,
+  Form,
+  Image,
+  Input,
+  message,
+  Modal,
+  Popconfirm,
+  Space,
+  Spin,
+} from 'antd';
+import Title from '@/components/Title';
+import {
+  addAlbumCateDataAPI,
+  delAlbumCateDataAPI,
+  editAlbumCateDataAPI,
+  getAlbumCateListAPI,
+  getImagesByAlbumIdAPI,
+} from '@/api/Album';
+import { addAlbumImageDataAPI, delAlbumImageDataAPI } from '@/api/AlbumImage';
+import { AlbumCate } from '@/types/app/album';
+import { PiKeyReturnFill } from 'react-icons/pi';
+import {
+  CloudUploadOutlined,
+  DeleteOutlined,
+  DownloadOutlined,
+  EditOutlined,
+  PictureOutlined,
+  RotateLeftOutlined,
+  RotateRightOutlined,
+  SwapOutlined,
+  UndoOutlined,
+  ZoomInOutlined,
+  ZoomOutOutlined,
+} from '@ant-design/icons';
+import errorImg from '../File/image/error.png';
+import albumSvg from '../File/image/file.svg';
+import Material from '@/components/Material';
+import Masonry from 'react-masonry-css';
+import TextArea from 'antd/es/input/TextArea';
+import './index.scss';
+import { downloadFile } from '@/utils';
 
 // Masonry布局的响应式断点配置
 const breakpointColumnsObj = {
   default: 4,
   1100: 3,
   700: 2,
-  500: 1
+  500: 1,
 };
 
 export default () => {
   // 加载状态
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   // 按钮加载状态
-  const [btnLoading, setBtnLoading] = useState(false)
+  const [btnLoading, setBtnLoading] = useState(false);
   // 下载加载状态
-  const [downloadLoading, setDownloadLoading] = useState(false)
+  const [downloadLoading, setDownloadLoading] = useState(false);
   // 当前页码
-  const [page, setPage] = useState(1)
+  const [page, setPage] = useState(1);
   // 是否还有更多数据
-  const [hasMore, setHasMore] = useState(true)
+  const [hasMore, setHasMore] = useState(true);
   // 防止重复加载的引用
-  const loadingRef = useRef(false)
+  const loadingRef = useRef(false);
 
   // 弹窗状态
   const [isMaterialModalOpen, setIsMaterialModalOpen] = useState(false);
@@ -43,12 +75,12 @@ export default () => {
   const [openImagePreviewDrawer, setOpenImagePreviewDrawer] = useState(false);
 
   // 相册和照片列表数据
-  const [albumList, setAlbumList] = useState<AlbumCate[]>([])
-  const [imageList, setImageList] = useState<any[]>([])
+  const [albumList, setAlbumList] = useState<AlbumCate[]>([]);
+  const [imageList, setImageList] = useState<any[]>([]);
 
   // 当前选中的相册和照片
-  const [currentAlbum, setCurrentAlbum] = useState<AlbumCate>({} as AlbumCate)
-  const [currentImage, setCurrentImage] = useState<any>({})
+  const [currentAlbum, setCurrentAlbum] = useState<AlbumCate>({} as AlbumCate);
+  const [currentImage, setCurrentImage] = useState<any>({});
 
   // 相册表单
   const [form] = Form.useForm();
@@ -69,15 +101,15 @@ export default () => {
    */
   const getAlbumList = async () => {
     try {
-      setLoading(true)
-      const { data } = await getAlbumCateListAPI()
+      setLoading(true);
+      const { data } = await getAlbumCateListAPI();
 
-      setAlbumList(data)
-      setLoading(false)
+      setAlbumList(data);
+      setLoading(false);
     } catch (error) {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   /**
    * 获取指定相册的照片列表
@@ -85,35 +117,38 @@ export default () => {
    * @param isLoadMore 是否为加载更多
    */
   const getImageList = async (albumId: number, isLoadMore = false) => {
-    if (loadingRef.current) return
-    
-    try {
-      loadingRef.current = true
-      setLoading(true)
+    if (loadingRef.current) return;
 
-      const { data } = await getImagesByAlbumIdAPI(albumId, isLoadMore ? page + 1 : 1)
+    try {
+      loadingRef.current = true;
+      setLoading(true);
+
+      const { data } = await getImagesByAlbumIdAPI(
+        albumId,
+        isLoadMore ? page + 1 : 1,
+      );
 
       if (!isLoadMore) {
-        setImageList(data.result)
-        setPage(1)
+        setImageList(data.records);
+        setPage(1);
       } else {
-        setImageList(prev => [...prev, ...data.result])
-        setPage(prev => prev + 1)
+        setImageList((prev) => [...prev, ...data.records]);
+        setPage((prev) => prev + 1);
       }
 
-      setHasMore(data.result.length === 10)
+      setHasMore(data.records.length === 10);
 
-      if (!imageList.length && !data.result.length && !isLoadMore) {
-        message.error("该相册中没有照片")
+      if (!imageList.length && !data.records.length && !isLoadMore) {
+        message.error('该相册中没有照片');
       }
 
-      setLoading(false)
-      loadingRef.current = false
+      setLoading(false);
+      loadingRef.current = false;
     } catch (error) {
-      setLoading(false)
-      loadingRef.current = false
+      setLoading(false);
+      loadingRef.current = false;
     }
-  }
+  };
 
   /**
    * 删除照片
@@ -121,31 +156,30 @@ export default () => {
    */
   const onDeleteImage = async (data: any) => {
     try {
-      setBtnLoading(true)
-      await delAlbumImageDataAPI(data.id)
-      await getImageList(currentAlbum.id!)
-      message.success("🎉 删除照片成功")
-      setCurrentImage({})
-      setOpenImageInfoDrawer(false)
-      setOpenImagePreviewDrawer(false)
-      setBtnLoading(false)
+      setBtnLoading(true);
+      await delAlbumImageDataAPI(data.id);
+      await getImageList(currentAlbum.id!);
+      message.success('🎉 删除照片成功');
+      setCurrentImage({});
+      setOpenImageInfoDrawer(false);
+      setOpenImagePreviewDrawer(false);
+      setBtnLoading(false);
     } catch (error) {
-      setBtnLoading(false)
+      setBtnLoading(false);
     }
-  }
+  };
 
   /**
    * 下载照片
    * @param data 要下载的照片数据
    */
   const onDownloadImage = async (data: any) => {
-
     try {
-      setDownloadLoading(true)
-      await downloadFile(data.image, '')
-      setDownloadLoading(false)
+      setDownloadLoading(true);
+      await downloadFile(data.image, '');
+      setDownloadLoading(false);
     } catch (error) {
-      setDownloadLoading(false)
+      setDownloadLoading(false);
     }
   };
 
@@ -154,34 +188,39 @@ export default () => {
    * @param e 滚动事件对象
    */
   const handleScroll = async (e: React.UIEvent<HTMLDivElement>) => {
-    const { scrollTop, scrollHeight, clientHeight } = e.currentTarget
-    if (scrollHeight - scrollTop - clientHeight < 50 && hasMore && !loading && currentAlbum.id) {
-      await getImageList(currentAlbum.id, true)
+    const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
+    if (
+      scrollHeight - scrollTop - clientHeight < 50 &&
+      hasMore &&
+      !loading &&
+      currentAlbum.id
+    ) {
+      await getImageList(currentAlbum.id, true);
     }
-  }
+  };
 
   /**
    * 打开相册
    * @param album 相册数据
    */
   const openAlbum = async (album: AlbumCate) => {
-    setCurrentAlbum(album)
-    await getImageList(album.id!)
-  }
+    setCurrentAlbum(album);
+    await getImageList(album.id!);
+  };
 
   // 组件挂载时获取相册列表
   useEffect(() => {
-    getAlbumList()
-  }, [])
+    getAlbumList();
+  }, []);
 
   /**
    * 查看照片信息
    * @param image 照片数据
    */
   const viewImageInfo = (image: any) => {
-    setOpenImageInfoDrawer(true)
-    setCurrentImage(image)
-  }
+    setOpenImageInfoDrawer(true);
+    setCurrentImage(image);
+  };
 
   /**
    * 打开相册表单
@@ -196,7 +235,7 @@ export default () => {
       form.resetFields();
     }
     setOpenAlbumModal(true);
-  }
+  };
 
   /**
    * 提交相册表单
@@ -208,10 +247,10 @@ export default () => {
 
       if (albumModalType === 'add') {
         await addAlbumCateDataAPI(values);
-        message.success("🎉 新增相册成功");
+        message.success('🎉 新增相册成功');
       } else {
         await editAlbumCateDataAPI(values);
-        message.success("🎉 修改相册成功");
+        message.success('🎉 修改相册成功');
       }
 
       setOpenAlbumModal(false);
@@ -220,7 +259,7 @@ export default () => {
     } catch (error) {
       setAlbumFormLoading(false);
     }
-  }
+  };
 
   /**
    * 删除相册
@@ -231,12 +270,12 @@ export default () => {
       setBtnLoading(true);
       await delAlbumCateDataAPI(album.id!);
       await getAlbumList();
-      message.success("🎉 删除相册成功");
+      message.success('🎉 删除相册成功');
       setBtnLoading(false);
     } catch (error) {
       setBtnLoading(false);
     }
-  }
+  };
 
   /**
    * 提交上传照片表单
@@ -251,10 +290,10 @@ export default () => {
         description: values.description,
         image: values.image,
         cateId: currentAlbum.id!,
-        createTime: values.date.valueOf()
+        createTime: values.date.valueOf(),
       });
 
-      message.success("🎉 上传照片成功");
+      message.success('🎉 上传照片成功');
       setIsAddAlbumModalOpen(false);
       uploadForm.resetFields();
       await getImageList(currentAlbum.id!);
@@ -262,7 +301,7 @@ export default () => {
     } catch (error) {
       setUploadLoading(false);
     }
-  }
+  };
 
   return (
     <div>
@@ -403,7 +442,7 @@ export default () => {
         onOk={onAlbumFormSubmit}
         onCancel={() => {
           setOpenAlbumModal(false);
-          form.resetFields()
+          form.resetFields();
         }}
         confirmLoading={albumFormLoading}
       >
@@ -651,4 +690,4 @@ export default () => {
       />
     </div>
   );
-}
+};

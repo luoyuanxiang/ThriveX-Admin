@@ -1,16 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
-  Table,
   Button,
-  Tag,
-  notification,
   Card,
-  Popconfirm,
+  DatePicker,
   Form,
   Input,
-  Select,
-  // DatePicker,
   message,
+  notification,
+  Popconfirm,
+  Select,
+  Table,
+  Tag,
 } from 'antd';
 import { titleSty } from '@/styles/sty';
 import Title from '@/components/Title';
@@ -19,9 +19,9 @@ import { Link } from 'react-router-dom';
 import { getCateListAPI } from '@/api/Cate';
 import { getTagListAPI } from '@/api/Tag';
 import {
-  delArticleDataAPI,
-  getArticleListAPI,
   batchArticleDataAPI,
+  delArticleDataAPI,
+  getArticlePagingAPI,
 } from '@/api/Article';
 import type { Tag as ArticleTag } from '@/types/app/tag';
 import type { Cate } from '@/types/app/cate';
@@ -43,14 +43,18 @@ import { TableRowSelection } from 'antd/es/table/interface';
 export default () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [btnLoading, setBtnLoading] = useState<boolean>(false);
-
   const [form] = Form.useForm();
   const web = useWebStore((state) => state.web);
-  const [current, setCurrent] = useState<number>(1);
   const [articleList, setArticleList] = useState<Article[]>([]);
   const [openFile, setOpenFile] = useState<boolean>(false);
-  // const { RangePicker } = DatePicker;
-
+  const { RangePicker } = DatePicker;
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 10,
+    total: 0,
+  });
+  const [cateList, setCateList] = useState<Cate[]>([]);
+  const [tagList, setTagList] = useState<ArticleTag[]>([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
@@ -84,13 +88,33 @@ export default () => {
     onChange: onSelectChange,
   };
 
-  const getArticleList = async () => {
+  const getArticleData = async (current: number, pageSize: number) => {
     try {
       setLoading(true);
-
-      const { data } = await getArticleListAPI();
-      setArticleList(data);
-
+      const values = form.getFieldsValue();
+      const query: FilterArticle = {
+        key: values.title ? values.title : null,
+        cateId: values.cateId ? values.cateId : null,
+        tagId: values.tagId ? values.tagId : null,
+        isDraft: 0,
+        isDel: 0,
+        startDate: values.createTime && values.createTime[0].valueOf() + null,
+        endDate: values.createTime && values.createTime[1].valueOf() + null,
+      };
+      const { data } = await getArticlePagingAPI({
+        pagination: {
+          current: current ? current : 1,
+          size: pageSize ? pageSize : 10,
+        },
+        ...query,
+      });
+      setArticleList(data.records);
+      setPagination({
+        ...pagination,
+        current: data.current,
+        pageSize: data.size,
+        total: data.total,
+      });
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -100,12 +124,10 @@ export default () => {
   const delArticleData = async (id: number) => {
     try {
       setBtnLoading(true);
-
       // 普通删除：可从回收站恢复
       await delArticleDataAPI(id, true);
-      await getArticleList();
+      await getArticleData(1, 10);
       form.resetFields();
-      setCurrent(1);
       notification.success({ message: '🎉 删除文章成功' });
       setBtnLoading(false);
     } catch (error) {
@@ -263,31 +285,9 @@ export default () => {
     },
   ];
 
-  const onFilterSubmit = async (values: FilterForm) => {
-    try {
-      setLoading(true);
-
-      const query: FilterArticle = {
-        key: values.title,
-        cateId: values.cateId,
-        tagId: values.tagId,
-        isDraft: 0,
-        isDel: 0,
-        startDate: values.createTime && values.createTime[0].valueOf() + '',
-        endDate: values.createTime && values.createTime[1].valueOf() + '',
-      };
-
-      const { data } = await getArticleListAPI({ query });
-      setArticleList(data);
-
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-    }
+  const onFilterSubmit = async (_: FilterForm) => {
+    await getArticleData(1, 10);
   };
-
-  const [cateList, setCateList] = useState<Cate[]>([]);
-  const [tagList, setTagList] = useState<ArticleTag[]>([]);
 
   const getCateList = async () => {
     const { data } = await getCateListAPI();
@@ -300,10 +300,16 @@ export default () => {
   };
 
   useEffect(() => {
-    getArticleList();
+    getArticleData(1, 10);
     getCateList();
     getTagList();
   }, []);
+
+  // 处理分页变化
+  const handleTableChange = async (pagination: any) => {
+    const pager = { ...pagination };
+    await getArticleData(pager.current, pager.pageSize);
+  };
 
   return (
     <div>
@@ -348,13 +354,13 @@ export default () => {
             />
           </Form.Item>
 
-          {/*<Form.Item*/}
-          {/*  label="时间范围"*/}
-          {/*  name="createTime"*/}
-          {/*  className="min-w-[250px]"*/}
-          {/*>*/}
-          {/*  <RangePicker placeholder={['选择起始时间', '选择结束时间']} />*/}
-          {/*</Form.Item>*/}
+          <Form.Item
+            label="时间范围"
+            name="createTime"
+            className="min-w-[250px]"
+          >
+            <RangePicker placeholder={['选择起始时间', '选择结束时间']} />
+          </Form.Item>
           <Form.Item className="pr-6">
             <Button type="primary" htmlType="submit">
               查询
@@ -372,18 +378,17 @@ export default () => {
             </Button>
           </Form.Item>
         </Form>
+        <ArticleFileUpload
+          open={openFile}
+          onSuccess={function (): void {}}
+          onCancel={function (): void {
+            setOpenFile(false);
+          }}
+        />
       </Card>
 
-      <ArticleFileUpload
-        open={openFile}
-        onSuccess={function (): void {}}
-        onCancel={function (): void {
-          setOpenFile(false);
-        }}
-      />
-
       <Card className={`${titleSty} min-h-[calc(100vh-270px)]`}>
-        <Table
+        <Table<Article>
           rowKey="id"
           dataSource={articleList}
           columns={columns as any}
@@ -391,12 +396,14 @@ export default () => {
           rowSelection={rowSelection}
           pagination={{
             position: ['bottomCenter'],
-            current,
-            defaultPageSize: 8,
-            onChange(current) {
-              setCurrent(current);
+            showSizeChanger: true,
+            showTitle: true,
+            showTotal(total, _) {
+              return `共 ${total} 条数据`;
             },
+            ...pagination,
           }}
+          onChange={handleTableChange}
           loading={loading}
         />
       </Card>
