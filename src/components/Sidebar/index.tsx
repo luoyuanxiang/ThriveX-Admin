@@ -35,19 +35,20 @@ interface SubMenuItem {
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const location = useLocation();
   const store = useUserStore();
-
   const version = useVersionData();
-
   const { pathname } = location;
 
+  // 创建 ref 用于触发器和侧边栏元素
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
 
+  // 从 localStorage 获取侧边栏展开状态
   const storedSidebarExpanded = localStorage.getItem('sidebar-expanded');
   const [sidebarExpanded, setSidebarExpanded] = useState(
     storedSidebarExpanded === null ? false : storedSidebarExpanded === 'true'
   );
 
+  // 点击事件处理：点击侧边栏外部时关闭侧边栏
   useEffect(() => {
     const clickHandler = ({ target }: MouseEvent) => {
       if (!sidebar.current || !trigger.current) return;
@@ -63,6 +64,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
     return () => document.removeEventListener('click', clickHandler);
   });
 
+  // 键盘事件处理：按 ESC 键关闭侧边栏
   useEffect(() => {
     const keyHandler = ({ keyCode }: KeyboardEvent) => {
       if (!sidebarOpen || keyCode !== 27) return;
@@ -72,6 +74,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
     return () => document.removeEventListener('keydown', keyHandler);
   });
 
+  // 侧边栏展开状态持久化处理
   useEffect(() => {
     localStorage.setItem('sidebar-expanded', sidebarExpanded.toString());
     if (sidebarExpanded) {
@@ -81,11 +84,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
     }
   }, [sidebarExpanded]);
 
-  // 导航项样式
+  // 定义导航项的样式类
   const sidebarItemSty = "group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-  // 导航选中样式
   const sidebarItemActiveSty = "bg-graydark dark:bg-meta-4"
 
+  // 箭头图标组件：用于显示子菜单的展开/收起状态
   const Arrow = ({ open }: { open: boolean }) => {
     return <svg
       className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${open && 'rotate-180'
@@ -105,7 +108,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
     </svg>
   }
 
-  // 路由列表
+  // 定义完整的路由列表配置
   const routesAll: { group: string; list: MenuItem[] }[] = [
     {
       group: "Menu",
@@ -274,9 +277,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
     }
   ];
 
+  // 状态：存储过滤后的路由列表
   const [routes, setRoutes] = useState<typeof routesAll>([])
 
-  // 获取路由列表
+  // 获取角色对应的路由列表
   const getRouteList = async (id: number) => {
     const { data } = await getRoleRouteListAPI(id)
     // 处理成路径
@@ -299,21 +303,25 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
     setRoutes(filteredRoutes);
   }
 
+  // 当用户角色信息更新时，重新获取路由列表
   useEffect(() => {
     if (store.role.id) getRouteList(store.role.id)
   }, [store])
 
+  // 渲染侧边栏组件
   return (
     <aside
       ref={sidebar}
       className={`absolute left-0 top-0 z-99 flex h-screen w-64 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
     >
+      {/* Logo 和标题区域 */}
       <div className="flex justify-center items-center gap-2 px-6 py-5.5 pb-2 lg:pt-6">
         <NavLink to="/" className="flex items-center text-white">
           <img src={logo} alt="logo" className='w-8 mr-2.5' />
           <div>博客管理系统 🎉</div>
         </NavLink>
 
+        {/* 移动端侧边栏触发器按钮 */}
         <button
           ref={trigger}
           onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -323,23 +331,30 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         />
       </div>
 
+      {/* 导航菜单区域 */}
       <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
         <nav className="py-4 px-4 lg:px-6">
+          {/* 遍历路由组并渲染 */}
           {routes.map((group, index) => (
             <div key={index}>
+              {/* 路由组标题 */}
               <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">
                 {group.group}
               </h3>
 
+              {/* 路由列表 */}
               <ul className="mb-6 flex flex-col gap-1.5">
                 {group.list.map((item, subIndex) => (
+                  // 根据是否有子菜单渲染不同的导航项
                   item.subMenu ? (
+                    // 带子菜单的导航项组件
                     <SidebarLinkGroup
                       key={subIndex}
                       activeCondition={false}
                     >
                       {(handleClick, open) => (
                         <React.Fragment>
+                          {/* 父级菜单项 */}
                           <NavLink
                             to={item.to}
                             className={`${sidebarItemSty}`}
@@ -353,6 +368,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             <Arrow open={open} />
                           </NavLink>
 
+                          {/* 子菜单列表 */}
                           <div className={`translate transform overflow-hidden ${!open && 'hidden'}`}>
                             <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
                               {item.subMenu!.map((subItem, subSubIndex) => (
@@ -374,6 +390,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       )}
                     </SidebarLinkGroup>
                   ) : (
+                    // 普通导航项
                     <li key={subIndex}>
                       <NavLink
                         to={item.to}
