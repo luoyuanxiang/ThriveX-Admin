@@ -23,7 +23,7 @@ export default function InfoCard() {
   }, []);
 
   return (
-    <div className="bg-blue-400 rounded-2xl p-10 flex flex-col justify-center h-[170px] relative overflow-hidden mb-4">
+    <div className="bg-blue-400 rounded-2xl p-6 sm:p-10 flex flex-col justify-center h-[170px] relative overflow-hidden mb-4">
       {/* 右侧弧形背景装饰 */}
       <div
         className="absolute right-[-60px] top-[-40px] w-[300px] h-[300px] bg-blue-300 opacity-40 z-0"
@@ -33,7 +33,7 @@ export default function InfoCard() {
       />
 
       <div className="relative z-10">
-        <h1 className="text-white text-2xl font-bold">
+        <h1 className="text-white text-xl font-bold sm:text-2xl">
           欢迎使用 ThriveX 现代化博客管理系统
         </h1>
 
