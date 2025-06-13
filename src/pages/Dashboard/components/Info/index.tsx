@@ -38,7 +38,7 @@ export default function InfoCard() {
         </h1>
 
         <p className="text-white text-sm mt-2 mb-3">
-          今日有 <span className="text-white text-2xl font-bold">{commentCount}</span> 条评论，<span className="text-white text-2xl font-bold">{linkCount}</span> 条友链，<span className="text-white text-2xl font-bold">{wallCount}</span> 条留言。
+          当前有 <span className="text-white text-2xl font-bold">{commentCount}</span> 条评论，<span className="text-white text-2xl font-bold">{linkCount}</span> 条友链，<span className="text-white text-2xl font-bold">{wallCount}</span> 条留言。
         </p>
 
         <button className="bg-white text-blue-400 font-bold py-1 px-4 rounded transition duration-300 transform hover:scale-105">
