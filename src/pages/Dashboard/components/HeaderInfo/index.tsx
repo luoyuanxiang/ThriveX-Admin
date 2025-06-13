@@ -29,7 +29,7 @@ const HeaderInfo = () => {
             <div className='hidden md:flex md:flex-col space-y-1 xl:mr-30'>
                 {
                     version.tag_name === import.meta.env.VITE_VERSION
-                        ? <p>🎉 当前版本为：<b className='inline-block px-2 text-white bg-green-600 rounded-md'>{version.tag_name} 最新版</b></p>
+                        ? <p>🎉 当前版本为：<b className='inline-block px-2 text-white bg-green-500 rounded-md'>{version.tag_name} 最新版</b></p>
                         : (
                             <>
                                 <div className='flex space-x-4'>

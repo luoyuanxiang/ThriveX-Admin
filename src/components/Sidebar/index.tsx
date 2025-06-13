@@ -280,7 +280,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             <div className='flex items-center gap-1'>
               {
                 version.tag_name === import.meta.env.VITE_VERSION ? (
-                  <span className={`text-xs text-white px-2 py-0.5 rounded-lg bg-green-400`}>最新版</span>
+                  <span className={`text-xs text-white px-2 py-0.5 rounded-lg bg-green-500`}>最新版</span>
                 ) : (
                   <span className={`text-xs text-white px-2 py-0.5 rounded-lg bg-red-400`}>有新版本</span>
                 )
