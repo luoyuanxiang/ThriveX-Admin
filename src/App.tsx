@@ -30,7 +30,7 @@ function App() {
   const getWebData = async () => {
     if (!token) return;
     const { data } = await getConfigDataAPI<Web>('web');
-    console.log(data,9999);
+    console.log(data, 9999);
     setWeb(data);
   };
 

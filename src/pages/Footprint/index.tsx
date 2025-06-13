@@ -294,7 +294,7 @@ export default () => {
                 />
               </Form.Item>
 
-              <div onClick={() => setIsMaterialModalOpen(true)} className='absolute bottom-2 right-2 bg-white rounded-full border border-[#eee] cursor-pointer'>
+              <div onClick={() => setIsMaterialModalOpen(true)} className='absolute bottom-2 right-2 bg-white rounded-full border border-stroke cursor-pointer'>
                 <CloudUploadOutlined className='text-xl hover:text-primary transition-colors p-2' />
               </div>
             </div>

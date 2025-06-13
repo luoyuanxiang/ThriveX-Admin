@@ -22,7 +22,7 @@ const DropdownUser = () => {
           <span className="block text-xs">{store.role.name}</span>
         </span>
 
-        <span className="overflow-hidden h-12 w-12 rounded-full border border-[#eee]">
+        <span className="overflow-hidden h-12 w-12 rounded-full border border-stroke">
           <img src={store.user?.avatar} alt="User" />
         </span>
 

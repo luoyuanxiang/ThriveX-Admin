@@ -18,7 +18,7 @@
      }
 
      h1 {
-         @apply text-2xl my-6 pb-3 border-b border-[#eee];
+         @apply text-2xl my-6 pb-3 border-b border-stroke;
 
          // &::before {
          //     content: "✨️";
@@ -51,7 +51,7 @@
      }
 
      hr {
-         @apply my-5 border-[#eee] transition-colors;
+         @apply my-5 border-stroke transition-colors;
      }
 
      p code,

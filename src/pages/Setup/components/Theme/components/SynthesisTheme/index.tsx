@@ -180,7 +180,7 @@ export default () => {
                     <div className='overflow-auto w-full'>
                         <div className="article flex w-[650px]">
                             {['classics', 'card', 'waterfall'].map((item) => (
-                                <div key={item} onClick={() => setTheme({ ...theme, is_article_layout: item })} className={`item flex flex-col items-center p-4 m-4 border-2 rounded cursor-pointer ${theme.is_article_layout === item ? 'border-primary' : 'border-[#eee]'}`}>
+                                <div key={item} onClick={() => setTheme({ ...theme, is_article_layout: item })} className={`item flex flex-col items-center p-4 m-4 border-2 rounded cursor-pointer ${theme.is_article_layout === item ? 'border-primary' : 'border-stroke'}`}>
                                     <p className={`text-center ${theme.is_article_layout === item ? 'text-primary' : ''}`}>
                                         {item === 'classics' ? '经典布局' : item === 'card' ? '卡片布局' : '瀑布流布局'}
                                     </p>

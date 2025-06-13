@@ -220,7 +220,7 @@ export default ({ multiple, open, onClose, onSelect, maxCount }: Props) => {
                     fileList.map((item, index) =>
                       <div
                         key={index}
-                        className={`group relative overflow-hidden rounded-md cursor-pointer mb-4 border-2 border-[#eee] dark:border-transparent hover:!border-primary p-1 ${selectedFiles.some(file => file.url === item.url) ? 'border-primary' : 'border-gray-100'}`}
+                        className={`group relative overflow-hidden rounded-md cursor-pointer mb-4 border-2 border-stroke dark:border-transparent hover:!border-primary p-1 ${selectedFiles.some(file => file.url === item.url) ? 'border-primary' : 'border-gray-100'}`}
                         onClick={() => onHandleSelectImage(item)}>
                         <div className="relative">
                           <Image

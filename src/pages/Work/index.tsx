@@ -65,7 +65,7 @@ export default () => {
 
             <Card className="mt-2 min-h-[calc(100vh-180px)]">
                 <div className="flex flex-col md:flex-row w-full">
-                    <div className="w-full min-w-[200px] md:w-2/12 md:min-h-96 mb-5 md:mb-0 pr-4 md:border-b-transparent md:border-r border-[#eee] dark:border-strokedark">
+                    <div className="w-full min-w-[200px] md:w-2/12 md:min-h-96 mb-5 md:mb-0 pr-4 md:border-b-transparent md:border-r border-stroke dark:border-strokedark">
                         <ul className="space-y-1">
                             {(["comment", "link", "wall"] as Menu[]).map((menu) => (
                                 <li

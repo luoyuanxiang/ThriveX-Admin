@@ -5,7 +5,7 @@ import Stats from './components/Stats';
 export default () => {
   return (
     <div>
-      <Card className='[&>.ant-card-body]:!p-3'>
+      <Card className='[&>.ant-card-body]:!p-3 border border-stroke'>
         <HeaderInfo />
       </Card>
 

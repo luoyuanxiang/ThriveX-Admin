@@ -18,7 +18,7 @@
             border-radius: 5px;
             background-color: #fff;
             transition: box-shadow 0.3s;
-            @apply border border-[#eee] dark:border-strokedark bg-white dark:bg-[#2b425f];
+            @apply border border-stroke dark:border-strokedark bg-white dark:bg-[#2b425f];
 
             &:hover {
                 box-shadow: 0px 2px 15px -3px rgba(121, 122, 243, 0.1);

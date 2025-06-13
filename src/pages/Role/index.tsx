@@ -344,7 +344,7 @@ export default () => {
                 <div className='mt-10 mb-4'>
                     <h2 className='flex justify-center my-4 text-lg'>接口权限</h2>
 
-                    <div className='overflow-y-auto h-55 p-4 border border-[#eee] rounded-md'>
+                    <div className='overflow-y-auto h-55 p-4 border border-stroke rounded-md'>
                         {Object.keys(permissionList).map((group, index) => (
                             <div key={index}>
                                 <div className='flex justify-center items-center'>

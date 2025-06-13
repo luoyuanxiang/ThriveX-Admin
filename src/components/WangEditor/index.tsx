@@ -58,12 +58,12 @@ export default forwardRef((props, ref) => {
     }, [editor]);
 
     return (
-        <div className='overflow-hidden border border-[#eee] rounded-xl z-40 w-full'>
+        <div className='overflow-hidden border border-stroke rounded-xl z-40 w-full'>
             <Toolbar
                 editor={editor}
                 defaultConfig={toolbarConfig}
                 mode="default"
-                className='border-b border-[#eee]'
+                className='border-b border-stroke'
             />
 
             <Editor
