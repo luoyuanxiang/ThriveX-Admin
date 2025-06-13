@@ -4,6 +4,7 @@ import { getRouteListAPI, addRouteDataAPI, editRouteDataAPI, delRouteDataAPI, ge
 import { Route } from '@/types/app/route';
 import Title from '@/components/Title';
 import { ColumnsType } from 'antd/es/table';
+import { DeleteOutlined, FormOutlined } from '@ant-design/icons';
 
 export default () => {
     const [loading, setLoading] = useState<boolean>(false);
@@ -22,9 +23,9 @@ export default () => {
             title: '操作', key: 'action',
             render: (_: string, record: Route) => (
                 <>
-                    <Button onClick={() => editRouteData(record)}>修改</Button>
+                    <Button onClick={() => editRouteData(record)} icon={<FormOutlined />} />
                     <Popconfirm title="警告" description="你确定要删除吗" okText="确定" cancelText="取消" onConfirm={() => delRouteData(record.id!)}>
-                        <Button type="primary" danger className="ml-2">删除</Button>
+                        <Button type="primary" danger className="ml-2" icon={<DeleteOutlined />} />
                     </Popconfirm>
                 </>
             )

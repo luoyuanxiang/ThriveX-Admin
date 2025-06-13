@@ -8,7 +8,7 @@ import { GiPositionMarker } from "react-icons/gi";
 import { IoSearch } from "react-icons/io5";
 import dayjs from 'dayjs';
 import axios from 'axios';
-import { CloudUploadOutlined } from '@ant-design/icons';
+import { CloudUploadOutlined, DeleteOutlined, FormOutlined } from '@ant-design/icons';
 import Material from '@/components/Material';
 
 export default () => {
@@ -79,9 +79,9 @@ export default () => {
       align: 'center',
       render: (_: string, record: Footprint) => (
         <div className='flex space-x-2'>
-          <Button onClick={() => editFootprintData(record.id!)}>修改</Button>
+          <Button onClick={() => editFootprintData(record.id!)} icon={<FormOutlined />} />
           <Popconfirm title="警告" description="你确定要删除吗" okText="确定" cancelText="取消" onConfirm={() => delFootprintData(record.id!)}>
-            <Button type="primary" danger>删除</Button>
+            <Button type="primary" danger icon={<DeleteOutlined />} />
           </Popconfirm>
         </div>
       ),

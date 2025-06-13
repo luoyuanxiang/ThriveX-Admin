@@ -1,6 +1,6 @@
 import { Button, Card, Form, Input, List, Modal, Popconfirm, Select } from 'antd';
 import { useState } from 'react';
-import { PlusOutlined } from '@ant-design/icons';
+import { DeleteOutlined, FormOutlined, PlusOutlined } from '@ant-design/icons';
 import Title from '@/components/Title';
 import useAssistant from '@/hooks/useAssistant';
 
@@ -54,11 +54,11 @@ export default () => {
                   loading={testingMap[item.id]}
                 >{testingMap[item.id] ? '测试中...' : '测试连接'}</Button>,
 
-                <Button type='primary' onClick={() => {
+                <Button onClick={() => {
                   form.setFieldsValue(item);
                   setId(item.id);
                   setIsModalOpen(true);
-                }}>编辑</Button>,
+                }} icon={<FormOutlined />} />,
 
                 <Popconfirm
                   title="您确定要删除这个助手吗？"
@@ -66,7 +66,7 @@ export default () => {
                   okText="确定"
                   cancelText="取消"
                 >
-                  <Button type='primary' color="danger" danger>删除</Button>
+                  <Button type='primary' color="danger" danger icon={<DeleteOutlined />} />
                 </Popconfirm>,
 
                 <Button

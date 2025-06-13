@@ -9,6 +9,7 @@ import dayjs from 'dayjs';
 import TextArea from 'antd/es/input/TextArea';
 import { sendReplyWallEmailAPI } from '@/api/Email';
 import { useWebStore } from '@/stores';
+import { DeleteOutlined, SendOutlined, StarFilled, StarOutlined } from '@ant-design/icons';
 
 export default () => {
     const web = useWebStore(state => state.web)
@@ -120,15 +121,15 @@ export default () => {
                         } catch (error) {
                             setLoading(false)
                         }
-                    }}>{record.isChoice === 1 ? '取消精选' : '设置精选'}</Button>
+                    }} icon={record.isChoice === 1 ? <StarFilled /> : <StarOutlined />} />
 
                     <Button onClick={() => {
                         setWall(record)
                         setIsReplyModalOpen(true)
-                    }}>回复</Button>
+                    }} icon={<SendOutlined />} />
 
                     <Popconfirm title="警告" description="你确定要删除吗" okText="确定" cancelText="取消" onConfirm={() => delWallData(record.id)}>
-                        <Button type="primary" danger>删除</Button>
+                        <Button type="primary" danger icon={<DeleteOutlined />} />
                     </Popconfirm>
                 </div>
             ),

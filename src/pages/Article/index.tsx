@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-import { Table, Button, Tag, notification, Card, Popconfirm, Form, Input, Select, DatePicker, Upload, Modal, message } from 'antd';
-import { InboxOutlined } from '@ant-design/icons';
+import { Table, Button, Tag, notification, Card, Popconfirm, Form, Input, Select, DatePicker, Modal, message } from 'antd';
+import { DeleteOutlined, FormOutlined, InboxOutlined } from '@ant-design/icons';
 import type { UploadFile, UploadFileStatus, RcFile } from 'antd/es/upload/interface';
 import { titleSty } from '@/styles/sty'
 import Title from '@/components/Title';
@@ -147,11 +147,11 @@ export default () => {
             render: (_: string, record: Article) => (
                 <div className='flex justify-center space-x-2'>
                     <Link to={`/create?id=${record.id}`}>
-                        <Button>编辑</Button>
+                        <Button icon={<FormOutlined />} />
                     </Link>
 
                     <Popconfirm title="警告" description="你确定要删除吗" okText="确定" cancelText="取消" onConfirm={() => delArticleData(record.id!)}>
-                        <Button type="primary" danger>删除</Button>
+                        <Button type="primary" danger icon={<DeleteOutlined />} />
                     </Popconfirm>
                 </div>
             ),
@@ -278,7 +278,7 @@ export default () => {
 
     const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = Array.from(e.target.files || []);
-        
+
         // 检查文件扩展名是否为 .md
         const markdownFiles = files.filter(file =>
             file.name.toLowerCase().endsWith('.md') ||
@@ -365,9 +365,7 @@ export default () => {
                     <Button
                         type="primary"
                         onClick={() => setIsModalOpen(true)}
-                    >
-                        导入文章
-                    </Button>
+                    >导入文章</Button>
                 </div>
             </Card>
 

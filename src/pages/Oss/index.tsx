@@ -5,6 +5,7 @@ import type { Oss } from '@/types/app/oss';
 import Title from '@/components/Title';
 import type { ColumnsType } from 'antd/es/table';
 import { titleSty } from '@/styles/sty';
+import { BulbOutlined, CheckCircleOutlined, CheckSquareOutlined, DeleteOutlined, FormOutlined, PoweroffOutlined, StarOutlined, StopOutlined } from '@ant-design/icons';
 
 export default () => {
     const [loading, setLoading] = useState<boolean>(false);
@@ -53,15 +54,15 @@ export default () => {
             render: (_, record: Oss) => (
                 <div className='space-x-2'>
                     {record.isEnable ? (
-                        <Button type="primary" danger onClick={() => disableOssData(record.id!)}>禁用</Button>
+                        <Button type="primary" disabled onClick={() => disableOssData(record.id!)} icon={<StarOutlined />} />
                     ) : (
-                        <Button type="primary" onClick={() => enableOssData(record.id!)}>启用</Button>
+                        <Button type="primary" onClick={() => enableOssData(record.id!)} icon={<PoweroffOutlined />} />
                     )}
 
-                    <Button onClick={() => editOssData(record)}>修改</Button>
+                    <Button onClick={() => editOssData(record)} icon={<FormOutlined />} />
 
                     <Popconfirm title="警告" description="你确定要删除吗" okText="确定" cancelText="取消" onConfirm={() => delOssData(record.id!)}>
-                        <Button type="primary" danger>删除</Button>
+                        <Button type="primary" danger icon={<DeleteOutlined />} />
                     </Popconfirm>
                 </div>
             )

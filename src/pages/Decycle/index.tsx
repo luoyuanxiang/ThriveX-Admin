@@ -11,6 +11,7 @@ import type { Article } from '@/types/app/article';
 
 import { useWebStore } from '@/stores';
 import dayjs from 'dayjs';
+import { DeleteOutlined } from '@ant-design/icons';
 
 export default () => {
     const [loading, setLoading] = useState<boolean>(false);
@@ -152,7 +153,7 @@ export default () => {
                     <Button onClick={() => reductionArticleData(record.id!)}>还原</Button>
 
                     <Popconfirm title="警告" description="此操作会彻底文章且无法恢复" okText="确定" cancelText="取消" onConfirm={() => delArticleData(record.id!)}>
-                        <Button type="primary" danger>删除</Button>
+                        <Button type="primary" danger icon={<DeleteOutlined />} />
                     </Popconfirm>
                 </div>
             ),

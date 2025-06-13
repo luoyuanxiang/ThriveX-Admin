@@ -4,7 +4,7 @@ import { getSwiperListAPI, addSwiperDataAPI, editSwiperDataAPI, delSwiperDataAPI
 import { Swiper } from '@/types/app/swiper';
 import Title from '@/components/Title';
 import { ColumnsType } from 'antd/es/table';
-import { CloudUploadOutlined, PictureOutlined } from '@ant-design/icons';
+import { CloudUploadOutlined, DeleteOutlined, FormOutlined, PictureOutlined } from '@ant-design/icons';
 import Material from '@/components/Material';
 
 export default () => {
@@ -31,10 +31,10 @@ export default () => {
             title: '操作', key: 'action', align: 'center',
             render: (_: string, record: Swiper) => (
                 <>
-                    <Button onClick={() => editSwiperData(record)}>修改</Button>
+                    <Button onClick={() => editSwiperData(record)} icon={<FormOutlined />} />
 
                     <Popconfirm title="警告" description="你确定要删除吗" okText="确定" cancelText="取消" onConfirm={() => delSwiperData(record.id!)}>
-                        <Button type="primary" danger className="ml-2">删除</Button>
+                        <Button type="primary" danger className="ml-2" icon={<DeleteOutlined />} />
                     </Popconfirm>
                 </>
             )

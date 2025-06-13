@@ -8,6 +8,7 @@ import { delRecordDataAPI, getRecordListAPI } from '@/api/Record';
 import type { Record } from '@/types/app/record';
 
 import dayjs from 'dayjs';
+import { DeleteOutlined, FormOutlined } from '@ant-design/icons';
 
 export interface FilterForm {
   content: string,
@@ -108,11 +109,11 @@ export default () => {
       render: (_: string, record: Record) => (
         <div className='flex justify-center space-x-2'>
           <Link to={`/create_record?id=${record.id}`}>
-            <Button>编辑</Button>
+            <Button icon={<FormOutlined />} />
           </Link>
 
           <Popconfirm title="警告" description="你确定要删除吗" okText="确定" cancelText="取消" onConfirm={() => delRecordData(record.id!)}>
-            <Button type="primary" danger loading={btnLoading}>删除</Button>
+            <Button type="primary" danger loading={btnLoading} icon={<DeleteOutlined />} />
           </Popconfirm>
         </div>
       ),

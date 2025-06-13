@@ -13,6 +13,7 @@ import { titleSty } from '@/styles/sty';
 import Title from '@/components/Title';
 import logo from '@/images/logo/logo.png';
 import dayjs from 'dayjs';
+import { DeleteOutlined, FormOutlined } from '@ant-design/icons';
 
 export default () => {
     const store = useUserStore()
@@ -99,10 +100,10 @@ export default () => {
             align: 'center',
             render: (_: string, record: User) => (
                 <div className='flex space-x-2'>
-                    <Button onClick={() => editUserData(record.id!)}>修改</Button>
+                    <Button onClick={() => editUserData(record.id!)} icon={<FormOutlined />} />
 
                     <Popconfirm title="警告" description="你确定要删除吗" okText="确定" cancelText="取消" onConfirm={() => delUserData(record.id!)}>
-                        <Button type="primary" danger disabled={record.id === store.user.id}>删除</Button>
+                        <Button type="primary" danger disabled={record.id === store.user.id} icon={<DeleteOutlined />} />
                     </Popconfirm>
                 </div>
             ),
