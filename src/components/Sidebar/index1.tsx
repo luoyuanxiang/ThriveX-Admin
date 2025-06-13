@@ -11,7 +11,6 @@ import { getRoleRouteListAPI } from '@/api/Role'
 import { Route } from '@/types/app/route';
 import logo from '@/images/logo/logo.png'
 import useVersionData from '@/hooks/useVersionData';
-import './index.scss';
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -85,21 +84,17 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
     }
   }, [sidebarExpanded]);
 
-  const isSideBarTheme: string = "light"
-  // const isSideBarTheme: "dark" | "light" = "dark"
-
   // 定义导航项的样式类
-  const sidebarItemStyDark = "group relative flex items-center gap-2.5 py-2 px-4 text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 rounded-sm font-medium"
-  const sidebarItemStyLight = "group relative flex items-center gap-2.5 py-2 px-4 text-[#444] duration-300 ease-in-out hover:bg-[rgba(241,241,244,0.9)] dark:hover:bg-meta-4 rounded-[10px] hover:backdrop-blur-[15px]"
-  const sidebarItemActiveSty = `${isSideBarTheme === "dark" ? "bg-graydark dark:bg-meta-4" : "!text-primary"}`
+  const sidebarItemSty = "group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
+  const sidebarItemActiveSty = "bg-graydark dark:bg-meta-4"
 
   // 箭头图标组件：用于显示子菜单的展开/收起状态
   const Arrow = ({ open }: { open: boolean }) => {
     return <svg
       className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${open && 'rotate-180'
         }`}
-      width="17"
-      height="17"
+      width="20"
+      height="20"
       viewBox="0 0 20 20"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -108,7 +103,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         fillRule="evenodd"
         clipRule="evenodd"
         d="M4.41107 6.9107C4.73651 6.58527 5.26414 6.58527 5.58958 6.9107L10.0003 11.3214L14.4111 6.91071C14.7365 6.58527 15.2641 6.58527 15.5896 6.91071C15.915 7.23614 15.915 7.76378 15.5896 8.08922L10.5896 13.0892C10.2641 13.4147 9.73651 13.4147 9.41107 13.0892L4.41107 8.08922C4.08563 7.76378 4.08563 7.23614 4.41107 6.9107Z"
-        fill="#ccc"
+        fill=""
       />
     </svg>
   }
@@ -116,7 +111,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   // 定义完整的路由列表配置
   const routesAll: { group: string; list: MenuItem[] }[] = [
     {
-      group: "",
+      group: "Menu",
       list: [
         {
           to: "/",
@@ -317,13 +312,13 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   return (
     <aside
       ref={sidebar}
-      className={`absolute left-0 top-0 z-99 flex h-screen w-64 flex-col overflow-y-hidden duration-300 ease-linear lg:static lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} ${isSideBarTheme === "dark" ? "bg-black dark:bg-boxdark" : "sidebar_bg border-r border-[#eee]"}`}
+      className={`absolute left-0 top-0 z-99 flex h-screen w-64 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
     >
       {/* Logo 和标题区域 */}
-      <div className="flex justify-center items-center gap-2 px-6 py-5.5 pb-0 lg:pt-6">
-        <NavLink to="/" className={`flex items-center font-bold ${isSideBarTheme === "dark" ? "text-white" : "text-[#555]"}`}>
+      <div className="flex justify-center items-center gap-2 px-6 py-5.5 pb-2 lg:pt-6">
+        <NavLink to="/" className="flex items-center">
           <img src={logo} alt="logo" className='w-8 mr-2.5' />
-          <div>Thrive X</div>
+          {/* <div>博客管理系统 🎉</div> */}
         </NavLink>
 
         {/* 移动端侧边栏触发器按钮 */}
@@ -338,12 +333,12 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
       {/* 导航菜单区域 */}
       <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
-        <nav className="pt-2 pb-4 px-4 lg:px-6">
+        <nav className="py-4 px-4 lg:px-6">
           {/* 遍历路由组并渲染 */}
           {routes.map((group, index) => (
             <div key={index}>
               {/* 路由组标题 */}
-              <h3 className="mb-4 ml-4 text-sm font-semibold">
+              <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">
                 {group.group}
               </h3>
 
@@ -362,7 +357,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                           {/* 父级菜单项 */}
                           <NavLink
                             to={item.to}
-                            className={`${isSideBarTheme === "dark" ? sidebarItemStyDark : sidebarItemStyLight}`}
+                            className={`${sidebarItemSty}`}
                             onClick={(e) => {
                               e.preventDefault();
                               sidebarExpanded ? handleClick() : setSidebarExpanded(true);
@@ -381,8 +376,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                   <NavLink
                                     to={subItem.to}
                                     className={({ isActive }) =>
-                                      `group relative flex items-center gap-2.5 rounded-md px-4 duration-300 ease-in-out ${isSideBarTheme === "dark" ? 'hover:text-white text-bodydark2 font-medium' : 'hover:!text-primary text-[#666]'} ` +
-                                      (isActive && '!text-primary')
+                                      'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
+                                      (isActive && '!text-white')
                                     }
                                   >
                                     {subItem.name}
@@ -399,7 +394,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     <li key={subIndex}>
                       <NavLink
                         to={item.to}
-                        className={`${isSideBarTheme === "dark" ? sidebarItemStyDark : sidebarItemStyLight} ${pathname.includes(item.path) && sidebarItemActiveSty}`}
+                        className={`${sidebarItemSty} ${pathname.includes(item.path) && sidebarItemActiveSty}`}
                       >
                         {item.icon}
                         {item.name}
