@@ -8,8 +8,8 @@ const Header = (props: {
   setSidebarOpen: (arg0: boolean) => void;
 }) => {
   return (
-    <header className="sticky top-0 z-999 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none">
-      <div className="flex flex-grow items-center justify-between px-4 py-4 shadow-2 md:px-6 2xl:px-11">
+    <header className="sticky top-0 z-999 flex w-full bg-[rgba(255,255,255,0.5)] drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none">
+      <div className="flex flex-grow items-center justify-between px-4 py-2 shadow-2 md:px-6 2xl:px-11">
         <div className='flex items-center'>
           <div className="flex items-center gap-4 lg:hidden">
             <button
@@ -53,13 +53,13 @@ const Header = (props: {
             </Link>
           </div>
 
-          <div className="hidden xs:block ml-5 2xl:ml-0">再渺小的星光，也有属于他的光芒！</div>
+          <div className="hidden xs:block ml-5 2xl:ml-0">有些梦虽然遥不可及，但并不是不可能实现</div>
         </div>
 
         <div className="flex items-center gap-3 2xsm:gap-7">
           <ul className="flex items-center gap-2 2xsm:gap-4">
             <li className='hidden md:block'>
-              <a href="https://github.com/LiuYuYang01/ThriveX-Admin" target='_blank' className='hover:text-primary'>开源不易，赏个Star吧！！！</a>
+              <a href="https://github.com/LiuYuYang01/ThriveX-Admin" target='_blank' className='hover:text-primary text-sm'>开源不易，赏个 Star 吧！！！</a>
             </li>
 
             <DarkModeSwitcher />

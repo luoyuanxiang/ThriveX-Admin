@@ -322,8 +322,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
       {/* Logo 和标题区域 */}
       <div className="flex justify-center items-center gap-2 px-6 py-5.5 pb-0 lg:pt-6">
         <NavLink to="/" className={`flex items-center font-bold ${isSideBarTheme === "dark" ? "text-white" : "text-[#555]"}`}>
-          <img src={logo} alt="logo" className='w-8 mr-2.5' />
-          <div>Thrive X</div>
+          {/* <img src={logo} alt="logo" className='w-8 mr-2.5' />
+          <div>Thrive X</div> */}
         </NavLink>
 
         {/* 移动端侧边栏触发器按钮 */}
