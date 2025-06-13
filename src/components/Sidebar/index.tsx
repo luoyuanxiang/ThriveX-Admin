@@ -11,7 +11,6 @@ import { getRoleRouteListAPI } from '@/api/Role'
 import { Route } from '@/types/app/route';
 import logo from '@/images/logo/logo.png'
 import useVersionData from '@/hooks/useVersionData';
-import './index.scss';
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -85,12 +84,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
     }
   }, [sidebarExpanded]);
 
-  const isSideBarTheme: string = "light"
-  // const isSideBarTheme: "dark" | "light" = "dark"
+  const [isSideBarTheme, setIsSideBarTheme] = useState<"dark" | "light">("light")
 
   // 定义导航项的样式类
   const sidebarItemStyDark = "group relative flex items-center gap-2.5 py-2 px-4 text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 rounded-sm font-medium"
-  const sidebarItemStyLight = "group relative flex items-center gap-2.5 py-2 px-4 text-[#444] duration-300 ease-in-out hover:bg-[rgba(241,241,244,0.9)] dark:hover:bg-meta-4 rounded-[10px] hover:backdrop-blur-[15px]"
+  const sidebarItemStyLight = "group relative flex items-center gap-2.5 py-2 px-4 text-[#444] dark:text-slate-200 duration-300 ease-in-out hover:bg-[rgba(241,241,244,0.9)] dark:hover:bg-meta-4 rounded-[10px] hover:backdrop-blur-[15px]"
   const sidebarItemActiveSty = `${isSideBarTheme === "dark" ? "bg-graydark dark:bg-meta-4" : "!text-primary"}`
 
   // 箭头图标组件：用于显示子菜单的展开/收起状态
@@ -317,11 +315,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   return (
     <aside
       ref={sidebar}
-      className={`absolute left-0 top-0 z-99 flex h-screen w-64 flex-col overflow-y-hidden duration-300 ease-linear lg:static lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} ${isSideBarTheme === "dark" ? "bg-black dark:bg-boxdark" : "sidebar_bg border-r border-stroke"}`}
+      className={`absolute left-0 top-0 z-99 flex h-screen w-64 flex-col overflow-y-hidden duration-300 ease-linear lg:static lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} ${isSideBarTheme === "dark" ? "bg-black dark:bg-boxdark" : "bg-sidebar-light dark:bg-sidebar-dark border-r border-stroke dark:border-strokedark"}`}
     >
       {/* Logo 和标题区域 */}
       <div className="flex justify-center items-center gap-2 px-6 py-5.5 pb-0 lg:pt-6">
-        <NavLink to="/" className={`flex items-center ${isSideBarTheme === "dark" ? "font-bold text-white" : "text-[#555]"}`}>
+        <NavLink to="/" className={`flex items-center ${isSideBarTheme === "dark" ? "font-bold text-white" : "text-[#555] dark:text-white"}`}>
           <img src={logo} alt="logo" className='w-8 mr-2.5' />
           <div>Thrive X</div>
         </NavLink>
@@ -381,7 +379,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                   <NavLink
                                     to={subItem.to}
                                     className={({ isActive }) =>
-                                      `group relative flex items-center gap-2.5 rounded-md px-4 duration-300 ease-in-out ${isSideBarTheme === "dark" ? 'hover:text-white text-bodydark2 font-medium' : 'hover:!text-primary text-[#666]'} ` +
+                                      `group relative flex items-center gap-2.5 rounded-md px-4 duration-300 ease-in-out ${isSideBarTheme === "dark" ? 'hover:text-white text-bodydark2 font-medium' : 'hover:!text-primary text-[#666] dark:text-slate-400'} ` +
                                       (isActive && '!text-primary')
                                     }
                                   >
