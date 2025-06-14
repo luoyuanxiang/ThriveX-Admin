@@ -6,6 +6,7 @@ interface CardDataStatsProps {
     rate: string;
     levelUp?: boolean;
     levelDown?: boolean;
+    linearGradient?: string;
     children: ReactNode;
 }
 
@@ -15,23 +16,26 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
     rate,
     levelUp,
     levelDown,
-    children,
+    linearGradient = "radial-gradient(at 13.814868431089122% 36.55432836575234%, hsla(33.33333333333323, 100%, 98.23529411764707%, 1) 0%, hsla(33.33333333333323, 100%, 98.23529411764707%, 0) 100%), radial-gradient(at 26.757512289394448% 14.55716430928402%, hsla(201.99999999999997, 100%, 94.11764705882352%, 1) 0%, hsla(201.99999999999997, 100%, 94.11764705882352%, 0) 100%), radial-gradient(at 71.81123062379334% 73.35997062171711%, hsla(201.99999999999997, 100%, 94.11764705882352%, 1) 0%, hsla(201.99999999999997, 100%, 94.11764705882352%, 0) 100%), radial-gradient(at 80.67571417506147% 77.36934613667599%, hsla(33.33333333333323, 100%, 98.23529411764707%, 1) 0%, hsla(33.33333333333323, 100%, 98.23529411764707%, 0) 100%)",
+    children
 }) => {
     return (
-        <div className="rounded-2xl border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark">
-            <div className="flex h-11.5 w-11.5 items-center justify-center rounded-full bg-meta-2 dark:bg-meta-4">
-                {children}
+        <div className="rounded-2xl border border-stroke py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark" style={{ backgroundImage: linearGradient }}>
+            <h3 className="text-sm text-slate-700 dark:text-white">
+                {title}
+            </h3>
+
+            <div className="flex items-end justify-between">
+                <h4 className="text-title-md font-bold text-black dark:text-white">
+                    {total}
+                </h4>
+
+                <div className="flex h-11.5 w-11.5 items-center justify-center rounded-lg bg-[#e7f2fe] dark:bg-meta-4">
+                    {children}
+                </div>
             </div>
 
-            <div className="mt-4 flex items-end justify-between">
-                <div>
-                    <h4 className="text-title-md font-bold text-black dark:text-white">
-                        {total}
-                    </h4>
-                    <span className="text-sm font-medium">{title}</span>
-                </div>
-
-                <span
+            {/* <span
                     className={`flex items-center gap-1 text-sm font-medium ${levelUp && 'text-meta-3'
                         } ${levelDown && 'text-meta-5'} `}
                 >
@@ -67,8 +71,7 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
                             />
                         </svg>
                     )}
-                </span>
-            </div>
+                </span> */}
         </div>
     );
 };
