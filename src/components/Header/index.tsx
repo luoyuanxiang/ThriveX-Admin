@@ -8,7 +8,7 @@ const Header = (props: {
   setSidebarOpen: (arg0: boolean) => void;
 }) => {
   return (
-    <header className="sticky top-0 z-999 flex w-full bg-light-gradient dark:bg-dark-gradient drop-shadow-1 dark:drop-shadow-none backdrop-blur-sm">
+    <header className="sticky top-0 z-999 flex w-full bg-light-gradient dark:bg-dark-gradient drop-shadow-1 dark:drop-shadow-none backdrop-blur-lg">
       <div className="flex flex-grow items-center justify-between px-4 py-3 shadow-2 md:px-6 2xl:px-11">
         <div className='flex items-center'>
           <div className="flex items-center gap-4 lg:hidden">
