@@ -135,11 +135,11 @@ export default () => {
     const [state, setState] = useState<ChartOneState>({
         series: [
             {
-                name: '访客数量',
+                name: '浏览量',
                 data: [],
             },
             {
-                name: 'IP数量',
+                name: '访客',
                 data: [],
             },
         ],
@@ -266,7 +266,7 @@ export default () => {
     // 当数据发生变化时，更新图表选项和状态
     useEffect(() => {
         setLoading(true)
-        
+
         setOptions((data) => ({
             ...data,
             xaxis: { ...options.xaxis, categories: scopeData.categories || [] }
@@ -276,11 +276,11 @@ export default () => {
             ...prevState,
             series: [
                 {
-                    name: '访客数量',
+                    name: '浏览量',
                     data: scopeData.series[0] || 0,
                 },
                 {
-                    name: 'IP数量',
+                    name: '访客',
                     data: scopeData.series[1] || 0,
                 },
             ],
