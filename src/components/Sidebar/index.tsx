@@ -85,6 +85,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   }, [sidebarExpanded]);
 
   const [isSideBarTheme, setIsSideBarTheme] = useState<"dark" | "light">("light")
+  // const [isSideBarTheme, setIsSideBarTheme] = useState<"dark" | "light">("dark")
 
   // 定义导航项的样式类
   const sidebarItemStyDark = "group relative flex items-center gap-2.5 py-2 px-4 text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 rounded-sm font-medium"
