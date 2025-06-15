@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-interface Version { name: string, tag_name: string, tarball_url: string }
+interface Version { name: string, tag_name: string, html_url: string }
 
 const useVersionData = () => {
     const [version, setVersion] = useState<Version>({} as Version);

@@ -1,9 +1,21 @@
-import React, { useState, ReactNode } from 'react';
+import React, { useState, ReactNode, useEffect } from 'react';
+import { notification } from 'antd';
 import Header from '../components/Header/index';
 import Sidebar from '../components/Sidebar/index';
+import useVersionData from '@/hooks/useVersionData';
 
 const DefaultLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const version = useVersionData();
+
+  useEffect(() => {
+    if (version.tag_name &&version.tag_name !== import.meta.env.VITE_VERSION) {
+      notification.success({
+        message: '系统升级',
+        description: `请更新到 ${version.tag_name} 版本，以获得最佳体验`,
+      });
+    }
+  }, [version]);
 
   return (
     <div className="dark:bg-[#1A222C] dark:text-bodydark">

@@ -41,7 +41,7 @@ const HeaderInfo = () => {
 
                                 <div className='group flex items-center'>
                                     <FaDownload className='group-hover:text-primary transition-colors' />
-                                    <a href={version.tarball_url} className='group-hover:text-primary pl-2 transition-colors'>点击下载最新版</a>
+                                    <a href={version.html_url} className='group-hover:text-primary pl-2 transition-colors'>点击下载最新版</a>
                                 </div>
                             </>
                         )
