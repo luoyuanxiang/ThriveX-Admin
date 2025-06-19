@@ -2,8 +2,10 @@ import { getCommentListAPI } from "@/api/Comment";
 import { getWallListAPI } from "@/api/Wall";
 import { getLinkListAPI } from "@/api/Web";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function InfoCard() {
+  const navigate = useNavigate()
   const [commentCount, setCommentCount] = useState<number>(0);
   const [linkCount, setLinkCount] = useState<number>(0);
   const [wallCount, setWallCount] = useState<number>(0);
@@ -41,7 +43,7 @@ export default function InfoCard() {
           当前有 <span className="text-white text-2xl font-bold">{commentCount}</span> 条评论，<span className="text-white text-2xl font-bold">{linkCount}</span> 条友链，<span className="text-white text-2xl font-bold">{wallCount}</span> 条留言。
         </p>
 
-        <button className="bg-white text-blue-400 font-bold py-1 px-4 rounded transition duration-300 transform hover:scale-105">
+        <button className="bg-white text-blue-400 font-bold py-1 px-4 rounded transition duration-300 transform hover:scale-105" onClick={() => navigate("/work")}>
           去处理
         </button>
       </div>
