@@ -64,7 +64,7 @@ function App() {
       locale={zhCN}
       theme={{
         token: {
-          colorPrimary: '#727cf5',
+          colorPrimary: '#60a5fa',
           colorBgBase: isDarkTheme ? '#24303F' : '#ffffff',
           colorTextBase: isDarkTheme ? '#e0e0e0' : '#000000',
         },

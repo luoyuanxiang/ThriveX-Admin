@@ -275,7 +275,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           to: "/iter",
           path: "iter",
           icon: <BiBug className='text-[22px]' />,
-          // name: <div>更新日志 <b className={`inline-block w-3 h-3 ml-2 ${version.tag_name === import.meta.env.VITE_VERSION ? 'bg-green-400' : 'bg-red-400'} rounded-full`}></b></div>
           name: <div className='flex items-center w-full justify-between'>
             <span>更新日志</span>
             <div className='flex items-center gap-1'>

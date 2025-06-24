@@ -8,11 +8,27 @@ const useVersionData = () => {
 
     useEffect(() => {
         const getVersionData = async () => {
-            const project_version = JSON.parse(sessionStorage.getItem('project_version') || '{}');
-            if (Object.keys(project_version).length !== 0) return setVersion(project_version);
-            const { data } = await axios.get("https://api.github.com/repos/LiuYuYang01/ThriveX-Admin/releases/latest");
-            setVersion(data);
-            sessionStorage.setItem('project_version', JSON.stringify(data));
+            try {
+                // 先检查 sessionStorage 中是否有缓存的版本数据
+                const cachedVersion = sessionStorage.getItem('project_version');
+
+                if (cachedVersion) {
+                    const parsedVersion = JSON.parse(cachedVersion);
+                    // 检查缓存的数据是否有效（包含必要字段）
+                    if (parsedVersion.tag_name && parsedVersion.html_url) {
+                        setVersion(parsedVersion);
+                        return; // 使用缓存数据，不调用接口
+                    }
+                }
+
+                // 如果没有缓存或缓存无效，则调用接口获取数据
+                const { data } = await axios.get("https://api.github.com/repos/LiuYuYang01/ThriveX-Admin/releases/latest");
+                setVersion(data);
+                // 将新数据存储到 sessionStorage
+                sessionStorage.setItem('project_version', JSON.stringify(data));
+            } catch (error) {
+                console.error('获取版本信息失败:', error);
+            }
         };
 
         getVersionData();
