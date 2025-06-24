@@ -33,7 +33,7 @@ const HeaderInfo = () => {
                         : (
                             <>
                                 <div className='flex space-x-4'>
-                                    <p>当前版本：<b className='inline-block px-2 text-white bg-blue-400 rounded-md'>{import.meta.env.VITE_VERSION}</b></p>
+                                    <p>当前版本：<b className='inline-block px-2 text-white bg-primary rounded-md'>{import.meta.env.VITE_VERSION}</b></p>
                                     <p>最新版本：<b className='inline-block px-2 text-white bg-red-500 rounded-md'>{version.tag_name}</b></p>
                                 </div>
 

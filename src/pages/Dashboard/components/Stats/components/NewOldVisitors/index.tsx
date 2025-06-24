@@ -13,7 +13,7 @@ const options: ApexOptions = {
     fontFamily: 'Satoshi, sans-serif',
     type: 'donut',
   },
-  colors: ['#91C8EA', '#727cf5'],
+  colors: ['#91C8EA', '#60a5fa'],
   labels: ['新访客', '老访客'],
   legend: {
     show: false,

@@ -44,7 +44,7 @@ export default () => {
             position: 'top',
             horizontalAlign: 'left',
         },
-        colors: ['#3C50E0', '#80CAEE'],
+        colors: ['#60a5fa', '#80CAEE'],
         chart: {
             fontFamily: 'Satoshi, sans-serif',
             height: 335,
@@ -101,7 +101,7 @@ export default () => {
         markers: {
             size: 4,
             colors: '#fff',
-            strokeColors: ['#3056D3', '#80CAEE'],
+            strokeColors: ['#60a5fa', '#80CAEE'],
             strokeWidth: 3,
             strokeOpacity: 0.9,
             strokeDashArray: 0,
