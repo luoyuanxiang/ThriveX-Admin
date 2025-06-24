@@ -32,7 +32,7 @@
 }
 
 .ant-btn-primary {
-  background-color: #727cf5;
+  background-color: #60a5fa;
 }
 
 .ant-switch {
@@ -40,5 +40,5 @@
 }
 
 .ant-switch-checked {
-  background-color: #727cf5 !important;
+  background-color: #60a5fa !important;
 }
