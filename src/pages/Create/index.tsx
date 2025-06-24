@@ -233,7 +233,7 @@ export default () => {
       </Title>
 
       <Spin spinning={loading}>
-        <Card className={`${titleSty} overflow-hidden rounded-xl min-h-[calc(100vh-180px)]`}>
+        <Card className={`${titleSty} overflow-hidden rounded-xl min-h-[calc(100vh-160px)]`}>
           <Editor value={content} onChange={(value) => setContent(value)} />
 
           <Drawer

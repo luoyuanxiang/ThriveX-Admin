@@ -60,7 +60,7 @@ export default () => {
         <div>
             <Title value="项目配置" />
 
-            <Card className='mt-2 min-h-[calc(100vh-180px)]'>
+            <Card className='mt-2 min-h-[calc(100vh-160px)]'>
                 <div className="flex flex-col md:flex-row">
                     <ul className="w-full md:w-[20%] md:mr-5 mb-10 md:mb-0 border-b-0 md:border-r border-stroke dark:border-strokedark divide-y divide-solid divide-[#F6F6F6] dark:divide-strokedark">
                         {list.map((item) => (

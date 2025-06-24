@@ -440,7 +440,7 @@ export default () => {
                 </div>
             </Modal>
 
-            <Card className={`${titleSty} min-h-[calc(100vh-270px)]`}>
+            <Card className={`${titleSty} min-h-[calc(100vh-250px)]`}>
                 <Table
                     rowKey="id"
                     dataSource={articleList}

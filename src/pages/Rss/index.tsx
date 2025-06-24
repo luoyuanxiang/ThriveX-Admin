@@ -40,7 +40,7 @@ export default () => {
             <Title value='订阅中心' />
 
             <Spin spinning={loading}>
-                <Card className='mt-2 min-h-[calc(100vh-180px)]'>
+                <Card className='mt-2 min-h-[calc(100vh-160px)]'>
                     <List
                         dataSource={list}
                         size="large"

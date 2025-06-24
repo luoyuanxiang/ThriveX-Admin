@@ -83,7 +83,7 @@ export default () => {
             <Title value='项目迭代记录'></Title>
 
             <Spin spinning={loading}>
-                <Card className='mt-2 min-h-[calc(100vh-180px)]'>
+                <Card className='mt-2 min-h-[calc(100vh-160px)]'>
                     <div className='flex flex-col items-center mt-2 mb-22'>
                         <div className='ml-5 mb-6'>
                             <span>年份切换：</span>

@@ -212,7 +212,7 @@ export default () => {
                 </Form>
             </Card>
 
-            <Card className={`${titleSty} mt-2 min-h-[calc(100vh-180px)]`}>
+            <Card className={`${titleSty} mt-2 min-h-[calc(100vh-160px)]`}>
                 <Table
                     rowKey="id"
                     dataSource={list}

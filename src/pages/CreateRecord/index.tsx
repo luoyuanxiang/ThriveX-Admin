@@ -148,7 +148,7 @@ export default () => {
             <Title value="闪念" />
 
             <Spin spinning={loading}>
-                <Card className={`${titleSty} min-h-[calc(100vh-180px)]`}>
+                <Card className={`${titleSty} min-h-[calc(100vh-160px)]`}>
                     <div className="relative flex w-[90%] xl:w-[800px] mx-auto mt-[50px]">
                         <WangEditor ref={editorRef} />
 

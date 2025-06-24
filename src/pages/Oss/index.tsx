@@ -197,7 +197,7 @@ export default () => {
                 <Button type="primary" size='large' onClick={addOssData}>新增配置</Button>
             </Title>
 
-            <Card className={`${titleSty} min-h-[calc(100vh-180px)]`}>
+            <Card className={`${titleSty} min-h-[calc(100vh-160px)]`}>
                 <Table
                     rowKey="id"
                     loading={loading}
