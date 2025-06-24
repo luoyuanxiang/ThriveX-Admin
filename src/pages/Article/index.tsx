@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 
 import { getCateListAPI } from '@/api/Cate'
 import { getTagListAPI } from '@/api/Tag'
-import { delArticleDataAPI, getArticleListAPI, getArticlePagingAPI, importArticleDataAPI } from '@/api/Article';
+import { delArticleDataAPI, getArticlePagingAPI, importArticleDataAPI } from '@/api/Article';
 import type { Tag as ArticleTag } from '@/types/app/tag';
 import type { Cate } from '@/types/app/cate';
 import type { Article, Config, FilterArticle, FilterForm } from '@/types/app/article';
@@ -28,12 +28,10 @@ export default () => {
 
     const [form] = Form.useForm();
     const web = useWebStore(state => state.web);
-    const [current, setCurrent] = useState<number>(1);
     const [articleList, setArticleList] = useState<Article[]>([]);
     const { RangePicker } = DatePicker;
 
     // 分页获得的文章列表
-    const [pagingArticleList, setPagingArticleList] = useState<Article[]>([]);
     const [total, setTotal] = useState<number>(0);
     // 分页参数
     const [paging, setPaging] = useState<Page>({
@@ -52,7 +50,7 @@ export default () => {
     })
 
     // 分页获取文章
-    const getArticleListByPaging = async () => {
+    const getArticleList = async () => {
         try {
             setLoading(true);
             const { data } = await getArticlePagingAPI({
@@ -60,23 +58,10 @@ export default () => {
                 query
             })
             setTotal(data.total)
-            setPagingArticleList(data.result)
+            setArticleList(data.result)
             setLoading(false)
         } catch (error) {
             setLoading(false)
-        }
-    };
-
-    const getArticleList = async () => {
-        try {
-            setLoading(true);
-
-            const { data } = await getArticleListAPI();
-            setArticleList(data);
-
-            setLoading(false);
-        } catch (error) {
-            setLoading(false);
         }
     };
 
@@ -88,7 +73,6 @@ export default () => {
             await delArticleDataAPI(id, true);
             await getArticleList();
             form.resetFields()
-            setCurrent(1)
             notification.success({ message: '🎉 删除文章成功' })
             setLoading(false);
         } catch (error) {
@@ -195,23 +179,11 @@ export default () => {
 
     const onFilterSubmit = async (values: FilterForm) => {
         try {
-            // setLoading(true)
-
-            // const query: FilterArticle = {
-            //     key: values.title,
-            //     cateId: values.cateId,
-            //     tagId: values.tagId,
-            //     isDraft: 0,
-            //     isDel: 0,
-            //     startDate: values.createTime && values.createTime[0].valueOf() + '',
-            //     endDate: values.createTime && values.createTime[1].valueOf() + ''
-            // }
-            console.log(values);
-            
             setPaging({
                 ...paging,
                 page: 1 // 条件参数发生变化，重置分页
             });
+
             setQuery({
                 key: values.title,
                 cateId: values.cateId,
@@ -219,13 +191,8 @@ export default () => {
                 startDate: values.createTime && values.createTime[0].valueOf() + '',
                 endDate: values.createTime && values.createTime[1].valueOf() + ''
             });
-
-            // const { data } = await getArticleListAPI({ query });
-            // setArticleList(data);
-
-            // setLoading(false)
         } catch (error) {
-            // setLoading(false)
+            console.log(error);
         }
     }
 
@@ -360,12 +327,11 @@ export default () => {
     };
 
     useEffect(() => {
-        getArticleListByPaging()
+        getArticleList()
     }, [paging, query])
 
     useEffect(() => {
-        // getArticleList()
-        getArticleListByPaging()
+        getArticleList()
         getCateList()
         getTagList()
     }, [])
@@ -496,21 +462,13 @@ export default () => {
             <Card className={`${titleSty} min-h-[calc(100vh-250px)]`}>
                 <Table
                     rowKey="id"
-                    // dataSource={articleList}
-                    dataSource={pagingArticleList}
+                    dataSource={articleList}
                     columns={columns}
                     scroll={{ x: 'max-content' }}
-                    // pagination={{
-                    //     position: ['bottomCenter'],
-                    //     current,
-                    //     defaultPageSize: 8,
-                    //     onChange(current) {
-                    //         setCurrent(current)
-                    //     }
-                    // }}
                     pagination={false}
                     loading={loading}
                 />
+
                 <div className='flex justify-center my-5'>
                     <Pagination total={total} current={paging.page} pageSize={paging.size} onChange={(page, pageSize) => setPaging({ ...paging, page, size: pageSize })} />
                 </div>
