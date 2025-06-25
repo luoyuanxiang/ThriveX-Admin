@@ -80,16 +80,16 @@ export default ({
         message.error('复制到剪贴板失败，请手动复制');
         onSuccess(data);
         setIsLoading(false);
+        // onCloseModel()
         return;
       }
 
       message.success(`🎉 文件上传成功，URL链接已复制到剪贴板`);
       onSuccess(data);
-      setIsLoading(false);
       onCloseModel();
     } catch (error) {
       message.error('文件上传失败：' + (error as Error).message);
-      setIsLoading(false);
+      onCloseModel()
     }
   };
 

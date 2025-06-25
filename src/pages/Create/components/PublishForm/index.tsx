@@ -15,191 +15,195 @@ import { Tag } from "@/types/app/tag";
 import { Article, Status } from "@/types/app/article";
 
 import dayjs from 'dayjs';
+import Material from "@/components/Material";
+import { CloudUploadOutlined, PictureOutlined } from "@ant-design/icons";
 
 interface Props {
-    data: Article,
-    closeModel: () => void
+  data: Article,
+  closeModel: () => void
 }
 
 interface FieldType {
-    title: string,
-    createTime: number;
-    cateIds: number[];
-    tagIds: (number | string)[];
-    cover: string;
-    description: string;
-    config: {
-        top: boolean;
-        status: Status;
-        password: string;
-        isEncrypt: number;
-    }
+  title: string,
+  createTime: number;
+  cateIds: number[];
+  tagIds: (number | string)[];
+  cover: string;
+  description: string;
+  config: {
+    top: boolean;
+    status: Status;
+    password: string;
+    isEncrypt: number;
+  }
 }
 
 const PublishForm = ({ data, closeModel }: Props) => {
-    const [params] = useSearchParams()
-    const id = +params.get('id')!
-    const isDraftParams = Boolean(params.get('draft'))
+  const [params] = useSearchParams()
+  const id = +params.get('id')!
+  const isDraftParams = Boolean(params.get('draft'))
 
-    const [btnLoading, setBtnLoading] = useState(false)
+  const [btnLoading, setBtnLoading] = useState(false)
 
-    const [form] = Form.useForm()
-    const navigate = useNavigate()
+  const [isMaterialModalOpen, setIsMaterialModalOpen] = useState(false)
 
-    const [cateList, setCateList] = useState<Cate[]>([])
-    const [tagList, setTagList] = useState<Tag[]>([])
-    const [isEncryptEnabled, setIsEncryptEnabled] = useState(false);
+  const [form] = Form.useForm()
+  const navigate = useNavigate()
 
-    useEffect(() => {
-        if (!id) return form.resetFields()
+  const [cateList, setCateList] = useState<Cate[]>([])
+  const [tagList, setTagList] = useState<Tag[]>([])
+  const [isEncryptEnabled, setIsEncryptEnabled] = useState(false);
 
-        // 把数据处理成[[1], [4, 5], [4, 6]]格式
-        const cateIds = data?.cateList?.flatMap(item => {
-            if (item?.children?.length) {
-                return item.children.map(child => [item.id, child.id]);
-            } else {
-                return [[item.id]];
-            }
-        });
+  useEffect(() => {
+    if (!id) return form.resetFields()
 
-        const tagIds = data.tagList!.map(item => item.id)
+    // 把数据处理成[[1], [4, 5], [4, 6]]格式
+    const cateIds = data?.cateList?.flatMap(item => {
+      if (item?.children?.length) {
+        return item.children.map(child => [item.id, child.id]);
+      } else {
+        return [[item.id]];
+      }
+    });
 
-        const formValues = {
-            ...data,
-            status: data.config.status,
-            password: data.config.password,
-            isEncrypt: !!data.config.isEncrypt,
-            cateIds,
+    const tagIds = data.tagList!.map(item => item.id)
+
+    const formValues = {
+      ...data,
+      status: data.config.status,
+      password: data.config.password,
+      isEncrypt: !!data.config.isEncrypt,
+      cateIds,
+      tagIds,
+      createTime: dayjs(+data.createTime!)
+    }
+
+    form.setFieldsValue(formValues)
+    // 设置初始的加密状态
+    setIsEncryptEnabled(!!formValues.isEncrypt)
+  }, [data, id])
+
+  const getCateList = async () => {
+    const { data } = await getCateListAPI()
+    setCateList(data.filter(item => item.type === "cate") as Cate[])
+  }
+
+  const getTagList = async () => {
+    const { data } = await getTagListAPI()
+    setTagList(data as Tag[])
+  }
+
+  useEffect(() => {
+    getCateList()
+    getTagList()
+  }, [])
+
+  // 校验文章封面
+  const validateURL = (_: RuleObject, value: string) => {
+    return !value || /^(https?:\/\/)/.test(value) ? Promise.resolve() : Promise.reject(new Error('请输入有效的封面链接'));
+  };
+
+  const onSubmit = async (values: FieldType, isDraft?: boolean) => {
+    setBtnLoading(true)
+
+    values.config.isEncrypt = values.config.isEncrypt ? 1 : 0
+
+    try {
+      // 如果是文章标签，则先判断是否存在，如果不存在则添加
+      let tagIds: number[] = []
+      for (const item of (values.tagIds ? values.tagIds : [])) {
+        if (typeof item === "string") {
+          // 如果已经有这个标签了，就没必要再创建一个了
+          // 先转换为大写进行查找，否则会出现大小写不匹配问题
+          const tag1 = tagList.find(t => t.name.toUpperCase() === item.toUpperCase())?.id;
+
+          if (tag1) {
+            tagIds.push(tag1)
+            continue
+          }
+
+          await addTagDataAPI({ name: item });
+          const { data: list } = await getTagListAPI();
+          // 添加成功后查找对应的标签id
+          const tag2 = list.find(t => t.name === item)?.id;
+          if (tag2) tagIds.push(tag2);
+        } else {
+          tagIds.push(item);
+        }
+      }
+
+      values.createTime = values.createTime.valueOf()
+      values.cateIds = [...new Set(values.cateIds?.flat())]
+
+      if (id && !isDraftParams) {
+        await editArticleDataAPI({
+          id,
+          ...values,
+          content: data.content,
+          tagIds,
+          config: {
+            isDraft: 0,
+            isDel: 0,
+            ...values.config
+          }
+        } as any)
+        message.success("🎉 编辑成功")
+      } else {
+        if (!isDraftParams) {
+          await addArticleDataAPI({
+            id,
+            ...values,
+            content: data.content,
             tagIds,
-            createTime: dayjs(+data.createTime!)
-        }
+            config: {
+              isDraft: isDraft ? 1 : 0,
+              isDel: 0,
+              ...values.config
+            },
+            createTime: values.createTime.toString()
+          })
 
-        form.setFieldsValue(formValues)
-        // 设置初始的加密状态
-        setIsEncryptEnabled(!!formValues.isEncrypt)
-    }, [data, id])
-
-    const getCateList = async () => {
-        const { data } = await getCateListAPI()
-        setCateList(data.filter(item => item.type === "cate") as Cate[])
-    }
-
-    const getTagList = async () => {
-        const { data } = await getTagListAPI()
-        setTagList(data as Tag[])
-    }
-
-    useEffect(() => {
-        getCateList()
-        getTagList()
-    }, [])
-
-    // 校验文章封面
-    const validateURL = (_: RuleObject, value: string) => {
-        return !value || /^(https?:\/\/)/.test(value) ? Promise.resolve() : Promise.reject(new Error('请输入有效的封面链接'));
-    };
-
-    const onSubmit = async (values: FieldType, isDraft?: boolean) => {
-        setBtnLoading(true)
-
-        values.config.isEncrypt = values.config.isEncrypt ? 1 : 0
-
-        try {
-            // 如果是文章标签，则先判断是否存在，如果不存在则添加
-            let tagIds: number[] = []
-            for (const item of (values.tagIds ? values.tagIds : [])) {
-                if (typeof item === "string") {
-                    // 如果已经有这个标签了，就没必要再创建一个了
-                    // 先转换为大写进行查找，否则会出现大小写不匹配问题
-                    const tag1 = tagList.find(t => t.name.toUpperCase() === item.toUpperCase())?.id;
-
-                    if (tag1) {
-                        tagIds.push(tag1)
-                        continue
-                    }
-
-                    await addTagDataAPI({ name: item });
-                    const { data: list } = await getTagListAPI();
-                    // 添加成功后查找对应的标签id
-                    const tag2 = list.find(t => t.name === item)?.id;
-                    if (tag2) tagIds.push(tag2);
-                } else {
-                    tagIds.push(item);
-                }
+          isDraft ? message.success("🎉 保存为草稿成功") : message.success("🎉 发布成功")
+        } else {
+          // 修改草稿状态为发布文章
+          await editArticleDataAPI({
+            id,
+            ...values,
+            content: data.content,
+            tagIds,
+            config: {
+              isDraft: isDraft ? 1 : 0,
+              ...values.config
             }
-
-            values.createTime = values.createTime.valueOf()
-            values.cateIds = [...new Set(values.cateIds?.flat())]
-
-            if (id && !isDraftParams) {
-                await editArticleDataAPI({
-                    id,
-                    ...values,
-                    content: data.content,
-                    tagIds,
-                    config: {
-                        isDraft: 0,
-                        isDel: 0,
-                        ...values.config
-                    }
-                } as any)
-                message.success("🎉 编辑成功")
-            } else {
-                if (!isDraftParams) {
-                    await addArticleDataAPI({
-                        id,
-                        ...values,
-                        content: data.content,
-                        tagIds,
-                        config: {
-                            isDraft: isDraft ? 1 : 0,
-                            isDel: 0,
-                            ...values.config
-                        },
-                        createTime: values.createTime.toString()
-                    })
-
-                    isDraft ? message.success("🎉 保存为草稿成功") : message.success("🎉 发布成功")
-                } else {
-                    // 修改草稿状态为发布文章
-                    await editArticleDataAPI({
-                        id,
-                        ...values,
-                        content: data.content,
-                        tagIds,
-                        config: {
-                            isDraft: isDraft ? 1 : 0,
-                            ...values.config
-                        }
-                    } as any)
-                }
-            }
-
-            // 关闭弹框
-            closeModel()
-            // 清除本地持久化的数据
-            localStorage.removeItem('article_content')
-            // 如果是草稿就跳转到草稿页，否则文章页
-            isDraft ? navigate("/draft") : navigate("/article")
-            // 初始化表单
-            form.resetFields()
-        } catch (error) {
-            setBtnLoading(false)
+          } as any)
         }
+      }
 
-        setBtnLoading(false)
+      // 关闭弹框
+      closeModel()
+      // 清除本地持久化的数据
+      localStorage.removeItem('article_content')
+      // 如果是草稿就跳转到草稿页，否则文章页
+      isDraft ? navigate("/draft") : navigate("/article")
+      // 初始化表单
+      form.resetFields()
+    } catch (error) {
+      setBtnLoading(false)
     }
 
-    // 初始表单数据
-    const initialValues = {
-        config: {
-            top: false,
-            status: "default",
-            password: "",
-            isEncrypt: 0
-        },
-        createTime: dayjs(new Date())
-    }
+    setBtnLoading(false)
+  }
+
+  // 初始表单数据
+  const initialValues = {
+    config: {
+      top: false,
+      status: "default",
+      password: "",
+      isEncrypt: 0
+    },
+    createTime: dayjs(new Date())
+  }
 
   const { callAssistant } = useAssistant();
   const [generating, setGenerating] = useState(false);
@@ -208,7 +212,7 @@ const PublishForm = ({ data, closeModel }: Props) => {
   const generateTitleAndDescription = async () => {
     try {
       setGenerating(true);
-      
+
       const content = data.content || '';
       if (!content) {
         message.error('请先输入文章内容');
@@ -225,32 +229,32 @@ ${content}
 3. 返回格式为JSON对象，包含title和description字段`;
 
       const response = await callAssistant([
-        { 
-          role: "system", 
+        {
+          role: "system",
           content: "你是 Kimi，由 Moonshot AI 提供的人工智能助手，你更擅长中文和英文的对话。你会为用户提供安全，有帮助，准确的回答。"
         },
         { role: "user", content: prompt }
       ], { max_tokens: 200, temperature: 0.3 });
 
       if (response) {
-          const result = response.choices[0]?.message?.content?.trim();
-          if (result) {
-            try {
-              let jsonStr = result;
-              if (jsonStr.startsWith('```json')) {
-                jsonStr = jsonStr.replace(/```json/g, '').replace(/```/g, '').trim();
-              }
-              
-              const { title, description } = JSON.parse(jsonStr);
-              form.setFieldsValue({ 
-                title: title || '',
-                description: description || '' 
-              });
-              message.success('标题和简介生成成功');
-            } catch (e) {
-              console.error('Failed to parse response:', e);
-              message.error('解析生成结果失败，请检查助手返回格式');
+        const result = response.choices[0]?.message?.content?.trim();
+        if (result) {
+          try {
+            let jsonStr = result;
+            if (jsonStr.startsWith('```json')) {
+              jsonStr = jsonStr.replace(/```json/g, '').replace(/```/g, '').trim();
             }
+
+            const { title, description } = JSON.parse(jsonStr);
+            form.setFieldsValue({
+              title: title || '',
+              description: description || ''
+            });
+            message.success('标题和简介生成成功');
+          } catch (e) {
+            console.error('Failed to parse response:', e);
+            message.error('解析生成结果失败，请检查助手返回格式');
+          }
         } else {
           message.error('生成失败，请重试');
         }
@@ -261,6 +265,11 @@ ${content}
       setGenerating(false);
     }
   };
+
+  // 文件上传
+  const UploadBtn = () => (
+    <CloudUploadOutlined className='text-xl cursor-pointer' onClick={() => setIsMaterialModalOpen(true)} />
+  )
 
   return (
     <div>
@@ -278,23 +287,23 @@ ${content}
         </Form.Item>
 
         <Form.Item label="文章简介" name="description">
-          <TextArea 
-            autoSize={{ minRows: 2, maxRows: 5 }} 
-            showCount 
-            placeholder="请输入文章简介" 
+          <TextArea
+            autoSize={{ minRows: 2, maxRows: 5 }}
+            showCount
+            placeholder="请输入文章简介"
           />
         </Form.Item>
 
         <Form.Item>
-          <Button 
-            type="primary" 
+          <Button
+            type="primary"
             onClick={generateTitleAndDescription}
             loading={generating}
           >一键生成标题和简介</Button>
         </Form.Item>
 
         <Form.Item label="文章封面" name="cover" rules={[{ validator: validateURL }]}>
-          <Input placeholder="请输入文章封面" />
+          <Input placeholder="请输入文章封面" prefix={<PictureOutlined />} addonAfter={<UploadBtn />} className='customizeAntdInputAddonAfter' />
         </Form.Item>
 
         <Form.Item label="选择分类" name="cateIds" rules={[{ required: true, message: '请选择文章分类' }]}>
@@ -324,9 +333,9 @@ ${content}
           <DatePicker showTime placeholder="选择文章发布时间" className="w-full" />
         </Form.Item>
 
-        <Form.Item label="是否置顶" name={["config", "top"]} valuePropName="checked">
+        {/* <Form.Item label="是否置顶" name={["config", "top"]} valuePropName="checked">
           <Switch />
-        </Form.Item>
+        </Form.Item> */}
 
         <Form.Item label="状态" name={["config", "status"]}>
           <Radio.Group>
@@ -361,6 +370,16 @@ ${content}
           </Form.Item>
         )}
       </Form>
+
+      <Material
+        // multiple
+        open={isMaterialModalOpen}
+        onClose={() => setIsMaterialModalOpen(false)}
+        onSelect={(url) => {
+          form.setFieldValue("cover", url[0]);
+          form.validateFields(['cover']); // 手动触发 image 字段的校验
+        }}
+      />
     </div>
   );
 };
