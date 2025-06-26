@@ -49,10 +49,19 @@
 }
 // ------------------> Antd组件库暗色适配 结束 <------------------
 
-// #root {
-//     transition-duration: 0s !important;
+#root {
+    .ant-table,
+    .ant-form,
+    .ant-card,
+    .ant-modal,
+    .ant-drawer,
+    .ant-notification,
+    .ant-message,
+    .ant-tooltip {
+        transition-duration: 0s !important;
 
-//     * {
-//         transition-duration: 0s !important;
-//     }
-// }
+        * {
+            transition-duration: 0s !important;
+        }
+    }
+}
