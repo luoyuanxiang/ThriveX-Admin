@@ -112,7 +112,7 @@ export default () => {
                                 type="primary"
                                 htmlType="submit"
                                 loading={loading}
-                                className="w-full h-12 mt-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 font-medium text-base"
+                                className="w-full h-12 mt-4 rounded-xl shadow-lg hover:shadow-xl font-medium text-base hover:scale-105 transition-transform"
                                 block
                             >
                                 {loading ? '登录中...' : '登录'}
