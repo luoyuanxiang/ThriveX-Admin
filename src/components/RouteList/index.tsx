@@ -15,7 +15,6 @@ import Swiper from '@/pages/Swiper';
 import Footprint from '@/pages/Footprint';
 import User from '@/pages/User';
 import Setup from '@/pages/Setup';
-import Rss from '@/pages/Rss';
 import File from "@/pages/File";
 import Iterative from '@/pages/Iterative';
 import Page from '@/pages/Route';
@@ -65,7 +64,6 @@ export default () => {
         { path: "/setup", title: "项目配置", component: <Setup /> },
         { path: "/route", title: "路由配置", component: <Page /> },
         { path: "/role", title: "角色管理", component: <Role /> },
-        { path: "/rss", title: "订阅中心", component: <Rss /> },
         { path: "/file", title: "文件管理", component: <File /> },
         { path: "/iter", title: "项目更新记录", component: <Iterative /> },
         { path: "/work", title: "工作台", component: <Work /> },

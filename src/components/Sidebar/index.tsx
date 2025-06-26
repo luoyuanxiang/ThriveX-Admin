@@ -260,12 +260,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           name: "工作台"
         },
         {
-          to: "/rss",
-          path: "rss",
-          icon: <LiaRssSolid className='text-[22px]' />,
-          name: "订阅中心"
-        },
-        {
           to: "/file",
           path: "file",
           icon: <BiFolderOpen className='text-[22px]' />,
