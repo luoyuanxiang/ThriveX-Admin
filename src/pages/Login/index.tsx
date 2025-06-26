@@ -6,6 +6,7 @@ import { UserOutlined, LockOutlined, EyeOutlined, EyeInvisibleOutlined } from '@
 import { loginDataAPI } from '@/api/User';
 import { useUserStore } from '@/stores';
 import { getRolePermissionListAPI } from '@/api/Role';
+import github from './assets/images/oauth/github.svg';
 
 export default () => {
     const navigate = useNavigate();
@@ -13,6 +14,11 @@ export default () => {
     const store = useUserStore();
 
     const [loading, setLoading] = useState(false)
+
+    const client_id = 'Ov23liIIzRjNDsB1PXsk';
+
+    const authorize_uri = 'https://github.com/login/oauth/authorize';
+    const redirect_uri = `${window.location.origin}/auth`;
 
     const [form] = useForm();
 
@@ -32,7 +38,7 @@ export default () => {
             store.setUser(data.user);
             store.setRole(data.role)
             store.setPermission(permission)
-            
+
             notification.success({
                 message: '🎉 登录成功',
                 description: `Hello ${data.user.name} 欢迎回来`,
@@ -47,18 +53,18 @@ export default () => {
 
     return (
         <div className="w-screen h-screen flex justify-center items-center">
-            <div className="overflow-hidden relative w-[400px] h-[380px] rounded-lg bg-white shadow-[4px_6px_200px_200px_rgba(121,122,243,0.1)]">
-                <div className="flex flex-col justify-center items-center h-25 bg-primary text-white">
+            <div className="overflow-hidden relative w-[400px] h-[380px] px-10 rounded-lg bg-white shadow-[4px_6px_200px_200px_rgba(121,122,243,0.1)]">
+                {/* <div className="flex flex-col justify-center items-center h-25 bg-primary text-white">
                     <h3 className="text-3xl">Thrive</h3>
                     <p className="text-gray-300 mt-2">现代化博客管理系统</p>
-                </div>
+                </div> */}
 
                 <Form
                     form={form}
                     size='large'
                     layout="vertical"
                     onFinish={onSubmit}
-                    className='pt-5 px-10'
+                    className='pt-5'
                 >
                     <Form.Item
                         name="username"
@@ -87,6 +93,10 @@ export default () => {
                         <Button type="primary" htmlType="submit" loading={loading} className="w-full" block>登录</Button>
                     </Form.Item>
                 </Form>
+
+                <a href={`${authorize_uri}?client_id=${client_id}&redirect_uri=${redirect_uri}`} target="_blank">
+                    <img src={github} alt="" className='w-10 h-10 cursor-pointer' />
+                </a>
             </div>
         </div>
     );

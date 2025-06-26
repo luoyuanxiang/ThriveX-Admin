@@ -36,12 +36,13 @@ import { getRoleRouteListAPI } from "@/api/Role";
 import { checkTokenAPI } from '@/api/User'
 import { Route as RouteType } from "@/types/app/route";
 import NotFound from "../NotFound";
+import Auth from "@/pages/Auth";
 
 export default () => {
     const navigate = useNavigate();
     const store = useUserStore();
     const { pathname } = useLocation();
-    const isLoginRoute = pathname === '/login';
+    const isLoginRoute = pathname === '/login' || pathname === '/auth';
 
     const routesAll = [
         { path: "/", title: "仪表盘", component: <Home /> },
@@ -80,10 +81,10 @@ export default () => {
     };
 
     useEffect(() => {
-        // 如果没有token就跳转到登录页
-        if (!store.token) return navigate("/login")
+        // 如果没有token并且不在登录相关页面就跳转到登录页
+        if (!store.token && !isLoginRoute) return navigate("/login")
         if (store.role.id) getRouteList(store.role.id)
-    }, [store]);
+    }, [store, isLoginRoute]);
 
     useEffect(() => {
         if (store.token) checkTokenAPI(store.token)
@@ -101,6 +102,13 @@ export default () => {
                         </>
                     }
                 />
+
+                <Route path="/auth" element={
+                    <>
+                        <PageTitle title="ThriveX | 第三方登录" />
+                        <Auth />
+                    </>
+                } />
             </Routes>
         );
     }
