@@ -3,6 +3,7 @@ import { Spin } from 'antd';
 import { ApexOptions } from 'apexcharts';
 import ReactApexChart from 'react-apexcharts';
 import dayjs from 'dayjs';
+import { getStatisAPI } from '@/api/Statis';
 
 interface Result {
     timeSpan: string[];
@@ -34,8 +35,8 @@ export default () => {
 
     const [result, setResult] = useState<Result | null>(null);
     const [scope, setScope] = useState<"day" | "month" | "year">("day");
-    const [startDate, setStartDate] = useState(dayjs(new Date()).subtract(7, "day").format("YYYY/MM/DD"));
-    const endDate = dayjs(new Date()).format("YYYY/MM/DD");
+    const [startDate, setStartDate] = useState(dayjs(new Date()).subtract(7, "day").format("YYYYMMDD"));
+    const endDate = dayjs(new Date()).format("YYYYMMDD");
 
     // 图表相关配置
     const [options, setOptions] = useState<ApexOptions>({
@@ -150,12 +151,8 @@ export default () => {
         try {
             setLoading(true)
 
-            const siteId = import.meta.env.VITE_BAIDU_TONGJI_SITE_ID;
-            const token = import.meta.env.VITE_BAIDU_TONGJI_ACCESS_TOKEN;
-
-            const response = await fetch(`/baidu/rest/2.0/tongji/report/getData?access_token=${token}&site_id=${siteId}&start_date=${startDate}&end_date=${endDate}&metrics=pv_count%2Cip_count&method=overview%2FgetTimeTrendRpt`);
-            const data = await response.json();
-            const { result } = data;
+            const { data } = await getStatisAPI("basic-overview", startDate, endDate);
+            const { result } = data as any;
             setResult(result);
 
             setLoading(false);
