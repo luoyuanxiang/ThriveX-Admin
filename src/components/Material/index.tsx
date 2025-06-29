@@ -257,7 +257,7 @@ export default ({ multiple, open, onClose, onSelect, maxCount }: Props) => {
 
       {/* 文件上传弹窗 */}
       <FileUpload
-        multiple={multiple}
+        multiple={multiple || (maxCount !== undefined && maxCount !== 1)}
         dir={dirName}
         open={isUploadModalOpen}
         onSuccess={onUpdateSuccess}
