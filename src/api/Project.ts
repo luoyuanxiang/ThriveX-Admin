@@ -12,4 +12,4 @@ export const editConfigDataAPI = (type: string, data: object) => Request<{ [stri
 export const getEnvConfigListAPI = () => Request<EnvConfig[]>("GET", `/env-config/list`)
 
 // 更新环境配置
-export const updateEnvConfigDataAPI = (data: EnvConfig) => Request("PATCH", `/env-config/${data.id}/json`, { data })
+export const updateEnvConfigDataAPI = (data: EnvConfig) => Request("PATCH", `/env-config/${data.id}/json`, { data: data.value })

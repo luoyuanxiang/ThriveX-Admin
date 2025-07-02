@@ -20,6 +20,8 @@
     "@bytemd/plugin-highlight": "^1.21.0",
     "@bytemd/plugin-math": "^1.21.0",
     "@bytemd/react": "^1.21.0",
+    "@codemirror/lang-json": "^6.0.2",
+    "@uiw/react-codemirror": "^4.23.14",
     "@wangeditor-next/editor-for-react": "^1.0.9",
     "antd": "^5.19.3",
     "apexcharts": "^3.41.0",
