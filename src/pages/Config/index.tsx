@@ -8,6 +8,7 @@ import { titleSty } from '@/styles/sty';
 
 export default () => {
   const [loading, setLoading] = useState(false);
+  const [btnLoading, setBtnLoading] = useState(false);
   const [list, setList] = useState<EnvConfig[]>([]);
   const [editItem, setEditItem] = useState<EnvConfig | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,21 +42,27 @@ export default () => {
   // 保存编辑
   const handleSave = async () => {
     try {
+      setBtnLoading(true);
       const values = await form.validateFields();
+
       let jsonValue;
+
       try {
         jsonValue = JSON.parse(values.value);
       } catch (e) {
         message.error('请输入合法的JSON格式');
         return;
       }
+
       await updateEnvConfigDataAPI({ ...editItem!, value: jsonValue });
       message.success('保存成功');
+      getList();
       setIsModalOpen(false);
       setEditItem(null);
-      getList();
+      setBtnLoading(false);
     } catch (e) {
       // 校验失败
+      setBtnLoading(false);
     }
   };
 
@@ -96,22 +103,21 @@ export default () => {
       </Card>
 
       <Modal
-        title={`编辑配置 - ${editItem?.name}`}
+        title={`编辑配置`}
         open={isModalOpen}
         onCancel={() => setIsModalOpen(false)}
-        onOk={handleSave}
-        okText="保存"
-        cancelText="取消"
-        destroyOnClose
+        footer={null}
       >
-        <Form form={form} layout="vertical">
+        <Form form={form} layout="vertical" onFinish={handleSave} size='large'>
           <Form.Item
-            label="配置内容 (JSON)"
             name="value"
             rules={[{ required: true, message: '请输入配置内容' }]}
+            className='mb-4'
           >
             <Input.TextArea rows={10} placeholder="请输入JSON格式内容" />
           </Form.Item>
+
+          <Button type="primary" htmlType="submit" loading={btnLoading} className="w-full">保存</Button>
         </Form>
       </Modal>
     </div>
