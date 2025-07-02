@@ -4,6 +4,7 @@ import { getEnvConfigListAPI, updateEnvConfigDataAPI } from '@/api/Project';
 import { EnvConfig } from '@/types/app/project';
 import Title from '@/components/Title';
 import { FormOutlined } from '@ant-design/icons';
+import { titleSty } from '@/styles/sty';
 
 export default () => {
   const [loading, setLoading] = useState(false);
@@ -61,23 +62,21 @@ export default () => {
   const columns = [
     { title: 'ID', dataIndex: 'id', key: 'id', align: 'center' as const },
     { title: '名称', dataIndex: 'name', key: 'name' },
+    { title: '备注', dataIndex: 'notes', key: 'notes' },
     {
       title: '配置内容',
       dataIndex: 'value',
       key: 'value',
       render: (value: object) => (
-        <pre className="max-w-[400px] whitespace-pre-wrap break-all bg-gray-50 dark:bg-[#222] p-2 rounded text-xs overflow-auto">{JSON.stringify(value, null, 2)}</pre>
+        <pre className="whitespace-pre-wrap break-all bg-gray-50 dark:bg-[#222] p-2 rounded text-xs overflow-auto">{JSON.stringify(value, null, 2)}</pre>
       ),
     },
-    { title: '备注', dataIndex: 'notes', key: 'notes' },
     {
       title: '操作',
       key: 'action',
       align: 'center' as const,
       render: (_: any, record: EnvConfig) => (
-        <Button icon={<FormOutlined />} onClick={() => handleEdit(record)}>
-          修改
-        </Button>
+        <Button icon={<FormOutlined />} onClick={() => handleEdit(record)} />
       ),
     },
   ];
@@ -85,8 +84,8 @@ export default () => {
   return (
     <div>
       <Title value="环境配置" />
-      
-      <Card className="my-2 overflow-scroll">
+
+      <Card className={`${titleSty} min-h-[calc(100vh-160px)]`}>
         <Table
           rowKey="id"
           dataSource={list}
@@ -95,6 +94,7 @@ export default () => {
           pagination={false}
         />
       </Card>
+
       <Modal
         title={`编辑配置 - ${editItem?.name}`}
         open={isModalOpen}
