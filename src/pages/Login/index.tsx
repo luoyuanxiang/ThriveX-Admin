@@ -121,12 +121,12 @@ export default () => {
                     </Form>
 
                     {/* 分隔线 */}
-                    <Divider className="my-6">
+                    {/* <Divider className="my-6">
                         <span className="text-slate-500 font-thin text-sm">或使用以下方式登录</span>
-                    </Divider>
+                    </Divider> */}
 
                     {/* GitHub登录 */}
-                    <div className="flex justify-center">
+                    {/* <div className="flex justify-center">
                         <a
                             href={`${authorize_uri}?client_id=${client_id}&redirect_uri=${redirect_uri}`}
                             target="_blank"
@@ -134,7 +134,7 @@ export default () => {
                         >
                             <img src={github} alt="" className='w-10 h-10' />
                         </a>
-                    </div>
+                    </div> */}
                 </div>
 
                 {/* 底部装饰 */}

@@ -35,7 +35,6 @@ import { getRoleRouteListAPI } from "@/api/Role";
 import { checkTokenAPI } from '@/api/User'
 import { Route as RouteType } from "@/types/app/route";
 import NotFound from "../NotFound";
-import Auth from "@/pages/Auth";
 
 export default () => {
     const navigate = useNavigate();
@@ -100,13 +99,6 @@ export default () => {
                         </>
                     }
                 />
-
-                <Route path="/auth" element={
-                    <>
-                        <PageTitle title="ThriveX | 第三方登录" />
-                        <Auth />
-                    </>
-                } />
             </Routes>
         );
     }
