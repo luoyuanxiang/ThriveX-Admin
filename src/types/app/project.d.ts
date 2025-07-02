@@ -52,4 +52,5 @@ export interface EnvConfig {
     id: string,
     name: string,
     value: object,
+    notes: string
 }

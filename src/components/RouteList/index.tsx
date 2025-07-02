@@ -27,6 +27,7 @@ import Record from "@/pages/Record";
 import Oss from "@/pages/Oss";
 import Album from "@/pages/Album";
 import Assistant from "@/pages/Assistant";
+import Config from "@/pages/Config";
 
 import PageTitle from "../PageTitle";
 
@@ -67,6 +68,7 @@ export default () => {
         { path: "/iter", title: "项目更新记录", component: <Iterative /> },
         { path: "/work", title: "工作台", component: <Work /> },
         { path: "/assistant", title: "助手管理", component: <Assistant /> },
+        { path: "/config", title: "环境配置", component: <Config /> },
     ];
 
     const [routes, setRoutes] = useState<typeof routesAll | null>(null);
@@ -114,7 +116,7 @@ export default () => {
                         path={path}
                         element={
                             <>
-                                <PageTitle title={`Thrive - ${title}`} />
+                                <PageTitle title={`ThriveX - ${title}`} />
                                 {component}
                             </>
                         }

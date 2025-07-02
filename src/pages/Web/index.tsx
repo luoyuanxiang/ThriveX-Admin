@@ -231,7 +231,7 @@ export default () => {
                         <div className='w-full md:w-[500px] mx-auto'>
                             <Form form={form} layout="vertical" size='large' initialValues={link} onFinish={onSubmit}>
                                 <Form.Item label="网站标题" name="title" rules={[{ required: true, message: '网站标题不能为空' }]}>
-                                    <Input placeholder="Thrive" />
+                                    <Input placeholder="ThriveX" />
                                 </Form.Item>
 
                                 <Form.Item label="网站描述" name="description" rules={[{ required: true, message: '网站描述不能为空' }]}>
