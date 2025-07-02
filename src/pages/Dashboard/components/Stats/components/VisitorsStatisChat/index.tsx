@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useMemo } from 'react';
-import { Spin } from 'antd';
+import { message, Spin } from 'antd';
 import { ApexOptions } from 'apexcharts';
 import ReactApexChart from 'react-apexcharts';
 import dayjs from 'dayjs';

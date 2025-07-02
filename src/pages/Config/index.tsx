@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Table, Button, Modal, Form, Input, message, Card } from 'antd';
+import { Table, Button, Modal, Form, message, Card } from 'antd';
 import { getEnvConfigListAPI, updateEnvConfigDataAPI } from '@/api/Project';
 import { EnvConfig } from '@/types/app/project';
 import Title from '@/components/Title';
@@ -104,7 +104,7 @@ export default () => {
       dataIndex: 'value',
       key: 'value',
       render: (value: object) => (
-        <pre className="whitespace-pre-wrap break-all bg-slate-50 dark:bg-slate-800 p-2 rounded text-xs overflow-auto">{JSON.stringify(value, null, 2)}</pre>
+        <pre className="min-w-[200px] whitespace-pre-wrap break-all bg-slate-50 dark:bg-slate-800 p-2 rounded text-xs overflow-auto">{JSON.stringify(value, null, 2)}</pre>
       ),
     },
     {
@@ -154,8 +154,9 @@ export default () => {
               style={jsonError ? { border: '1px solid #ff4d4f', borderRadius: 6 } : { borderRadius: 6 }}
             />
           </Form.Item>
+
           <Button onClick={handleFormatJson} className="w-full mb-2">格式化</Button>
-          <Button type="primary" htmlType="submit" loading={btnLoading} className="w-full">保存</Button>
+          <Button type="primary" htmlType="submit" loading={btnLoading} className="w-full">保存配置</Button>
         </Form>
       </Modal>
     </div>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Spin } from "antd";
+import { message, Spin } from "antd";
 import VisitorsStatisChat from "./components/VisitorsStatisChat"
 import NewOldVisitors from './components/NewOldVisitors'
 import CardDataStats from "@/components/CardDataStats"
@@ -7,9 +7,12 @@ import CardDataStats from "@/components/CardDataStats"
 import { AiOutlineEye, AiOutlineMeh, AiOutlineStock, AiOutlineFieldTime } from "react-icons/ai";
 import dayjs from 'dayjs';
 import { getStatisAPI } from "@/api/Statis";
+import { getEnvConfigListAPI } from "@/api/Project";
 
 export default () => {
     const [loading, setLoading] = useState(false)
+    // 判断是否开启百度统计
+    const [isBaiduStatisOpen, setIsBaiduStatisOpen] = useState(false);
 
     const [stats, setStats] = useState({
         pv: 0,
@@ -27,13 +30,15 @@ export default () => {
         const h = Math.floor(roundedSeconds / 3600).toString().padStart(2, '0');
         const m = Math.floor((roundedSeconds % 3600) / 60).toString().padStart(2, '0');
         const s = (roundedSeconds % 60).toString().padStart(2, '0');
-        return `${h}:${m}:${s}`; 
+        return `${h}:${m}:${s}`;
     };
 
     // 获取统计数据
     const getDataList = async () => {
         try {
             setLoading(true)
+
+            if (!isBaiduStatisOpen) return message.error('请先配置百度统计')
 
             const { data } = await getStatisAPI("overview", date, date);
             const { result } = data as any;
@@ -73,9 +78,9 @@ export default () => {
                 }
             });
 
-            setStats({ 
-                pv, 
-                ip, 
+            setStats({
+                pv,
+                ip,
                 bounce: count !== 0 ? bounce / count : 0,
                 avgTime: count !== 0 ? formatTime(avgTime / count) : '00:00:00',
             })
@@ -87,17 +92,17 @@ export default () => {
     };
 
     useEffect(() => {
-        getDataList();
+        getDataList()
     }, []);
 
     return (
         <Spin spinning={loading}>
             {/* 基本数据 */}
             <div className="mt-2 grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-4">
-                <CardDataStats 
-                    title="今日浏览量" 
-                    total={stats.pv + ''} 
-                    rate="0.43%" 
+                <CardDataStats
+                    title="今日浏览量"
+                    total={stats.pv + ''}
+                    rate="0.43%"
                     levelUp
                 >
                     <AiOutlineEye className="fill-primary dark:fill-white text-2xl" />
