@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { message, Spin } from "antd";
+import { Spin } from "antd";
 import VisitorsStatisChat from "./components/VisitorsStatisChat"
 import NewOldVisitors from './components/NewOldVisitors'
 import CardDataStats from "@/components/CardDataStats"
@@ -7,12 +7,9 @@ import CardDataStats from "@/components/CardDataStats"
 import { AiOutlineEye, AiOutlineMeh, AiOutlineStock, AiOutlineFieldTime } from "react-icons/ai";
 import dayjs from 'dayjs';
 import { getStatisAPI } from "@/api/Statis";
-import { getEnvConfigListAPI } from "@/api/Project";
 
 export default () => {
     const [loading, setLoading] = useState(false)
-    // 判断是否开启百度统计
-    const [isBaiduStatisOpen, setIsBaiduStatisOpen] = useState(false);
 
     const [stats, setStats] = useState({
         pv: 0,
@@ -37,8 +34,6 @@ export default () => {
     const getDataList = async () => {
         try {
             setLoading(true)
-
-            if (!isBaiduStatisOpen) return message.error('请先配置百度统计')
 
             const { data } = await getStatisAPI("overview", date, date);
             const { result } = data as any;

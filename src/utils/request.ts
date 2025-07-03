@@ -45,6 +45,8 @@ instance.interceptors.request.use(
 // 响应拦截
 instance.interceptors.response.use(
     (res: AxiosResponse) => {
+        if (res.data?.code === 600) return res.data
+
         // 只要code不等于200, 就相当于响应失败
         if (res.data?.code !== 200) {
             notification.error({
@@ -58,7 +60,7 @@ instance.interceptors.response.use(
         return res.data;
     },
     (err: AxiosError) => {
-        if(isHandling401Error) return;
+        if (isHandling401Error) return;
 
         // 如果code为401就证明认证失败
         if (err.response?.status === 401) {
