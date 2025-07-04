@@ -2,7 +2,7 @@ import { ApexOptions } from 'apexcharts';
 import { useEffect, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import dayjs from 'dayjs';
-import { message, Spin } from 'antd';
+import { Spin } from 'antd';
 import { getStatisAPI } from '@/api/Statis';
 
 interface ChartThreeState {

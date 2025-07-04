@@ -119,8 +119,6 @@ export default () => {
             <div className="rounded-lg mt-2 grid grid-cols-12 gap-2">
                 <VisitorsStatisChat />
                 <NewOldVisitors />
-                {/* <ChartTwo />
-                <ChatCard /> */}
             </div>
         </Spin>
     )
