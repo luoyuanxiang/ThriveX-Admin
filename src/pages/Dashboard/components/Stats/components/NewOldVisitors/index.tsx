@@ -68,8 +68,8 @@ export default () => {
       const { data } = await getStatisAPI("new-visitor", date, date);
       const { result } = data as any;
 
-      const newVisitors = result.items[1][0][1] !== "--" ? result.items[1][0][1] : 0
-      const oldVisitors = result.items[1][0][1] !== "--" ? 100 - result.items[1][0][1] : 0
+      const newVisitors = result.items[1][0][1] !== "--" ? Number(Number(result.items[1][0][1]).toFixed(2)) : 0
+      const oldVisitors = result.items[1][0][1] !== "--" ? Number((100 - result.items[1][0][1]).toFixed(2)) : 0
 
       setState({ series: [newVisitors, oldVisitors] })
       setResult({ newVisitors, oldVisitors })
