@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { notification, Divider, Input, Alert, Button, Form, Checkbox } from 'antd';
 import { PictureOutlined, CloudUploadOutlined } from '@ant-design/icons';
-import { editConfigDataAPI, getConfigDataAPI } from '@/api/Project';
-import { Theme } from '@/types/app/project';
+import { editWebConfigDataAPI, getWebConfigDataAPI } from '@/api/Config';
+import { Theme } from '@/types/app/config';
 import Material from '@/components/Material';
 
 export default () => {
@@ -19,7 +19,7 @@ export default () => {
         try {
             setLoading(true);
 
-            const { data } = await getConfigDataAPI<Theme>("layout");
+            const { data } = await getWebConfigDataAPI<Theme>("layout");
             setTheme(data);
 
             form.setFieldsValue({
@@ -54,7 +54,7 @@ export default () => {
                 reco_article: JSON.stringify(values.reco_article.split('\n')),
             };
 
-            await editConfigDataAPI("layout", updatedLayout);
+            await editWebConfigDataAPI("layout", updatedLayout);
 
             notification.success({
                 message: '成功',

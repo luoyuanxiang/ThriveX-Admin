@@ -1,4 +1,4 @@
-import { Web } from '@/types/app/project';
+import { Web } from '@/types/app/config';
 import { create } from 'zustand';
 
 interface WebStore {

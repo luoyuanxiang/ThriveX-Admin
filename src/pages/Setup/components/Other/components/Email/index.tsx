@@ -1,5 +1,5 @@
 import { Button, Form, Input, message } from "antd"
-import { editOtherDataAPI, getOtherDataAPI } from "@/api/Project";
+import { editOtherDataAPI, getOtherDataAPI } from "@/api/Config";
 import { useEffect, useState } from "react";
 
 interface EmailForm {

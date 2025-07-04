@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Form, notification, Input, Button } from 'antd';
-import { Theme } from '@/types/app/project';
-import { editConfigDataAPI, getConfigDataAPI } from '@/api/Project';
+import { Theme } from '@/types/app/config';
+import { editWebConfigDataAPI, getWebConfigDataAPI } from '@/api/Config';
 
 export default () => {
     const [loading, setLoading] = useState<boolean>(false);
@@ -12,7 +12,7 @@ export default () => {
         try {
             setLoading(true);
 
-            const { data } = await getConfigDataAPI<Theme>("layout");
+            const { data } = await getWebConfigDataAPI<Theme>("layout");
             form.setFieldsValue({
                 record_name: data.record_name,
                 record_info: data.record_info
@@ -32,7 +32,7 @@ export default () => {
         try {
             setLoading(true);
 
-            await editConfigDataAPI("layout", values);
+            await editWebConfigDataAPI("layout", values);
 
             notification.success({
                 message: '成功',

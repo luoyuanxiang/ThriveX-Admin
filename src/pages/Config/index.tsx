@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Table, Button, Modal, Form, message, Card } from 'antd';
-import { getEnvConfigListAPI, updateEnvConfigDataAPI } from '@/api/Project';
-import { EnvConfig } from '@/types/app/project';
+import { getEnvConfigListAPI, updateEnvConfigDataAPI } from '@/api/Config';
+import { EnvConfig } from '@/types/app/config';
 import Title from '@/components/Title';
 import { FormOutlined } from '@ant-design/icons';
 import { titleSty } from '@/styles/sty';

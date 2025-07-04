@@ -10,7 +10,7 @@ import dayjs from 'dayjs';
 import axios from 'axios';
 import { CloudUploadOutlined, DeleteOutlined, FormOutlined } from '@ant-design/icons';
 import Material from '@/components/Material';
-import { getEnvConfigDataAPI } from '@/api/Project';
+import { getEnvConfigDataAPI } from '@/api/Config';
 
 export default () => {
   const [loading, setLoading] = useState<boolean>(false);
