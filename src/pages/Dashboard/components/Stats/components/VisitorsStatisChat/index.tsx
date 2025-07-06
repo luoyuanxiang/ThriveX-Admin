@@ -4,6 +4,7 @@ import { ApexOptions } from 'apexcharts';
 import ReactApexChart from 'react-apexcharts';
 import dayjs from 'dayjs';
 import { getStatisAPI } from '@/api/Statis';
+import ReactECharts from 'echarts-for-react';
 
 interface Result {
     timeSpan: string[];
@@ -132,38 +133,21 @@ export default () => {
         },
     });
 
-    // 核心数据
-    const [state, setState] = useState<ChartOneState>({
-        series: [
-            {
-                name: '浏览量',
-                data: [],
-            },
-            {
-                name: '访客',
-                data: [],
-            },
-        ],
-    });
-
     // 获取统计数据
-    const getDataList = useCallback(async () => {
-        try {
-            setLoading(true)
-
-            const { data } = await getStatisAPI("basic-overview", startDate, endDate);
-            const { result } = data as any;
-            setResult(result);
-
-            setLoading(false);
-        } catch (error) {
-            setLoading(false)
-        }
-    }, [startDate, endDate]);
-
     useEffect(() => {
-        getDataList();
-    }, []);
+        const fetchData = async () => {
+            try {
+                setLoading(true);
+                const { data } = await getStatisAPI("basic-overview", startDate, endDate);
+                const { result } = data as any;
+                setResult(result);
+                setLoading(false);
+            } catch (error) {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, [startDate, endDate]);
 
     // 切换不同范围的数据
     const scopeData = useMemo(() => {
@@ -171,90 +155,80 @@ export default () => {
 
         if (!result?.items?.length) return { categories: [], series: [[], []] };
 
-        let categories = [];
-        let pvList = [];
-        let ipList = [];
+        let categories: string[] = [];
+        let pvList: number[] = [];
+        let ipList: number[] = [];
+
+        const now = dayjs();
+        const currentYear = now.year();
+        const currentMonth = now.month() + 1; // month() 从0开始
 
         switch (scope) {
-            case "day":
-                categories = result.items[0].map((item: string[]) => {
-                    const year = new Date().getFullYear() + "/";
-                    return item[0].replace(year, "");
+            case "day": {
+                // 只生成本月1号到今天
+                const today = now.date();
+                categories = Array.from({ length: today }, (_, i) => `${currentMonth}/${(i + 1).toString().padStart(2, '0')}`);
+                // 过滤本月数据
+                const dateArr: string[][] = result.items[0];
+                const valueArr: (string | number)[][] = result.items[1];
+                const dayMap: Record<string, { pv: number, ip: number }> = {};
+                dateArr.forEach((dateArray, idx) => {
+                    const date = dateArray[0]; // 格式: YYYY/MM/DD
+                    const d = dayjs(date, 'YYYY/MM/DD');
+                    if (d.year() === currentYear && d.month() + 1 === currentMonth) {
+                        const key = `${currentMonth}/${d.date().toString().padStart(2, '0')}`;
+                        const pair = valueArr[idx];
+                        dayMap[key] = {
+                            pv: Number(pair[0]) || 0,
+                            ip: Number(pair[1]) || 0
+                        };
+                    }
                 });
-
-                pvList = result.items[1].map((item: number[]) =>
-                    typeof item[0] === 'string' ? 0 : item[0],
-                );
-                ipList = result.items[1].map((item: number[]) =>
-                    typeof item[1] === 'string' ? 0 : item[1],
-                );
+                pvList = categories.map(day => dayMap[day]?.pv || 0);
+                ipList = categories.map(day => dayMap[day]?.ip || 0);
                 break;
-            case "month":
-                const datesArray: string[][] = result.items[0];
-                const valuesArray: (string | number)[][] = result.items[1];
-
-                const monthlySums: MonthlySums = {};
-
-                datesArray.forEach((dateArray, index) => {
-                    const date: string = dateArray[0];
-                    const month = date.split('/')[1];
-
-                    if (!monthlySums[month]) {
-                        monthlySums[month] = { pv: 0, ip: 0 };
-                    }
-
-                    const pair = valuesArray[index];
-
-                    if (pair.length === 2) {
-                        const firstValue = parseFloat(pair[0] as string);
-                        const secondValue = parseFloat(pair[1] as string);
-
-                        if (!isNaN(firstValue) && !isNaN(secondValue)) {
-                            monthlySums[month].pv += firstValue;
-                            monthlySums[month].ip += secondValue;
-                        }
+            }
+            case "month": {
+                // 生成1-12月，全部用两位数
+                categories = Array.from({ length: 12 }, (_, i) => (i + 1).toString().padStart(2, '0'));
+                // 过滤本年数据
+                const dateArr: string[][] = result.items[0];
+                const valueArr: (string | number)[][] = result.items[1];
+                const monthMap: Record<string, { pv: number, ip: number }> = {};
+                dateArr.forEach((dateArray, idx) => {
+                    const date = dateArray[0]; // 格式: YYYY/MM/DD
+                    const d = dayjs(date, 'YYYY/MM/DD');
+                    if (d.year() === currentYear) {
+                        const m = (d.month() + 1).toString().padStart(2, '0');
+                        if (!monthMap[m]) monthMap[m] = { pv: 0, ip: 0 };
+                        const pair = valueArr[idx];
+                        monthMap[m].pv += Number(pair[0]) || 0;
+                        monthMap[m].ip += Number(pair[1]) || 0;
                     }
                 });
-
-                categories = Object.keys(monthlySums);
-                pvList = Object.values(monthlySums).map(item => item.pv);
-                ipList = Object.values(monthlySums).map(item => item.ip);
+                pvList = categories.map(m => monthMap[m]?.pv || 0);
+                ipList = categories.map(m => monthMap[m]?.ip || 0);
                 break;
-            case "year":
-                const yearlySums: { [year: string]: { pv: number, ip: number } } = {};
-
-                result.items[0].forEach((dateArray: string[], index: number) => {
-                    const date: string = dateArray[0];
-                    const year = date.split('/')[0];
-
-                    if (!yearlySums[year]) {
-                        yearlySums[year] = { pv: 0, ip: 0 };
-                    }
-
-                    const pair = result.items[1][index];
-
-                    if (pair.length === 2) {
-                        const firstValue = parseFloat(pair[0] + '');
-                        const secondValue = parseFloat(pair[1] + '');
-
-                        if (!isNaN(firstValue) && !isNaN(secondValue)) {
-                            yearlySums[year].pv += firstValue;
-                            yearlySums[year].ip += secondValue;
-                        }
-                    }
+            }
+            case "year": {
+                // 统计所有年
+                const dateArr: string[][] = result.items[0];
+                const valueArr: (string | number)[][] = result.items[1];
+                const yearMap: Record<string, { pv: number, ip: number }> = {};
+                dateArr.forEach((dateArray, idx) => {
+                    const date = dateArray[0]; // 格式: YYYY/MM/DD
+                    const d = dayjs(date, 'YYYY/MM/DD');
+                    const y = d.year().toString();
+                    if (!yearMap[y]) yearMap[y] = { pv: 0, ip: 0 };
+                    const pair = valueArr[idx];
+                    yearMap[y].pv += Number(pair[0]) || 0;
+                    yearMap[y].ip += Number(pair[1]) || 0;
                 });
-
-                // 删除没有数据的年份
-                Object.keys(yearlySums).forEach(year => {
-                    if (yearlySums[year].pv === 0 && yearlySums[year].ip === 0) {
-                        delete yearlySums[year];
-                    }
-                });
-
-                categories = Object.keys(yearlySums);
-                pvList = Object.values(yearlySums).map(item => item.pv);
-                ipList = Object.values(yearlySums).map(item => item.ip);
+                categories = Object.keys(yearMap).sort();
+                pvList = categories.map(y => yearMap[y]?.pv || 0);
+                ipList = categories.map(y => yearMap[y]?.ip || 0);
                 break;
+            }
         }
 
         return { categories, series: [pvList, ipList] };
@@ -269,89 +243,195 @@ export default () => {
             xaxis: { ...options.xaxis, categories: scopeData.categories || [] }
         }));
 
-        setState((prevState) => ({
-            ...prevState,
-            series: [
-                {
-                    name: '浏览量',
-                    data: scopeData.series[0] || 0,
-                },
-                {
-                    name: '访客',
-                    data: scopeData.series[1] || 0,
-                },
-            ],
-        }));
-
         setLoading(false)
     }, [scopeData]);
 
     // 处理范围变更并相应地更新日期范围
     const handleScopeChange = (newScope: "day" | "month" | "year") => {
         setScope(newScope);
+        const now = dayjs();
         switch (newScope) {
-            case "day":
-                setStartDate(dayjs(new Date()).subtract(7, "day").format("YYYY/MM/DD"));
+            case "day": {
+                // 本月1号到本月最后一天
+                setStartDate(now.startOf('month').format('YYYY/MM/DD'));
                 break;
-            case "month":
-                const year = new Date().getFullYear() + "";
-                setStartDate(year + "/01/01");
+            }
+            case "month": {
+                // 本年1月1日到12月31日
+                setStartDate(now.startOf('year').format('YYYY/MM/DD'));
                 break;
-            case "year":
-                setStartDate(dayjs(new Date()).subtract(5, "year").format("YYYY/MM/DD"));
+            }
+            case "year": {
+                // 取接口最早的年（如果有数据），否则5年前
+                if (result && result.items[0].length > 0) {
+                    const years = result.items[0].map(arr => dayjs(arr[0], 'YYYY/MM/DD').year());
+                    const minYear = Math.min(...years);
+                    setStartDate(dayjs(`${minYear}-01-01`).format('YYYY/MM/DD'));
+                } else {
+                    setStartDate(now.subtract(5, 'year').startOf('year').format('YYYY/MM/DD'));
+                }
                 break;
+            }
         }
     };
 
     return (
         <div className="col-span-12 rounded-2xl border border-stroke px-5 pt-7.5 pb-5 shadow-default dark:border-transparent bg-light-gradient dark:bg-dark-gradient sm:px-7.5 xl:col-span-8">
-            <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
-                <div className="flex w-full flex-wrap gap-3 sm:gap-5">
-                    <div className="flex min-w-47.5">
-                        <span className="mt-1 mr-2 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-primary">
-                            <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-primary"></span>
-                        </span>
+            <div className="flex w-full justify-between items-center mb-2">
+                <h3 className="text-xl font-bold text-slate-800">访客统计</h3>
 
-                        <div className="w-full">
-                            <p className="font-semibold text-primary">访客（UV）</p>
-                        </div>
-                    </div>
+                <div className="inline-flex items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 space-x-1">
+                    <button className={`rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:bg-meta-4 dark:text-white dark:hover:bg-boxdark ${scope === "day" ? "bg-white dark:!bg-[#4e5969] shadow-card" : ""}`} onClick={() => handleScopeChange("day")}>
+                        天
+                    </button>
 
-                    <div className="flex min-w-47.5">
-                        <span className="mt-1 mr-2 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-secondary">
-                            <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-secondary"></span>
-                        </span>
+                    <button className={`rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:bg-meta-4 dark:text-white dark:hover:bg-boxdark ${scope === "month" ? "bg-white dark:!bg-[#4e5969] shadow-card" : ""}`} onClick={() => handleScopeChange("month")}>
+                        月
+                    </button>
 
-                        <div className="w-full">
-                            <p className="font-semibold text-secondary">IP</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="flex w-full max-w-45 justify-end">
-                    <div className="inline-flex items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 space-x-1">
-                        <button className={`rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:bg-meta-4 dark:text-white dark:hover:bg-boxdark ${scope === "day" ? "bg-white dark:!bg-[#4e5969] shadow-card" : ""}`} onClick={() => handleScopeChange("day")}>
-                            天
-                        </button>
-
-                        <button className={`rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:bg-meta-4 dark:text-white dark:hover:bg-boxdark ${scope === "month" ? "bg-white dark:!bg-[#4e5969] shadow-card" : ""}`} onClick={() => handleScopeChange("month")}>
-                            月
-                        </button>
-
-                        <button className={`rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:bg-meta-4 dark:text-white dark:hover:bg-boxdark ${scope === "year" ? "bg-white dark:!bg-[#4e5969] shadow-card" : ""}`} onClick={() => handleScopeChange("year")}>
-                            年
-                        </button>
-                    </div>
+                    <button className={`rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:bg-meta-4 dark:text-white dark:hover:bg-boxdark ${scope === "year" ? "bg-white dark:!bg-[#4e5969] shadow-card" : ""}`} onClick={() => handleScopeChange("year")}>
+                        年
+                    </button>
                 </div>
             </div>
 
             <Spin spinning={loading}>
                 <div id="chartOne" className="-ml-5">
-                    <ReactApexChart
-                        options={options}
-                        series={state.series}
-                        type="area"
-                        height={350}
+                    <ReactECharts
+                        option={{
+                            tooltip: {
+                                trigger: "axis",
+                                backgroundColor: "#fff",
+                                borderColor: "#e5eaf3",
+                                borderWidth: 1,
+                                textStyle: {
+                                    color: "#1a2757",
+                                    fontSize: 14,
+                                },
+                                padding: 16,
+                                extraCssText: "box-shadow: 0 4px 24px rgba(0,0,0,0.08); border-radius: 10px;",
+                                formatter: function (params: any) {
+                                    let str = `<div style=\"font-weight:700;margin-bottom:8px;\">${params[0].axisValue}${scope === 'month' ? '月' : scope === 'year' ? '年' : ''}</div>`;
+                                    params.forEach((item: any) => {
+                                        let color;
+                                        if (item.seriesName === "访客") {
+                                            color = "#6a8eff";
+                                        } else if (item.seriesName === "IP") {
+                                            color = "#4fc3ff";
+                                        }
+                                        str += `\n          <div style=\"display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;\">\n            <span style=\"display:inline-flex;align-items:center;\">\n              <span style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:${color};margin-right:6px;\"></span>\n              ${item.seriesName}：\n            </span>\n            <span style=\"font-weight:700;margin-left:16px;\">${item.data}</span>\n          </div>\n        `;
+                                    });
+                                    return str;
+                                }
+                            },
+                            legend: {
+                                data: [
+                                    { name: "访客", icon: "circle", itemStyle: { color: "#6a8eff" } },
+                                    { name: "IP", icon: "circle", itemStyle: { color: "#4fc3ff" } }
+                                ],
+                                bottom: 0,
+                                left: "center",
+                                itemWidth: 18,
+                                itemHeight: 18,
+                                itemGap: 32,
+                                textStyle: {
+                                    fontSize: 14,
+                                    color: "#1a2757",
+                                    margin: 30,
+                                },
+                            },
+                            grid: {
+                                left: 50,
+                                right: 10,
+                                top: 20,
+                                bottom: 60,
+                            },
+                            xAxis: {
+                                type: "category",
+                                boundaryGap: false,
+                                data: scopeData.categories,
+                                axisLine: { show: false },   // 隐藏x轴轴线
+                                axisTick: { show: false },   // 隐藏x轴刻度线
+                                axisLabel: { fontSize: 12 },
+                            },
+                            yAxis: {
+                                type: "value",
+                                min: 0,
+                                splitNumber: 5,
+                                axisLine: { show: false },
+                                axisLabel: { fontSize: 12 },
+                                splitLine: { lineStyle: { type: 'dashed', color: "#f0f4fa" } },
+                            },
+                            series: [
+                                {
+                                    name: "访客",
+                                    type: "line",
+                                    smooth: false,
+                                    symbol: "circle",
+                                    symbolSize: 8,
+                                    itemStyle: {
+                                        color: "#fff",
+                                        borderColor: "#6a8eff",
+                                        borderWidth: 3,
+                                    },
+                                    emphasis: {
+                                        itemStyle: {
+                                            borderColor: "#6a8eff",
+                                            borderWidth: 5
+                                        }
+                                    },
+                                    lineStyle: {
+                                        width: 3,
+                                        color: "#6a8eff", // 纯色
+                                    },
+                                    areaStyle: {
+                                        color: {
+                                            type: 'linear',
+                                            x: 0, y: 0, x2: 0, y2: 1,
+                                            colorStops: [
+                                                { offset: 0, color: 'rgba(106,142,255,0.25)' },
+                                                { offset: 1, color: 'rgba(106,142,255,0)' }
+                                            ]
+                                        }
+                                    },
+                                    data: scopeData.series[0],
+                                },
+                                {
+                                    name: "IP",
+                                    type: "line",
+                                    smooth: false,
+                                    symbol: "circle",
+                                    symbolSize: 8,
+                                    itemStyle: {
+                                        color: "#fff",
+                                        borderColor: "#4fc3ff",
+                                        borderWidth: 3,
+                                    },
+                                    emphasis: {
+                                        itemStyle: {
+                                            borderColor: "#4fc3ff",
+                                            borderWidth: 5
+                                        }
+                                    },
+                                    lineStyle: {
+                                        width: 3,
+                                        color: "#4fc3ff", // 纯色
+                                    },
+                                    areaStyle: {
+                                        color: {
+                                            type: 'linear',
+                                            x: 0, y: 0, x2: 0, y2: 1,
+                                            colorStops: [
+                                                { offset: 0, color: 'rgba(79,195,255,0.18)' },
+                                                { offset: 1, color: 'rgba(79,195,255,0)' }
+                                            ]
+                                        }
+                                    },
+                                    data: scopeData.series[1],
+                                },
+                            ],
+                        }}
+                        style={{ height: 400, width: '100%' }}
                     />
                 </div>
             </Spin>
