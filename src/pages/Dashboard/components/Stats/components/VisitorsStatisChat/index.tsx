@@ -278,7 +278,7 @@ export default () => {
     return (
         <div className="col-span-12 rounded-2xl border border-stroke px-5 pt-7.5 pb-5 shadow-default dark:border-transparent bg-light-gradient dark:bg-dark-gradient sm:px-7.5 xl:col-span-8">
             <div className="flex w-full justify-between items-center mb-2">
-                <h3 className="text-xl font-bold text-slate-800">访客统计</h3>
+                <h3 className="text-xl font-bold text-slate-800 dark:text-white">访客统计</h3>
 
                 <div className="inline-flex items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 space-x-1">
                     <button className={`rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:bg-meta-4 dark:text-white dark:hover:bg-boxdark ${scope === "day" ? "bg-white dark:!bg-[#4e5969] shadow-card" : ""}`} onClick={() => handleScopeChange("day")}>
