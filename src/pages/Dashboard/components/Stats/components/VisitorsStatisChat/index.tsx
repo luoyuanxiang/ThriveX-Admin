@@ -1,7 +1,6 @@
-import { useEffect, useState, useCallback, useMemo } from 'react';
-import { message, Spin } from 'antd';
+import { useEffect, useState, useMemo } from 'react';
+import { Spin } from 'antd';
 import { ApexOptions } from 'apexcharts';
-import ReactApexChart from 'react-apexcharts';
 import dayjs from 'dayjs';
 import { getStatisAPI } from '@/api/Statis';
 import ReactECharts from 'echarts-for-react';
@@ -15,20 +14,6 @@ interface Result {
         any[],
         any[]
     ];
-}
-
-interface MonthlySums {
-    [key: string]: {
-        pv: number;
-        ip: number;
-    };
-}
-
-interface ChartOneState {
-    series: {
-        name: string;
-        data: number[];
-    }[];
 }
 
 export default () => {
