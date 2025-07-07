@@ -342,7 +342,7 @@ export default () => {
                             },
                             grid: {
                                 left: 50,
-                                right: 10,
+                                right: 20,
                                 top: 20,
                                 bottom: 60,
                             },
