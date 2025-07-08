@@ -8,18 +8,7 @@ import { titleSty } from '@/styles/sty';
 import CodeMirror from '@uiw/react-codemirror';
 import { json } from '@codemirror/lang-json';
 
-function ConfigEditModal({
-  open,
-  onCancel,
-  onSave,
-  value,
-  error,
-  onChange,
-  onFormat,
-  loading,
-  title,
-  form
-}: any) {
+function ConfigEditModal({ open, onCancel, onSave, value, error, onChange, onFormat, loading, title, form }: any) {
   return (
     <Modal title={title} open={open} onCancel={onCancel} width={1000} footer={null}>
       <Form form={form} layout="vertical" onFinish={onSave} size="large">
@@ -158,7 +147,7 @@ export default () => {
       render: (value: object) => (
         <>
           {activeTab === 'page'
-            ? <span className='text-sm text-gray-500'>内容过多，不易展示，请直接编辑</span>
+            ? <span className='text-sm text-gray-500'>内容过多，不易展示</span>
             : <pre className="min-w-[200px] whitespace-pre-wrap break-all bg-slate-50 dark:bg-slate-800 p-2 rounded text-xs overflow-auto">{JSON.stringify(value, null, 2)}</pre>
           }
         </>
@@ -178,14 +167,14 @@ export default () => {
     <div>
       <Title value="项目配置" />
 
-      <Tabs
-        activeKey={activeTab}
-        onChange={key => setActiveTab(key as 'env' | 'page')}
-        items={Object.keys(tabConfig).map(key => ({
-          key,
-          label: tabConfig[key as 'env' | 'page'].label,
-          children: (
-            <Card className={`${titleSty} min-h-[calc(100vh-200px)]`}>
+      <Card className={`${titleSty} min-h-[calc(100vh-200px)]`}>
+        <Tabs
+          activeKey={activeTab}
+          onChange={key => setActiveTab(key as 'env' | 'page')}
+          items={Object.keys(tabConfig).map(key => ({
+            key,
+            label: tabConfig[key as 'env' | 'page'].label,
+            children: (
               <Table
                 rowKey="id"
                 dataSource={data[key]}
@@ -193,13 +182,14 @@ export default () => {
                 loading={loading[key]}
                 pagination={false}
               />
-            </Card>
-          ),
-        }))}
-        className='[&_.ant-tabs-nav-wrap]:justify-center'
-      />
+            ),
+          }))}
+          className='[&_.ant-tabs-nav]:mb-0 [&_.ant-tabs-nav-wrap]:justify-center'
+        />
+      </Card>
 
       <ConfigEditModal
+        key={activeTab}
         open={isModalOpen}
         onCancel={() => setIsModalOpen(false)}
         onSave={handleSave}
