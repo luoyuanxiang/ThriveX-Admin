@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import { Table, Button, Modal, Form, message, Card } from 'antd';
-import { getEnvConfigListAPI, updateEnvConfigDataAPI } from '@/api/Config';
+import { useEffect, useState, useRef } from 'react';
+import { Table, Button, Modal, Form, message, Card, Tabs } from 'antd';
+import { getEnvConfigListAPI, updateEnvConfigDataAPI, getPageConfigListAPI, updatePageConfigDataAPI } from '@/api/Config';
 import { Config } from '@/types/app/config';
 import Title from '@/components/Title';
 import { FormOutlined } from '@ant-design/icons';
@@ -8,31 +8,85 @@ import { titleSty } from '@/styles/sty';
 import CodeMirror from '@uiw/react-codemirror';
 import { json } from '@codemirror/lang-json';
 
+function ConfigEditModal({
+  open,
+  onCancel,
+  onSave,
+  value,
+  error,
+  onChange,
+  onFormat,
+  loading,
+  title,
+  form
+}: any) {
+  return (
+    <Modal title={title} open={open} onCancel={onCancel} width={1000} footer={null}>
+      <Form form={form} layout="vertical" onFinish={onSave} size="large">
+        <Form.Item
+          name="value"
+          rules={[{ required: true, message: '请输入配置内容' }]}
+          className="mb-4"
+          validateStatus={error ? 'error' : ''}
+          help={error ? `JSON格式错误: ${error}` : ''}
+        >
+          <CodeMirror
+            value={value}
+            extensions={[json()]}
+            onChange={onChange}
+            theme={document.body.classList.contains('dark') ? 'dark' : 'light'}
+            basicSetup={{ lineNumbers: true, foldGutter: true }}
+            style={error ? { border: '1px solid #ff4d4f', borderRadius: 6 } : { borderRadius: 6 }}
+          />
+        </Form.Item>
+
+        <Button onClick={onFormat} className="w-full mb-2">格式化</Button>
+        <Button type="primary" htmlType="submit" loading={loading} className="w-full">保存配置</Button>
+      </Form>
+    </Modal>
+  );
+}
+
+const tabConfig = {
+  env: {
+    label: '环境配置',
+    getList: getEnvConfigListAPI,
+    update: async (item: Config, value: object) => updateEnvConfigDataAPI({ ...item, value }),
+    modalTitle: '编辑配置',
+  },
+  page: {
+    label: '页面配置',
+    getList: getPageConfigListAPI,
+    update: async (item: Config, value: object) => updatePageConfigDataAPI(Number(item.id), value),
+    modalTitle: '编辑页面配置',
+  },
+};
+
 export default () => {
-  const [loading, setLoading] = useState(false);
-  const [btnLoading, setBtnLoading] = useState(false);
-  const [list, setList] = useState<Config[]>([]);
+  // 合并状态
+  const [activeTab, setActiveTab] = useState<'env' | 'page'>('env');
+  const [data, setData] = useState<{ [key: string]: Config[] }>({ env: [], page: [] });
+  const [loading, setLoading] = useState<{ [key: string]: boolean }>({ env: false, page: false });
   const [editItem, setEditItem] = useState<Config | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [form] = Form.useForm();
   const [jsonError, setJsonError] = useState<string | null>(null);
   const [jsonValue, setJsonValue] = useState('');
+  const [btnLoading, setBtnLoading] = useState(false);
+  const formRef = useRef<any>({ env: Form.useForm(), page: Form.useForm() });
 
-  // 获取环境配置列表
-  const getList = async () => {
-    setLoading(true);
+  // 获取配置列表
+  const fetchList = async (type: 'env' | 'page') => {
+    setLoading(l => ({ ...l, [type]: true }));
     try {
-      const { data } = await getEnvConfigListAPI();
-      setList(data);
-    } catch (e) {
-      // 错误处理
-    }
-    setLoading(false);
+      const { data: list } = await tabConfig[type].getList();
+      setData(d => ({ ...d, [type]: list }));
+    } catch (e) { }
+    setLoading(l => ({ ...l, [type]: false }));
   };
 
   useEffect(() => {
-    getList();
-  }, []);
+    fetchList(activeTab);
+  }, [activeTab]);
 
   // 打开编辑弹窗
   const handleEdit = (item: Config) => {
@@ -40,32 +94,30 @@ export default () => {
     setIsModalOpen(true);
     const str = JSON.stringify(item.value, null, 2);
     setJsonValue(str);
-    form.setFieldsValue({ value: str });
+    formRef.current[activeTab][0].setFieldsValue({ value: str });
+    setJsonError(null);
   };
 
   // 保存编辑
   const handleSave = async () => {
     try {
       setBtnLoading(true);
-      const values = await form.validateFields();
-
-      let jsonValue;
-
+      const values = await formRef.current[activeTab][0].validateFields();
+      let parsed;
       try {
-        jsonValue = JSON.parse(values.value);
+        parsed = JSON.parse(values.value);
       } catch (e) {
         message.error('请输入合法的JSON格式');
+        setBtnLoading(false);
         return;
       }
-      
-      await updateEnvConfigDataAPI({ ...editItem!, value: jsonValue });
+      await tabConfig[activeTab].update(editItem!, parsed);
       message.success('保存成功');
-      getList();
+      fetchList(activeTab);
       setIsModalOpen(false);
       setEditItem(null);
       setBtnLoading(false);
     } catch (e) {
-      // 校验失败
       setBtnLoading(false);
     }
   };
@@ -73,7 +125,7 @@ export default () => {
   // JSON 输入变更时校验
   const handleJsonChange = (value: string) => {
     setJsonValue(value);
-    form.setFieldsValue({ value });
+    formRef.current[activeTab][0].setFieldsValue({ value });
     try {
       JSON.parse(value);
       setJsonError(null);
@@ -87,7 +139,7 @@ export default () => {
     try {
       const formatted = JSON.stringify(JSON.parse(jsonValue), null, 2);
       setJsonValue(formatted);
-      form.setFieldsValue({ value: formatted });
+      formRef.current[activeTab][0].setFieldsValue({ value: formatted });
       setJsonError(null);
     } catch (err: any) {
       setJsonError(err.message);
@@ -104,7 +156,12 @@ export default () => {
       dataIndex: 'value',
       key: 'value',
       render: (value: object) => (
-        <pre className="min-w-[200px] whitespace-pre-wrap break-all bg-slate-50 dark:bg-slate-800 p-2 rounded text-xs overflow-auto">{JSON.stringify(value, null, 2)}</pre>
+        <>
+          {activeTab === 'page'
+            ? <span className='text-sm text-gray-500'>内容过多，不易展示，请直接编辑</span>
+            : <pre className="min-w-[200px] whitespace-pre-wrap break-all bg-slate-50 dark:bg-slate-800 p-2 rounded text-xs overflow-auto">{JSON.stringify(value, null, 2)}</pre>
+          }
+        </>
       ),
     },
     {
@@ -121,44 +178,39 @@ export default () => {
     <div>
       <Title value="项目配置" />
 
-      <Card className={`${titleSty} min-h-[calc(100vh-160px)]`}>
-        <Table
-          rowKey="id"
-          dataSource={list}
-          columns={columns}
-          loading={loading}
-          pagination={false}
-        />
-      </Card>
+      <Tabs
+        activeKey={activeTab}
+        onChange={key => setActiveTab(key as 'env' | 'page')}
+        items={Object.keys(tabConfig).map(key => ({
+          key,
+          label: tabConfig[key as 'env' | 'page'].label,
+          children: (
+            <Card className={`${titleSty} min-h-[calc(100vh-200px)]`}>
+              <Table
+                rowKey="id"
+                dataSource={data[key]}
+                columns={columns}
+                loading={loading[key]}
+                pagination={false}
+              />
+            </Card>
+          ),
+        }))}
+        className='[&_.ant-tabs-nav-wrap]:justify-center'
+      />
 
-      <Modal
-        title={`编辑配置`}
+      <ConfigEditModal
         open={isModalOpen}
         onCancel={() => setIsModalOpen(false)}
-        footer={null}
-      >
-        <Form form={form} layout="vertical" onFinish={handleSave} size='large'>
-          <Form.Item
-            name="value"
-            rules={[{ required: true, message: '请输入配置内容' }]}
-            className='mb-4'
-            validateStatus={jsonError ? 'error' : ''}
-            help={jsonError ? `JSON格式错误: ${jsonError}` : ''}
-          >
-            <CodeMirror
-              value={jsonValue}
-              extensions={[json()]}
-              onChange={handleJsonChange}
-              theme={document.body.classList.contains('dark') ? 'dark' : 'light'}
-              basicSetup={{ lineNumbers: true, foldGutter: true }}
-              style={jsonError ? { border: '1px solid #ff4d4f', borderRadius: 6 } : { borderRadius: 6 }}
-            />
-          </Form.Item>
-
-          <Button onClick={handleFormatJson} className="w-full mb-2">格式化</Button>
-          <Button type="primary" htmlType="submit" loading={btnLoading} className="w-full">保存配置</Button>
-        </Form>
-      </Modal>
+        onSave={handleSave}
+        value={jsonValue}
+        error={jsonError}
+        onChange={handleJsonChange}
+        onFormat={handleFormatJson}
+        loading={btnLoading}
+        title={editItem ? tabConfig[activeTab].modalTitle : ''}
+        form={formRef.current[activeTab][0]}
+      />
     </div>
   );
 }

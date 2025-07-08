@@ -224,7 +224,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             {
               to: "/config",
               path: "config",
-              name: "环境配置"
+              name: "项目配置"
             },
           ]
         },

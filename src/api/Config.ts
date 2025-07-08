@@ -15,7 +15,7 @@ export const getEnvConfigDataAPI = (name: EnvConfigName) => Request<Config>("GET
 export const getEnvConfigListAPI = () => Request<Config[]>("GET", `/env_config/list`)
 
 // 更新环境配置
-export const updateEnvConfigDataAPI = (data: Config) => Request("PATCH", `/env_config/${data.id}/json`, { data: data.value })
+export const updateEnvConfigDataAPI = (data: Config) => Request("PATCH", `/env_config/json/${data.id}`, { data: data.value })
 
 
 // 获取页面配置
@@ -25,4 +25,4 @@ export const getPageConfigDataAPI = (id: number) => Request<Config>("GET", `/pag
 export const getPageConfigListAPI = () => Request<Config[]>("GET", `/page_config/list`)
 
 // 更新页面配置
-export const updatePageConfigDataAPI = (id: number, data: object) => Request("PATCH", `/page_config/${id}`, { data })
+export const updatePageConfigDataAPI = (id: number, data: object) => Request("PATCH", `/page_config/json/${id}`, { data })
