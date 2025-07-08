@@ -7,8 +7,22 @@ import { FormOutlined } from '@ant-design/icons';
 import { titleSty } from '@/styles/sty';
 import CodeMirror from '@uiw/react-codemirror';
 import { json } from '@codemirror/lang-json';
+import type { FormInstance } from 'antd/es/form';
 
-function ConfigEditModal({ open, onCancel, onSave, value, error, onChange, onFormat, loading, title, form }: any) {
+interface Props {
+  open: boolean;
+  onCancel: () => void;
+  onSave: () => void;
+  value: string;
+  error: string | null;
+  onChange: (value: string) => void;
+  onFormat: () => void;
+  loading: boolean;
+  title: string;
+  form: FormInstance;
+}
+
+function ConfigEditModal({ open, onCancel, onSave, value, error, onChange, onFormat, loading, title, form }: Props) {
   return (
     <Modal title={title} open={open} onCancel={onCancel} width={1000} footer={null}>
       <Form form={form} layout="vertical" onFinish={onSave} size="large">
