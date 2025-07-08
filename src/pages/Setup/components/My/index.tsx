@@ -54,7 +54,7 @@ export default () => {
 
     return (
         <div>
-            <h2 className="text-xl pb-4 pl-10">个人设置</h2>
+            <h2 className="text-xl pb-4 pl-10">个人配置</h2>
 
             <Form
                 form={form}

@@ -25,25 +25,25 @@ export default () => {
     
     const list: Setup[] = [
         {
-            title: "系统设置",
-            description: "配置管理员账号、登录时间等",
+            title: "账户配置",
+            description: "配置管理员账号、密码等",
             icon: <BiShieldQuarter className={iconSty} />,
             key: "system"
         },
         {
-            title: "网站设置",
+            title: "网站配置",
             description: "配置网站标题、LOGO、描述、SEO等",
             icon: <BiGlobe className={iconSty} />,
             key: "web"
         },
         {
-            title: "主题设置",
+            title: "主题配置",
             description: "配置网站主题风格",
             icon: <BiLayout className={iconSty} />,
             key: "theme"
         },
         {
-            title: "个人设置",
+            title: "个人配置",
             description: "配置个人信息等",
             icon: <BiUser className={iconSty} />,
             key: "my"
@@ -58,7 +58,7 @@ export default () => {
 
     return (
         <div>
-            <Title value="项目配置" />
+            <Title value="系统配置" />
 
             <Card className='mt-2 min-h-[calc(100vh-160px)]'>
                 <div className="flex flex-col md:flex-row">

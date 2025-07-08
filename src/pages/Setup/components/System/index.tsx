@@ -56,7 +56,7 @@ export default () => {
 
     return (
         <div>
-            <h2 className="text-xl pb-4 pl-10">系统配置</h2>
+            <h2 className="text-xl pb-4 pl-10">账户配置</h2>
 
             <Form
                 form={form}

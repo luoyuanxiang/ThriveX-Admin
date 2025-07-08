@@ -68,7 +68,7 @@ export default () => {
         { path: "/iter", title: "项目更新记录", component: <Iterative /> },
         { path: "/work", title: "工作台", component: <Work /> },
         { path: "/assistant", title: "助手管理", component: <Assistant /> },
-        { path: "/config", title: "环境配置", component: <Config /> },
+        { path: "/config", title: "项目配置", component: <Config /> },
     ];
 
     const [routes, setRoutes] = useState<typeof routesAll | null>(null);

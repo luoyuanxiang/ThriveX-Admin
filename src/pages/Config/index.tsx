@@ -119,7 +119,7 @@ export default () => {
 
   return (
     <div>
-      <Title value="环境配置" />
+      <Title value="项目配置" />
 
       <Card className={`${titleSty} min-h-[calc(100vh-160px)]`}>
         <Table
