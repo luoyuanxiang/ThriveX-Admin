@@ -16,3 +16,13 @@ export const getEnvConfigListAPI = () => Request<EnvConfig[]>("GET", `/env_confi
 
 // 更新环境配置
 export const updateEnvConfigDataAPI = (data: EnvConfig) => Request("PATCH", `/env_config/${data.id}/json`, { data: data.value })
+
+
+// 获取页面配置
+export const getPageConfigDataAPI = (id: number) => Request<EnvConfig>("GET", `/page_config/${id}`)
+
+// 获取页面配置列表
+export const getPageConfigListAPI = () => Request<EnvConfig[]>("GET", `/page_config/list`)
+
+// 更新页面配置
+export const updatePageConfigDataAPI = (id: number, data: object) => Request("PATCH", `/page_config/${id}`, { data })
