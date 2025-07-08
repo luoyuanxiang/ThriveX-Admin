@@ -18,8 +18,11 @@ export const getEnvConfigListAPI = () => Request<Config[]>("GET", `/env_config/l
 export const updateEnvConfigDataAPI = (data: Config) => Request("PATCH", `/env_config/json/${data.id}`, { data: data.value })
 
 
-// 获取页面配置
+// 根据id获取页面配置
 export const getPageConfigDataAPI = (id: number) => Request<Config>("GET", `/page_config/${id}`)
+
+// 根据名称获取页面配置
+export const getPageConfigDataByNameAPI = (name: string) => Request<Config>("GET", `/page_config/name/${name}`)
 
 // 获取页面配置列表
 export const getPageConfigListAPI = () => Request<Config[]>("GET", `/page_config/list`)
