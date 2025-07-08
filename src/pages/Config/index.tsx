@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Table, Button, Modal, Form, message, Card } from 'antd';
 import { getEnvConfigListAPI, updateEnvConfigDataAPI } from '@/api/Config';
-import { EnvConfig } from '@/types/app/config';
+import { Config } from '@/types/app/config';
 import Title from '@/components/Title';
 import { FormOutlined } from '@ant-design/icons';
 import { titleSty } from '@/styles/sty';
@@ -11,8 +11,8 @@ import { json } from '@codemirror/lang-json';
 export default () => {
   const [loading, setLoading] = useState(false);
   const [btnLoading, setBtnLoading] = useState(false);
-  const [list, setList] = useState<EnvConfig[]>([]);
-  const [editItem, setEditItem] = useState<EnvConfig | null>(null);
+  const [list, setList] = useState<Config[]>([]);
+  const [editItem, setEditItem] = useState<Config | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
   const [jsonError, setJsonError] = useState<string | null>(null);
@@ -35,7 +35,7 @@ export default () => {
   }, []);
 
   // 打开编辑弹窗
-  const handleEdit = (item: EnvConfig) => {
+  const handleEdit = (item: Config) => {
     setEditItem(item);
     setIsModalOpen(true);
     const str = JSON.stringify(item.value, null, 2);
@@ -111,7 +111,7 @@ export default () => {
       title: '操作',
       key: 'action',
       align: 'center' as const,
-      render: (_: any, record: EnvConfig) => (
+      render: (_: any, record: Config) => (
         <Button icon={<FormOutlined />} onClick={() => handleEdit(record)} />
       ),
     },
