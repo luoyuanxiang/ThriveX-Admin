@@ -22,7 +22,8 @@ export interface LoginReturn {
 }
 
 export interface EditUser {
-    username: string,
+    oldUsername: string,
+    newUsername: string,
     oldPassword: string,
     newPassword: string
 }
