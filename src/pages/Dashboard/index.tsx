@@ -1,5 +1,3 @@
-import { Card } from 'antd';
-import HeaderInfo from './components/HeaderInfo';
 import Stats from './components/Stats';
 import InfoCard from './components/Info';
 

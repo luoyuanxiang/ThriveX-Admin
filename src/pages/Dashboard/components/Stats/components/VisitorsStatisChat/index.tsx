@@ -247,14 +247,9 @@ export default () => {
                 break;
             }
             case "year": {
-                // 取接口最早的年（如果有数据），否则5年前
-                if (result && result.items[0].length > 0) {
-                    const years = result.items[0].map(arr => dayjs(arr[0], 'YYYY/MM/DD').year());
-                    const minYear = Math.min(...years);
-                    setStartDate(dayjs(`${minYear}-01-01`).format('YYYY/MM/DD'));
-                } else {
-                    setStartDate(now.subtract(5, 'year').startOf('year').format('YYYY/MM/DD'));
-                }
+                // 近五年（含今年），起始时间为五年前的1月1日
+                const startYear = now.year() - 4;
+                setStartDate(dayjs(`${startYear}-01-01`).format('YYYY/MM/DD'));
                 break;
             }
         }
