@@ -1,12 +1,11 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from 'antd/es/form/Form';
-import { Button, Form, Input, notification, Divider } from 'antd';
-import { UserOutlined, LockOutlined, EyeOutlined, EyeInvisibleOutlined, GithubOutlined } from '@ant-design/icons';
+import { Button, Form, Input, notification } from 'antd';
+import { UserOutlined, LockOutlined, EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 import { loginDataAPI } from '@/api/User';
 import { useUserStore } from '@/stores';
 import { getRolePermissionListAPI } from '@/api/Role';
-import github from './assets/images/oauth/github.svg';
 
 export default () => {
     const navigate = useNavigate();
@@ -14,11 +13,6 @@ export default () => {
     const store = useUserStore();
 
     const [loading, setLoading] = useState(false)
-
-    const client_id = 'Ov23liIIzRjNDsB1PXsk';
-
-    const authorize_uri = 'https://github.com/login/oauth/authorize';
-    const redirect_uri = `${window.location.origin}/auth`;
 
     const [form] = useForm();
 
@@ -119,22 +113,6 @@ export default () => {
                             </Button>
                         </Form.Item>
                     </Form>
-
-                    {/* 分隔线 */}
-                    {/* <Divider className="my-6">
-                        <span className="text-slate-500 font-thin text-sm">或使用以下方式登录</span>
-                    </Divider> */}
-
-                    {/* GitHub登录 */}
-                    {/* <div className="flex justify-center">
-                        <a
-                            href={`${authorize_uri}?client_id=${client_id}&redirect_uri=${redirect_uri}`}
-                            target="_blank"
-                            className="group flex items-center justify-center w-full h-12 bg-gray-900 hover:bg-gray-800 text-white rounded-xl transition-colors duration-300 space-x-2"
-                        >
-                            <img src={github} alt="" className='w-10 h-10' />
-                        </a>
-                    </div> */}
                 </div>
 
                 {/* 底部装饰 */}

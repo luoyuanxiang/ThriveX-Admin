@@ -11,7 +11,7 @@ import { useUserStore } from '@/stores'
 
 import { titleSty } from '@/styles/sty';
 import Title from '@/components/Title';
-import logo from '@/images/logo/logo.png';
+import logo from '/logo.png';
 import dayjs from 'dayjs';
 import { DeleteOutlined, FormOutlined } from '@ant-design/icons';
 

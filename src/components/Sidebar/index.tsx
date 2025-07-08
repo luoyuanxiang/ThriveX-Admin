@@ -3,13 +3,12 @@ import { NavLink, useLocation } from 'react-router-dom';
 import SidebarLinkGroup from './SidebarLinkGroup';
 
 import { BiEditAlt, BiFolderOpen, BiHomeSmile, BiSliderAlt, BiShieldQuarter, BiCategoryAlt, BiBug } from "react-icons/bi";
-import { LiaRssSolid } from "react-icons/lia";
 import { TbBrandAirtable } from "react-icons/tb";
 
 import { useUserStore } from '@/stores';
 import { getRoleRouteListAPI } from '@/api/Role'
 import { Route } from '@/types/app/route';
-import logo from '@/images/logo/logo.png'
+import logo from '/logo.png'
 import useVersionData from '@/hooks/useVersionData';
 
 interface SidebarProps {

@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import DropdownUser from './DropdownUser';
 import DarkModeSwitcher from './DarkModeSwitcher';
-import logo from '@/images/logo/logo.png'
+import logo from '/logo.png'
 
 const Header = (props: {
   sidebarOpen: string | boolean | undefined;
