@@ -75,7 +75,7 @@
 
 
 
-### 1.0 旧版（Vue3 + Python Flask）
+### 2.0 旧版（Vue3 + Python Flask）
 
 前端：[LiuYuYang01/Thrive-Blog (github.com)](https://github.com/LiuYuYang01/Thrive-Blog)
 
@@ -124,7 +124,7 @@
 
 大家在部署时遇到任何问题欢迎加入官方交流群进行探索
 
-加微信：`liuyuyang2023`   记得备注：**拉群**
+加微信：`liuyuyang2023`   记得说明在哪里看到的 ThriveX 项目
 
 ![微信](https://bu.dusays.com/2025/06/03/683e96eb43ad8.jpg)
 
