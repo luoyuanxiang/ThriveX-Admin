@@ -6,33 +6,33 @@ function useLocalStorage<T>(
   key: string,
   initialValue: T
 ): [T, (value: SetValue<T>) => void] {
-  // State to store our value
-  // Pass  initial state function to useState so logic is only executed once
+  // 存储值的状态
+  // 将初始状态函数传递给useState，因此逻辑只执行一次
   const [storedValue, setStoredValue] = useState(() => {
     try {
-      // Get from local storage by key
+      // 通过键从本地存储中获取
       const item = window.localStorage.getItem(key);
-      // Parse stored json or if none return initialValue
+      // 解析存储的json，如果没有则返回initialValue
       return item ? JSON.parse(item) : initialValue;
     } catch (error) {
-      // If error also return initialValue
+      // 如果出错也返回initialValue
       console.log(error);
       return initialValue;
     }
   });
 
-  // useEffect to update local storage when the state changes
+  // 当状态改变时，useEffect更新本地存储
   useEffect(() => {
     try {
-      // Allow value to be a function so we have same API as useState
+      // 允许值为函数，因此我们有与useState相同的API
       const valueToStore =
         typeof storedValue === 'function'
           ? storedValue(storedValue)
           : storedValue;
-      // Save state
+      // 保存状态
       window.localStorage.setItem(key, JSON.stringify(valueToStore));
     } catch (error) {
-      // A more advanced implementation would handle the error case
+      // 更高级的实现会处理错误情况
       console.log(error);
     }
   }, [key, storedValue]);
