@@ -99,10 +99,9 @@ export default () => {
             setTab('operate');
             setIsMethod("edit");
 
-            const { data } = await getLinkDataAPI(record.id)
-            setLink(data);
+            setLink(record);
 
-            form.setFieldsValue(data);
+            form.setFieldsValue(record);
             setEditLoading(false)
         } catch (error) {
             setEditLoading(false)
@@ -134,7 +133,7 @@ export default () => {
                     message.success('🎉 新增网站成功');
                 }
 
-                getLinkList();
+                await getLinkList();
                 reset()
                 setTab('list');
             });
