@@ -23,11 +23,8 @@ export default () => {
             setTheme(data);
 
             form.setFieldsValue({
-                light_logo: data.light_logo,
-                dark_logo: data.dark_logo,
-                swiper_image: data.swiper_image,
+                ...data,
                 swiper_text: data.swiper_text ? JSON.parse(data.swiper_text).join('\n') : '',
-                social: data.social,
                 covers: data.covers ? JSON.parse(data.covers).join("\n") : '',
                 reco_article: data.reco_article ? JSON.parse(data.reco_article).join("\n") : '',
             });

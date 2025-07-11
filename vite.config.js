@@ -22,6 +22,7 @@ export default defineConfig({
     }
   },
   server: {
+    port: 9100,
     proxy: {
       '/baidu': {
         target: 'https://openapi.baidu.com/',
