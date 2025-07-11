@@ -5,6 +5,7 @@ import { editWebConfigDataAPI, getWebConfigDataAPI } from '@/api/Config';
 
 export default () => {
     const [loading, setLoading] = useState<boolean>(false);
+    const [theme, setTheme] = useState<Theme>({} as Theme);
 
     const [form] = Form.useForm();
 
@@ -15,6 +16,8 @@ export default () => {
             const { data } = await getWebConfigDataAPI<{ value: Theme }>("theme");
 
             const theme = data.value
+
+            setTheme(theme);
 
             form.setFieldsValue({
                 record_name: theme.record_name,
@@ -35,7 +38,11 @@ export default () => {
         try {
             setLoading(true);
 
-            await editWebConfigDataAPI("theme", values);
+            await editWebConfigDataAPI("theme", {
+                ...theme,
+                record_name: values.record_name,
+                record_info: values.record_info
+            });
 
             notification.success({
                 message: '成功',
@@ -50,7 +57,7 @@ export default () => {
 
     return (
         <div>
-            <h2 className="text-xl pb-4 pl-10">说说配置</h2>
+            <h2 className="text-xl pb-4 pl-10">闪念配置</h2>
 
             <div className='w-full lg:w-[500px] md:ml-10'>
                 <Form form={form} onFinish={editThemeData} layout="vertical">
