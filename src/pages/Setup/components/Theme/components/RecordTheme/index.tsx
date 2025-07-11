@@ -12,10 +12,13 @@ export default () => {
         try {
             setLoading(true);
 
-            const { data } = await getWebConfigDataAPI<Theme>("layout");
+            const { data } = await getWebConfigDataAPI<{ value: Theme }>("theme");
+
+            const theme = data.value
+
             form.setFieldsValue({
-                record_name: data.record_name,
-                record_info: data.record_info
+                record_name: theme.record_name,
+                record_info: theme.record_info
             });
 
             setLoading(false);
@@ -32,7 +35,7 @@ export default () => {
         try {
             setLoading(true);
 
-            await editWebConfigDataAPI("layout", values);
+            await editWebConfigDataAPI("theme", values);
 
             notification.success({
                 message: '成功',

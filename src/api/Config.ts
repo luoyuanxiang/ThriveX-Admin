@@ -2,10 +2,10 @@ import Request from '@/utils/request'
 import { Config, EnvConfigName } from '@/types/app/config'
 
 // 获取网站配置
-export const getWebConfigDataAPI = <T>(type: string) => Request<T>("GET", `/web_config/list/${type}`)
+export const getWebConfigDataAPI = <T>(name: string) => Request<T>("GET", `/web_config/name/${name}`)
 
 // 修改网站配置
-export const editWebConfigDataAPI = (type: string, data: object) => Request<{ [string: string]: string }>("PATCH", `/web_config/${type}`, { data })
+export const editWebConfigDataAPI = (name: string, data: object) => Request<Config>("PATCH", `/web_config/json/name/${name}`, { data })
 
 
 // 获取环境配置

@@ -19,14 +19,18 @@ export default () => {
         try {
             setLoading(true);
 
-            const { data } = await getWebConfigDataAPI<Theme>("layout");
-            setTheme(data);
+            const { data } = await getWebConfigDataAPI<{ value: Theme }>("theme");
+
+            const theme = data.value
+            
+            setTheme(theme);
 
             form.setFieldsValue({
-                ...data,
-                swiper_text: data.swiper_text ? JSON.parse(data.swiper_text).join('\n') : '',
-                covers: data.covers ? JSON.parse(data.covers).join("\n") : '',
-                reco_article: data.reco_article ? JSON.parse(data.reco_article).join("\n") : '',
+                ...theme,
+                social: theme.social.map(item => JSON.stringify(item)).join("\n"),
+                swiper_text: theme.swiper_text.join('\n'),
+                covers: theme.covers.join("\n"),
+                reco_article: theme.reco_article.join("\n"),
             });
 
             setLoading(false);
@@ -46,12 +50,13 @@ export default () => {
             const updatedLayout = {
                 ...theme,
                 ...values,
-                swiper_text: JSON.stringify(values.swiper_text.split('\n')),
-                covers: JSON.stringify(values.covers.split('\n')),
-                reco_article: JSON.stringify(values.reco_article.split('\n')),
+                social: values.social.split("\n").map((item: string) => JSON.parse(item)),
+                swiper_text: values.swiper_text.split('\n'),
+                covers: values.covers.split('\n'),
+                reco_article: values.reco_article.split('\n'),
             };
 
-            await editWebConfigDataAPI("layout", updatedLayout);
+            await editWebConfigDataAPI("theme", updatedLayout);
 
             notification.success({
                 message: '成功',
@@ -159,9 +164,9 @@ export default () => {
 
                     <Divider orientation="left">侧边栏</Divider>
                     <Checkbox.Group
-                        value={theme.right_sidebar ? JSON.parse(theme.right_sidebar) : []}
-                        onChange={(checkedValues) => {
-                            setTheme({ ...theme, right_sidebar: JSON.stringify(checkedValues) });
+                        value={theme.right_sidebar}
+                        onChange={(right_sidebar) => {
+                            setTheme({ ...theme, right_sidebar});
                         }}
                     >
                         <div className="grid grid-cols-4 gap-2">

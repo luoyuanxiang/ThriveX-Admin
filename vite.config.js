@@ -23,22 +23,5 @@ export default defineConfig({
   },
   server: {
     port: 9100,
-    proxy: {
-      '/baidu': {
-        target: 'https://openapi.baidu.com/',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/baidu/, ''),
-      },
-      '/qiniu': {
-        target: 'https://rsf.qiniuapi.com/',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/qiniu/, ''),
-      },
-      '/ai': {
-        target: 'https://spark-api-open.xf-yun.com/',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/ai/, ''),
-      },
-    },
   },
 })
