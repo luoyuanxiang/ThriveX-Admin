@@ -9,6 +9,9 @@ export const addArticleDataAPI = (data: Article) =>
 export const delArticleDataAPI = (id: number, isDel?: boolean) =>
   Request("DELETE", isDel ? `/article/${id}/1` : `/article/${id}/0`);
 
+// 批量删除文章
+export const delBatchArticleDataAPI = (ids: number[]) =>
+  Request("DELETE", "/article/batch", { data: ids});
 // 还原被删除的文章
 export const reductionArticleDataAPI = (id: number) =>
   Request("PATCH", `/article/reduction/${id}`);
