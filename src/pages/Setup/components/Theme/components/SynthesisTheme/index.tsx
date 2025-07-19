@@ -53,7 +53,7 @@ export default () => {
                 social: values.social.split("\n").map((item: string) => JSON.parse(item)),
                 swiper_text: values.swiper_text.split('\n'),
                 covers: values.covers.split('\n'),
-                reco_article: values.reco_article.split('\n'),
+                reco_article: values.reco_article.split('\n').map((item: string) => Number(item)),
             };
 
             await editWebConfigDataAPI("theme", updatedLayout);
