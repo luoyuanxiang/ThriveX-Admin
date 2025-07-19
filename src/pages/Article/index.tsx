@@ -1,30 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
-import {
-  Table,
-  Button,
-  Tag,
-  notification,
-  Card,
-  Popconfirm,
-  Form,
-  Input,
-  Select,
-  DatePicker,
-  Modal,
-  message,
-  Pagination,
-} from 'antd';
-import {
-  DeleteOutlined,
-  FormOutlined,
-  InboxOutlined,
-  DownloadOutlined,
-} from '@ant-design/icons';
-import type {
-  UploadFile,
-  UploadFileStatus,
-  RcFile,
-} from 'antd/es/upload/interface';
+import { Table, Button, Tag, notification, Card, Popconfirm, Form, Input, Select, DatePicker, Modal, message, Pagination, Dropdown, Menu } from 'antd';
+import { DeleteOutlined, FormOutlined, InboxOutlined, DownloadOutlined } from '@ant-design/icons';
+import type { UploadFile, UploadFileStatus, RcFile } from 'antd/es/upload/interface';
 import { titleSty } from '@/styles/sty';
 import Title from '@/components/Title';
 import { Link } from 'react-router-dom';
@@ -32,24 +9,11 @@ import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import { getCateListAPI } from '@/api/Cate';
 import { getTagListAPI } from '@/api/Tag';
-import {
-  delArticleDataAPI,
-  getArticlePagingAPI,
-  addArticleDataAPI,
-  getArticleListAPI,
-  delBatchArticleDataAPI,
-} from '@/api/Article';
+import { delArticleDataAPI, getArticlePagingAPI, addArticleDataAPI, getArticleListAPI, delBatchArticleDataAPI } from '@/api/Article';
 import type { Tag as ArticleTag } from '@/types/app/tag';
 import type { Cate } from '@/types/app/cate';
-import type {
-  Article,
-  Config,
-  FilterArticle,
-  FilterForm,
-} from '@/types/app/article';
-
+import type { Article, Config, FilterArticle, FilterForm } from '@/types/app/article';
 import { useWebStore } from '@/stores';
-
 import dayjs from 'dayjs';
 import { ColumnType } from 'antd/es/table';
 import { TableRowSelection } from 'antd/es/table/interface';
@@ -67,14 +31,11 @@ export default () => {
   const [articleList, setArticleList] = useState<Article[]>([]);
   const { RangePicker } = DatePicker;
 
-  // 分页获得的文章列表
   const [total, setTotal] = useState<number>(0);
-  // 分页参数
   const [paging, setPaging] = useState<Page>({
     page: 1,
     size: 8,
   });
-  // 条件参数
   const [query, setQuery] = useState<FilterArticle>({
     key: undefined,
     cateId: undefined,
@@ -112,6 +73,7 @@ export default () => {
       notification.success({ message: '🎉 删除文章成功' });
       setLoading(false);
     } catch (error) {
+      console.error(error);
       setLoading(false);
     }
   };
@@ -222,10 +184,6 @@ export default () => {
       align: 'center',
       render: (_: string, record: Article) => (
         <div className="flex justify-center space-x-2">
-          <Link to={`/create?id=${record.id}`}>
-            <Button icon={<FormOutlined />} />
-          </Link>
-
           <Popconfirm
             title="提醒"
             description="你确定要导出吗"
@@ -235,6 +193,11 @@ export default () => {
           >
             <Button type="primary" icon={<DownloadOutlined />} />
           </Popconfirm>
+
+          <Link to={`/create?id=${record.id}`}>
+            <Button icon={<FormOutlined />} />
+          </Link>
+
           <Popconfirm
             title="警告"
             description="你确定要删除吗"
@@ -253,7 +216,7 @@ export default () => {
     try {
       setPaging({
         ...paging,
-        page: 1, // 条件参数发生变化，重置分页
+        page: 1,
       });
 
       setQuery({
@@ -264,7 +227,7 @@ export default () => {
         endDate: values.createTime && values.createTime[1].valueOf() + '',
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -281,13 +244,15 @@ export default () => {
     setTagList(data as ArticleTag[]);
   };
 
-  const handleImport = async () => {
+  // 导入文章
+  const handleArticleImport = async () => {
     if (fileList.length === 0) {
       notification.warning({ message: '请上传至少一个 .md 或 .json 文件' });
       return;
     }
 
     try {
+      setLoading(true);
       setImportLoading(true);
 
       const articles: Article[] = [];
@@ -306,10 +271,7 @@ export default () => {
         }
       }
 
-      if (articles.length === 0) {
-        notification.error({ message: '解析失败，未提取出有效文章数据' });
-        return;
-      }
+      if (articles.length === 0) return notification.error({ message: '解析失败，未提取出有效文章数据' });
 
       articles.forEach(async (article: Article) => {
         try {
@@ -321,6 +283,7 @@ export default () => {
           message.error(`${article.title}--导入失败~`);
         }
       });
+
       await getArticleList();
 
       setFileList([]);
@@ -334,6 +297,7 @@ export default () => {
       notification.error({ message: '导入失败，请检查文件格式或控制台报错' });
     } finally {
       setImportLoading(false);
+      setLoading(false);
     }
   };
 
@@ -428,10 +392,11 @@ export default () => {
     });
 
     setFileList([...fileList, ...newFileList]);
-    e.target.value = ''; // 允许重复上传同一文件
+    // 允许重复上传同一文件
+    e.target.value = '';
   };
 
-  /**导出为markdown文件 */
+  // 导出为markdown文件
   const generateMarkdown = (article: Article) => {
     const {
       title,
@@ -479,10 +444,11 @@ export default () => {
 
     return names
       .map((name) => lowerCaseMap.get(name.toLowerCase()))
-      .filter((id): id is number => id !== undefined); // 去除未匹配项
+      // 去除未匹配项
+      .filter((id): id is number => id !== undefined);
   };
 
-  /** 从 markdown 字符串解析为 Article JSON */
+  // 从 markdown 字符串解析为 Article JSON
   const parseMarkdownToArticle = (mdText: string): Article => {
     // 提取 frontmatter 块
     const frontmatterMatch = mdText.match(/^---\n([\s\S]*?)\n---/);
@@ -490,7 +456,8 @@ export default () => {
       throw new Error('Markdown 文件格式错误，缺少 frontmatter');
 
     const frontmatterText = frontmatterMatch[1];
-    const content = mdText.replace(frontmatterMatch[0], '').trim(); // 去除 frontmatter 后的正文
+    // 去除 frontmatter 后的正文
+    const content = mdText.replace(frontmatterMatch[0], '').trim();
 
     const meta: Record<string, string> = {};
 
@@ -531,7 +498,7 @@ export default () => {
     return article;
   };
 
-  /** 解析 JSON 内容为文章数据列表 */
+  // 解析 JSON 内容为文章数据列表
   const parseJsonToArticles = (raw: Article | Article[]): Article[] => {
     const parseSingle = (item: Article): Article => ({
       title: item.title || '未命名文章',
@@ -558,7 +525,7 @@ export default () => {
     return Array.isArray(raw) ? raw.map(parseSingle) : [parseSingle(raw)];
   };
 
-  /**下载文件 */
+  // 下载文件
   const downloadFile = (
     content: string,
     fileName: string,
@@ -575,6 +542,7 @@ export default () => {
     URL.revokeObjectURL(url);
   };
 
+  // 导出文章为 zip 文件
   const downloadMarkdownZip = async (articles: Article[]) => {
     const zip = new JSZip();
     const folder = zip.folder('data');
@@ -589,87 +557,73 @@ export default () => {
     saveAs(blob, '导出文章_' + new Date().getTime() + '.zip');
   };
 
-  /**导出文章 */
+  // 导出文章
   const exportArticle = (id: number) => {
     const article = articleList.filter((item) => item.id === id)[0];
     const markdown = generateMarkdown(article);
     downloadFile(markdown, `${article.title.replace(/[\\/:*?"<>|]/g, '_')}.md`);
   };
 
-  /**导出选中 */
+  // 导出选中
   const exportSelected = () => {
     const selectedArticles = articleList.filter((item: Article) =>
       selectedRowKeys.includes(item.id as number),
     );
-    if (!selectedArticles.length) {
-      message.warning('请选择要导出的文章');
-      return;
-    }
+
+    if (!selectedArticles.length) return message.warning('请选择要导出的文章');
+
     downloadMarkdownZip(selectedArticles);
   };
-  /**删除选中 */
+
+  // 删除选中
   const delSelected = async () => {
     if (!selectedRowKeys.length) {
       message.warning('请选择要删除的文章');
       return;
     }
-    console.log(selectedRowKeys);
-    const { code } = await delBatchArticleDataAPI(selectedRowKeys as number[]);
-    if (code === 200) {
-      message.success('删除成功');
-      await getArticleList();
-    } else {
-      message.error('删除失败');
+
+    try {
+      setLoading(true);
+      const { code } = await delBatchArticleDataAPI(selectedRowKeys as number[]);
+      if (code === 200) {
+        message.success('删除成功');
+        await getArticleList();
+      } else {
+        message.error('删除失败');
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
+
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
   };
+
+  // 选择行
   const rowSelection: TableRowSelection<Article> = {
     selectedRowKeys,
     onChange: onSelectChange,
-    selections: [
-      Table.SELECTION_ALL,
-      Table.SELECTION_INVERT,
-      Table.SELECTION_NONE,
-      {
-        key: 'odd',
-        text: '选择奇数行',
-        onSelect: (changableRowKeys) => {
-          let newSelectedRowKeys = [];
-          newSelectedRowKeys = changableRowKeys.filter((_, index) => {
-            if (index % 2 !== 0) {
-              return false;
-            }
-            return true;
-          });
-          setSelectedRowKeys(newSelectedRowKeys);
-        },
-      },
-      {
-        key: 'even',
-        text: '选择偶数行',
-        onSelect: (changableRowKeys) => {
-          let newSelectedRowKeys = [];
-          newSelectedRowKeys = changableRowKeys.filter((_, index) => {
-            if (index % 2 !== 0) {
-              return true;
-            }
-            return false;
-          });
-          setSelectedRowKeys(newSelectedRowKeys);
-        },
-      },
-    ],
+    fixed: 'left',
   };
 
-  /**全部导出 */
+  // 全部导出
   const exportAll = async () => {
-    const { data } = await getArticleListAPI({});
-    downloadMarkdownZip(data);
+    try {
+      setLoading(true);
+      const { data } = await getArticleListAPI({});
+      downloadMarkdownZip(data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
+
   // Markdown 模板
   const downloadMarkdownTemplate = () => {
     const content = `---\ntitle: 示例文章标题\ndescription: 这里是文章描述\ntags: 示例标签1 示例标签2\ncategories: 示例分类\ncover: https://example.com/image.png\ndate: 2025-07-12 12:00:00\nkeywords: 示例标签1 示例标签2 示例分类\n---\n\n这里是 Markdown 正文内容，请开始创作吧~`;
@@ -775,52 +729,44 @@ export default () => {
             </Form.Item>
 
             <Form.Item className="pr-6">
-              <Button type="primary" htmlType="submit">
-                查询
-              </Button>
+              <Button type="primary" htmlType="submit">筛选</Button>
             </Form.Item>
           </Form>
 
-          <Popconfirm
-            title="提醒"
-            description="你确定要全部导出吗"
-            okText="确定"
-            cancelText="取消"
-            className="mr-1"
-            onConfirm={() => exportAll()}
-          >
-            <Button type="primary">全部导出</Button>
-          </Popconfirm>
+          <div className='flex space-x-3 pl-32 pr-10'>
+            <Dropdown.Button
+              menu={{
+                items: [
+                  {
+                    label: '导出选中',
+                    key: 'exportSelected',
+                    onClick: () => exportSelected(),
+                  },
+                  {
+                    label: '导出全部',
+                    key: 'exportAll',
+                    onClick: () => exportAll(),
+                  },
+                ],
+              }}
+            >导出文章</Dropdown.Button>
 
-          <Popconfirm
-            title="提醒"
-            description="你确定要导出选中的文章吗"
-            okText="确定"
-            cancelText="取消"
-            className="mr-1"
-            onConfirm={() => exportSelected()}
-          >
-            <Button type="primary">导出选中</Button>
-          </Popconfirm>
+            <Button
+              type="primary"
+              className="mr-1"
+              onClick={() => setIsModalOpen(true)}
+            >导入文章</Button>
 
-          <Button
-            type="primary"
-            className="mr-1"
-            onClick={() => setIsModalOpen(true)}
-          >
-            导入文章
-          </Button>
-          <Popconfirm
-            title="警告"
-            description="你确定要删除选中的文章吗"
-            okText="确定"
-            cancelText="取消"
-            onConfirm={() => delSelected()}
-          >
-            <Button type="primary" danger>
-              删除选中
-            </Button>
-          </Popconfirm>
+            <Popconfirm
+              title="警告"
+              description="你确定要删除选中的文章吗"
+              okText="确定"
+              cancelText="取消"
+              onConfirm={() => delSelected()}
+            >
+              <Button type="primary" danger>删除选中</Button>
+            </Popconfirm>
+          </div>
         </div>
       </Card>
 
@@ -829,19 +775,15 @@ export default () => {
         open={isModalOpen}
         onCancel={handleCancel}
         footer={[
-          <Button key="cancel" onClick={handleCancel}>
-            取消
-          </Button>,
+          <Button key="cancel" onClick={handleCancel}>取消</Button>,
 
           <Button
             key="import"
             type="primary"
-            onClick={handleImport}
+            onClick={handleArticleImport}
             loading={importLoading}
             disabled={fileList.length === 0}
-          >
-            开始导入
-          </Button>,
+          >开始导入</Button>,
         ]}
       >
         <div className="py-4">
@@ -851,21 +793,21 @@ export default () => {
             onDragEnter={handleDragEnter}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
-            className={`w-full h-40 p-4 border border-dashed rounded-lg transition-all duration-300 ${
-              isDragging
-                ? 'border-primary bg-primary/5'
-                : 'border-[#D7D7D7] hover:border-primary bg-[#FAFAFA]'
-            } space-y-2 cursor-pointer`}
+            className={`w-full h-40 p-4 border border-dashed rounded-lg transition-all duration-300 ${isDragging
+              ? 'border-primary bg-primary/5'
+              : 'border-[#D7D7D7] hover:border-primary bg-[#FAFAFA]'
+              } space-y-2 cursor-pointer`}
           >
             <div className="flex justify-center">
               <InboxOutlined className="text-5xl text-primary" />
             </div>
 
             <p className="text-base text-center">
-              {isDragging ? '释放文件以上传' : '点击或拖动文件到此区域进行上传'}
+              {isDragging ? '文件放在此处即上传' : '点击或拖动文件到此区域'}
             </p>
+
             <p className="text-sm text-[#999] text-center">
-              支持单个或多个上传，最多5个文件，仅支持Markdown和Json格式
+              仅支持 Markdown 或 JSON 格式
             </p>
           </div>
 
@@ -876,7 +818,7 @@ export default () => {
             ref={fileInputRef}
             className="hidden"
             accept=".md"
-            placeholder="请选择markdown格式文件~"
+            placeholder="请选择 Markdown 格式文件"
           />
 
           {fileList.length > 0 && (
@@ -894,31 +836,21 @@ export default () => {
                       type="text"
                       danger
                       size="small"
-                      onClick={() =>
-                        setFileList(fileList.filter((f) => f.uid !== file.uid))
-                      }
-                    >
-                      删除
-                    </Button>
+                      onClick={() => setFileList(fileList.filter((f) => f.uid !== file.uid))}
+                    >删除</Button>
                   </li>
                 ))}
               </ul>
             </div>
           )}
+
           {fileList.length === 0 && (
             <div className="mt-4 flex justify-between items-center text-sm text-gray-500">
               <span>你可以下载模板后填写再导入：</span>
+
               <div className="space-x-2">
-                <Button
-                  type="link"
-                  size="small"
-                  onClick={downloadMarkdownTemplate}
-                >
-                  下载 Markdown 模板
-                </Button>
-                <Button type="link" size="small" onClick={downloadJsonTemplate}>
-                  下载 JSON 模板
-                </Button>
+                <Button type="link" size="small" onClick={downloadMarkdownTemplate}>下载 Markdown 模板</Button>
+                <Button type="link" size="small" onClick={downloadJsonTemplate}>下载 JSON 模板</Button>
               </div>
             </div>
           )}
@@ -931,9 +863,10 @@ export default () => {
           rowSelection={rowSelection}
           dataSource={articleList}
           columns={columns}
-          scroll={{ x: 'max-content' }}
           pagination={false}
           loading={loading}
+          scroll={{ x: 'max-content' }}
+          className='[&_.ant-table-selection-column]:w-18'
         />
 
         <div className="flex justify-center my-5">
