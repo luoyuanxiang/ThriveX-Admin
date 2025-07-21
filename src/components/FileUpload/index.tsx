@@ -6,7 +6,7 @@ import { DirList } from '@/types/app/file';
 import { baseURL } from '@/utils/request';
 import Compressor from 'compressorjs';
 
-interface UploadFileProps {
+interface Props {
   multiple?: boolean;
   dir: DirList;
   open: boolean;
@@ -14,7 +14,7 @@ interface UploadFileProps {
   onCancel: () => void;
 }
 
-export default ({ multiple, dir, open, onCancel, onSuccess }: UploadFileProps) => {
+export default ({ multiple, dir, open, onCancel, onSuccess }: Props) => {
   const store = useUserStore();
   const dragCounterRef = useRef(0);
 
@@ -75,7 +75,6 @@ export default ({ multiple, dir, open, onCancel, onSuccess }: UploadFileProps) =
         message.error('复制到剪贴板失败，请手动复制');
         onSuccess(data);
         setIsLoading(false);
-        // onCloseModel()
         return;
       }
 

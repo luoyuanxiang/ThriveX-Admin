@@ -6,29 +6,38 @@ const DropdownDefault = () => {
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
 
-  // close on click outside
+  // 监听点击事件，如果点击发生在下拉菜单外部，则关闭下拉菜单
   useEffect(() => {
     const clickHandler = ({ target }: MouseEvent) => {
+      // 如果下拉菜单未挂载，直接返回
       if (!dropdown.current) return;
+      // 如果下拉菜单未打开，或者点击目标在下拉菜单或触发按钮内部，则不做处理
       if (
         !dropdownOpen ||
         dropdown.current.contains(target) ||
         trigger.current.contains(target)
       )
         return;
+      // 否则关闭下拉菜单
       setDropdownOpen(false);
     };
+    // 添加全局点击事件监听
     document.addEventListener('click', clickHandler);
+    // 组件卸载时移除监听
     return () => document.removeEventListener('click', clickHandler);
   });
 
-  // close if the esc key is pressed
+  // 监听键盘事件，如果按下的是 ESC 键，则关闭下拉菜单
   useEffect(() => {
-    const keyHandler = ({ keyCode }: KeyboardEvent) => {
-      if (!dropdownOpen || keyCode !== 27) return;
+    const keyHandler = (event: KeyboardEvent) => {
+      // 如果下拉菜单未打开或按下的不是 ESC 键，则不做处理
+      if (!dropdownOpen || event.key !== 'Escape') return;
+      // 关闭下拉菜单
       setDropdownOpen(false);
     };
+    // 添加全局键盘按下事件监听
     document.addEventListener('keydown', keyHandler);
+    // 组件卸载时移除监听
     return () => document.removeEventListener('keydown', keyHandler);
   });
 
@@ -61,6 +70,7 @@ const DropdownDefault = () => {
           />
         </svg>
       </button>
+
       <div
         ref={dropdown}
         onFocus={() => setDropdownOpen(true)}
@@ -84,6 +94,7 @@ const DropdownDefault = () => {
                 fill=""
               />
             </g>
+
             <defs>
               <clipPath id="clip0_62_9787">
                 <rect width="16" height="16" fill="white" />
@@ -92,6 +103,7 @@ const DropdownDefault = () => {
           </svg>
           Edit
         </button>
+        
         <button className="flex w-full items-center gap-2 rounded-sm px-4 py-1.5 text-left text-sm hover:bg-gray dark:hover:bg-meta-4">
           <svg
             className="fill-current"
