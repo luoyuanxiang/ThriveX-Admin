@@ -1,20 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import {
-  Table,
-  Button,
-  Tag,
-  notification,
-  Card,
-  Popconfirm,
-  Form,
-  Input,
-  Select,
-  DatePicker,
-  Modal,
-  message,
-  Pagination,
-  Dropdown,
-} from 'antd';
+import { Table, Button, Tag, notification, Card, Popconfirm, Form, Input, Select, DatePicker, Modal, message, Pagination, Dropdown } from 'antd';
 import { DeleteOutlined, FormOutlined, InboxOutlined, DownloadOutlined } from '@ant-design/icons';
 import type { UploadFile, UploadFileStatus, RcFile } from 'antd/es/upload/interface';
 import { titleSty } from '@/styles/sty';
@@ -24,13 +9,7 @@ import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import { getCateListAPI } from '@/api/Cate';
 import { getTagListAPI } from '@/api/Tag';
-import {
-  delArticleDataAPI,
-  getArticlePagingAPI,
-  addArticleDataAPI,
-  getArticleListAPI,
-  delBatchArticleDataAPI,
-} from '@/api/Article';
+import { delArticleDataAPI, getArticlePagingAPI, addArticleDataAPI, getArticleListAPI, delBatchArticleDataAPI } from '@/api/Article';
 import type { Tag as ArticleTag } from '@/types/app/tag';
 import type { Cate } from '@/types/app/cate';
 import type { Article, Config, FilterArticle, FilterForm } from '@/types/app/article';
@@ -118,12 +97,7 @@ export default () => {
       align: 'center',
       width: 300,
       render: (text: string, record: Article) => (
-        <a
-          href={`${web.url}/article/${record.id}`}
-          target="_blank"
-          className="hover:text-primary line-clamp-1"
-          rel="noreferrer"
-        >
+        <a href={`${web.url}/article/${record.id}`} target="_blank" className="hover:text-primary line-clamp-1" rel="noreferrer">
           {text}
         </a>
       ),
@@ -180,11 +154,7 @@ export default () => {
       dataIndex: 'config',
       key: 'config',
       align: 'center',
-      render: (config: Config) =>
-        (config.status === 'default' && <span>正常</span>) ||
-        (config.status === 'no_home' && <span>不在首页显示</span>) ||
-        (config.status === 'hide' && <span>隐藏</span>) ||
-        (config.password.trim().length && <span>文章加密</span>),
+      render: (config: Config) => (config.status === 'default' && <span>正常</span>) || (config.status === 'no_home' && <span>不在首页显示</span>) || (config.status === 'hide' && <span>隐藏</span>) || (config.password.trim().length && <span>文章加密</span>),
     },
     {
       title: '发布时间',
@@ -203,13 +173,7 @@ export default () => {
       align: 'center',
       render: (_: string, record: Article) => (
         <div className="flex justify-center space-x-2">
-          <Popconfirm
-            title="提醒"
-            description="你确定要导出吗"
-            okText="确定"
-            cancelText="取消"
-            onConfirm={() => exportArticle(record.id!)}
-          >
+          <Popconfirm title="提醒" description="你确定要导出吗" okText="确定" cancelText="取消" onConfirm={() => exportArticle(record.id!)}>
             <Button type="primary" icon={<DownloadOutlined />} />
           </Popconfirm>
 
@@ -217,13 +181,7 @@ export default () => {
             <Button icon={<FormOutlined />} />
           </Link>
 
-          <Popconfirm
-            title="警告"
-            description="你确定要删除吗"
-            okText="确定"
-            cancelText="取消"
-            onConfirm={() => delArticleData(record.id!)}
-          >
+          <Popconfirm title="警告" description="你确定要删除吗" okText="确定" cancelText="取消" onConfirm={() => delArticleData(record.id!)}>
             <Button type="primary" danger icon={<DeleteOutlined />} />
           </Popconfirm>
         </div>
@@ -350,9 +308,7 @@ export default () => {
     setIsDragging(false);
 
     const files = Array.from(e.dataTransfer.files);
-    const validFiles = files.filter(
-      (file) => file.name.toLowerCase().endsWith('.md') || file.name.toLowerCase().endsWith('.json'),
-    );
+    const validFiles = files.filter((file) => file.name.toLowerCase().endsWith('.md') || file.name.toLowerCase().endsWith('.json'));
 
     if (validFiles.length === 0) {
       message.error('仅支持 Markdown(.md) 或 JSON(.json) 文件');
@@ -382,9 +338,7 @@ export default () => {
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
 
-    const validFiles = files.filter(
-      (file) => file.name.toLowerCase().endsWith('.md') || file.name.toLowerCase().endsWith('.json'),
-    );
+    const validFiles = files.filter((file) => file.name.toLowerCase().endsWith('.md') || file.name.toLowerCase().endsWith('.json'));
 
     if (validFiles.length === 0) {
       message.error('仅支持 Markdown(.md) 或 JSON(.json) 文件');
@@ -684,12 +638,7 @@ export default () => {
             </Form.Item>
 
             <Form.Item label="分类" name="cateId" className="min-w-[200px]">
-              <Select
-                allowClear
-                options={cateList}
-                fieldNames={{ label: 'name', value: 'id' }}
-                placeholder="请选择分类"
-              />
+              <Select allowClear options={cateList} fieldNames={{ label: 'name', value: 'id' }} placeholder="请选择分类" />
             </Form.Item>
 
             <Form.Item label="标签" name="tagId" className="min-w-[200px]">
@@ -743,13 +692,7 @@ export default () => {
               导入文章
             </Button>
 
-            <Popconfirm
-              title="警告"
-              description="你确定要删除选中的文章吗"
-              okText="确定"
-              cancelText="取消"
-              onConfirm={() => delSelected()}
-            >
+            <Popconfirm title="警告" description="你确定要删除选中的文章吗" okText="确定" cancelText="取消" onConfirm={() => delSelected()}>
               <Button type="primary" danger>
                 删除选中
               </Button>
@@ -767,28 +710,13 @@ export default () => {
             取消
           </Button>,
 
-          <Button
-            key="import"
-            type="primary"
-            onClick={handleArticleImport}
-            loading={importLoading}
-            disabled={fileList.length === 0}
-          >
+          <Button key="import" type="primary" onClick={handleArticleImport} loading={importLoading} disabled={fileList.length === 0}>
             开始导入
           </Button>,
         ]}
       >
         <div className="py-4">
-          <div
-            onClick={() => fileInputRef?.current?.click()}
-            onDragOver={handleDragOver}
-            onDragEnter={handleDragEnter}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-            className={`w-full h-40 p-4 border border-dashed rounded-lg transition-all duration-300 ${
-              isDragging ? 'border-primary bg-primary/5' : 'border-[#D7D7D7] hover:border-primary bg-[#FAFAFA]'
-            } space-y-2 cursor-pointer`}
-          >
+          <div onClick={() => fileInputRef?.current?.click()} onDragOver={handleDragOver} onDragEnter={handleDragEnter} onDragLeave={handleDragLeave} onDrop={handleDrop} className={`w-full h-40 p-4 border border-dashed rounded-lg transition-all duration-300 ${isDragging ? 'border-primary bg-primary/5' : 'border-[#D7D7D7] hover:border-primary bg-[#FAFAFA]'} space-y-2 cursor-pointer`}>
             <div className="flex justify-center">
               <InboxOutlined className="text-5xl text-primary" />
             </div>
@@ -798,15 +726,7 @@ export default () => {
             <p className="text-sm text-[#999] text-center">仅支持 Markdown 或 JSON 格式</p>
           </div>
 
-          <input
-            multiple
-            type="file"
-            onChange={handleFileInput}
-            ref={fileInputRef}
-            className="hidden"
-            accept=".md"
-            placeholder="请选择 Markdown 格式文件"
-          />
+          <input multiple type="file" onChange={handleFileInput} ref={fileInputRef} className="hidden" accept=".md" placeholder="请选择 Markdown 格式文件" />
 
           {fileList.length > 0 && (
             <div className="mt-4">
@@ -816,12 +736,7 @@ export default () => {
                   <li key={file.uid} className="flex items-center justify-between bg-gray-50 p-2 rounded">
                     <span className="text-sm">{file.name}</span>
 
-                    <Button
-                      type="text"
-                      danger
-                      size="small"
-                      onClick={() => setFileList(fileList.filter((f) => f.uid !== file.uid))}
-                    >
+                    <Button type="text" danger size="small" onClick={() => setFileList(fileList.filter((f) => f.uid !== file.uid))}>
                       删除
                     </Button>
                   </li>
@@ -848,24 +763,10 @@ export default () => {
       </Modal>
 
       <Card className={`${titleSty} min-h-[calc(100vh-250px)]`}>
-        <Table
-          rowKey="id"
-          rowSelection={rowSelection}
-          dataSource={articleList}
-          columns={columns}
-          pagination={false}
-          loading={loading}
-          scroll={{ x: 'max-content' }}
-          className="[&_.ant-table-selection-column]:w-18"
-        />
+        <Table rowKey="id" rowSelection={rowSelection} dataSource={articleList} columns={columns} pagination={false} loading={loading} scroll={{ x: 'max-content' }} className="[&_.ant-table-selection-column]:w-18" />
 
         <div className="flex justify-center my-5">
-          <Pagination
-            total={total}
-            current={paging.page}
-            pageSize={paging.size}
-            onChange={(page, pageSize) => setPaging({ ...paging, page, size: pageSize })}
-          />
+          <Pagination total={total} current={paging.page} pageSize={paging.size} onChange={(page, pageSize) => setPaging({ ...paging, page, size: pageSize })} />
         </div>
       </Card>
     </div>
