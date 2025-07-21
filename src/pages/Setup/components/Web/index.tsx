@@ -29,8 +29,8 @@ export default () => {
                 create_time: values.create_time ? values.create_time.valueOf() : undefined
             };
 
-            await editWebConfigDataAPI("web", submitData);
-            message.success("🎉 编辑网站成功");
+            await editWebConfigDataAPI('web', submitData);
+            message.success('🎉 编辑网站成功');
             setWeb(submitData);
             
             // 使用新的 submitData 来更新表单值
@@ -40,6 +40,7 @@ export default () => {
             };
             form.setFieldsValue(newInitialValues);
         } catch (error) {
+            console.error(error);
             setLoading(false);
         }
 
@@ -52,7 +53,7 @@ export default () => {
 
             <Form
                 form={form}
-                size='large'
+                size="large"
                 layout="vertical"
                 onFinish={onSubmit}
                 initialValues={initialValues}
@@ -118,7 +119,7 @@ export default () => {
                 </Form.Item>
 
                 <Form.Item label="网站创建时间" name="create_time">
-                    <DatePicker className='w-full' />
+                    <DatePicker className="w-full" />
                 </Form.Item>
 
                 <Form.Item>

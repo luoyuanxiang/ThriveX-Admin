@@ -1,7 +1,7 @@
 import { message } from 'antd';
 import { Assistant } from '@/types/app/assistant';
 
-const url = "https://api.deepseek.com"
+const url = 'https://api.deepseek.com'
 
 // 测试助手连接
 export const testAssistantConnection = async (assistant: Assistant) => {
@@ -42,6 +42,7 @@ export const testAssistantConnection = async (assistant: Assistant) => {
       return false;
     }
   } catch (error) {
+    console.error(error);
     message.error('测试连接失败');
     return false;
   }

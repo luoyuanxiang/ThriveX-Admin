@@ -43,13 +43,13 @@ const EditorMD = ({ value, onChange }: Props) => {
             setLoading(true);
             // 处理成后端需要的格式
             const formData = new FormData();
-            formData.append("dir", "article");
+            formData.append('dir', 'article');
             for (let i = 0; i < files.length; i++) formData.append('files', files[i])
 
             const { data: { data } } = await axios.post(`${baseURL}/file`, formData, {
                 headers: {
-                    "Authorization": `Bearer ${store.token}`,
-                    "Content-Type": "multipart/form-data"
+                    'Authorization': `Bearer ${store.token}`,
+                    'Content-Type': 'multipart/form-data'
                 }
             });
             
@@ -58,6 +58,7 @@ const EditorMD = ({ value, onChange }: Props) => {
             // 返回图片信息数组
             return data.map((url: string) => ({ url }));
         } catch (error) {
+            console.error(error);
             setLoading(false);
         }
     }

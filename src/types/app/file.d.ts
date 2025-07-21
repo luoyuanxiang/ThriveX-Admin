@@ -1,4 +1,4 @@
-export type DirList = ("default" | "article" | "swiper" | string)
+export type DirList = ('default' | 'article' | 'swiper' | string)
 
 export interface File {
     name: string;

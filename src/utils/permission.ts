@@ -1,4 +1,4 @@
-import { Permission } from "@/types/app/permission";
+import { Permission } from '@/types/app/permission';
 
 // 判断是否有权限
 export const useHasPermission = (code: string) => {

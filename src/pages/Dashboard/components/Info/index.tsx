@@ -1,8 +1,8 @@
-import { getCommentListAPI } from "@/api/Comment";
-import { getWallListAPI } from "@/api/Wall";
-import { getLinkListAPI } from "@/api/Web";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { getCommentListAPI } from '@/api/Comment';
+import { getWallListAPI } from '@/api/Wall';
+import { getLinkListAPI } from '@/api/Web';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function InfoCard() {
   const navigate = useNavigate()
@@ -11,7 +11,7 @@ export default function InfoCard() {
   const [wallCount, setWallCount] = useState<number>(0);
 
   const getData = async () => {
-    const { data: commentList } = await getCommentListAPI({ query: { status: 0 }, pattern: "list" });
+    const { data: commentList } = await getCommentListAPI({ query: { status: 0 }, pattern: 'list' });
     const { data: linkList } = await getLinkListAPI({ query: { status: 0 } });
     const { data: wallList } = await getWallListAPI({ query: { status: 0 } });
 
@@ -30,7 +30,7 @@ export default function InfoCard() {
       <div
         className="absolute right-[-60px] top-[-40px] w-[300px] h-[300px] bg-blue-300 opacity-40 z-0"
         style={{
-          borderRadius: "60% 40% 60% 40% / 60% 60% 40% 40%",
+          borderRadius: '60% 40% 60% 40% / 60% 60% 40% 40%',
         }}
       />
 
@@ -43,7 +43,7 @@ export default function InfoCard() {
           当前有 <span className="text-white text-2xl font-bold">{commentCount}</span> 条评论，<span className="text-white text-2xl font-bold">{linkCount}</span> 条友链，<span className="text-white text-2xl font-bold">{wallCount}</span> 条留言。
         </p>
 
-        <button className="bg-white text-blue-400 font-bold py-1 px-4 rounded transition duration-300 transform hover:scale-105" onClick={() => navigate("/work")}>
+        <button className="bg-white text-blue-400 font-bold py-1 px-4 rounded transition duration-300 transform hover:scale-105" onClick={() => navigate('/work')}>
           去处理
         </button>
       </div>

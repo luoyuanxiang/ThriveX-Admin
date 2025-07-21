@@ -13,7 +13,7 @@ export default () => {
         try {
             setLoading(true);
 
-            const { data } = await getWebConfigDataAPI<{ value: Theme }>("theme");
+            const { data } = await getWebConfigDataAPI<{ value: Theme }>('theme');
 
             const theme = data.value
 
@@ -26,6 +26,7 @@ export default () => {
 
             setLoading(false);
         } catch (error) {
+            console.error(error);
             setLoading(false);
         }
     };
@@ -38,7 +39,7 @@ export default () => {
         try {
             setLoading(true);
 
-            await editWebConfigDataAPI("theme", {
+            await editWebConfigDataAPI('theme', {
                 ...theme,
                 record_name: values.record_name,
                 record_info: values.record_info
@@ -51,6 +52,7 @@ export default () => {
 
             setLoading(false);
         } catch (error) {
+            console.error(error);
             setLoading(false);
         }
     };
@@ -59,15 +61,15 @@ export default () => {
         <div>
             <h2 className="text-xl pb-4 pl-10">闪念配置</h2>
 
-            <div className='w-full lg:w-[500px] md:ml-10'>
+            <div className="w-full lg:w-[500px] md:ml-10">
                 <Form form={form} onFinish={editThemeData} layout="vertical">
                     <Form.Item name="record_name" label="个人名称">
-                        <Input size='large' placeholder="请输入个人名称" />
+                        <Input size="large" placeholder="请输入个人名称" />
                     </Form.Item>
 
                     <Form.Item name="record_info" label="个人介绍">
                         <Input.TextArea
-                            size='large'
+                            size="large"
                             autoSize={{ minRows: 2, maxRows: 4 }}
                             placeholder="请输入个人介绍"
                         />

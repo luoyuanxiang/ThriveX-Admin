@@ -41,6 +41,7 @@ export default () => {
             setLoading(false)
             navigate(returnUrl);
         } catch (error) {
+            console.error(error);
             setLoading(false)
         }
     };
@@ -57,10 +58,10 @@ export default () => {
                 {/* 主登录卡片 */}
                 <div className="bg-[rgba(255,255,255,0.5)] backdrop-blur-sm rounded-2xl shadow-2xl p-8 border border-white/20">
                     {/* 头部区域 */}
-                    <div className='flex justify-center space-x-4 mb-8'>
-                        <img src="/logo.png" alt="" className='w-12 h-12' />
-                        <div className='flex flex-col'>
-                            <h1 className='font-bold text-lg text-slate-700'>ThriveX</h1>
+                    <div className="flex justify-center space-x-4 mb-8">
+                        <img src="/logo.png" alt="" className="w-12 h-12" />
+                        <div className="flex flex-col">
+                            <h1 className="font-bold text-lg text-slate-700">ThriveX</h1>
                             <p className="text-slate-400 text-sm">现代化博客管理系统</p>
                         </div>
                     </div>
@@ -68,7 +69,7 @@ export default () => {
                     {/* 登录表单 */}
                     <Form
                         form={form}
-                        size='large'
+                        size="large"
                         layout="vertical"
                         onFinish={onSubmit}
                         className="space-y-1"

@@ -1,6 +1,6 @@
 import { Modal, Input, message } from 'antd';
 
-import videoSvg from "./icon/video.svg?raw";
+import videoSvg from './icon/video.svg?raw';
 import markerSvg from './icon/marker.svg?raw';
 import calloutSvg from './icon/callout.svg?raw';
 import noteSvg from './icon/note.svg?raw';
@@ -81,7 +81,7 @@ const videos = (): BytemdPlugin => {
               title: '插入抖音视频',
               content: (
                 <div>
-                  <div className='mb-2 text-xs'>目前仅支持插入抖音视频</div>
+                  <div className="mb-2 text-xs">目前仅支持插入抖音视频</div>
                   <Input placeholder="请输入抖音视频ID" onChange={(e) => videoId = e.target.value.trim()} />
                 </div>
               ),
@@ -115,7 +115,7 @@ const markers = (): BytemdPlugin => {
         handler: {
           type: 'action',
           click: (ctx) => {
-            ctx.wrapText("==", "==");
+            ctx.wrapText('==', '==');
           }
         }
       }

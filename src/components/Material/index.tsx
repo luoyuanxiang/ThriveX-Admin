@@ -1,15 +1,15 @@
 import { useEffect, useState, useRef } from 'react'
 import { Image, Spin, message, Button } from 'antd'
 import { CheckOutlined } from '@ant-design/icons'
-import { Modal } from "antd"
-import Masonry from "react-masonry-css"
+import { Modal } from 'antd'
+import Masonry from 'react-masonry-css'
 import { getFileListAPI, getDirListAPI } from '@/api/File'
 import { File, FileDir } from '@/types/app/file'
 import errorImg from '@/pages/File/image/error.png'
 import fileSvg from '@/pages/File/image/file.svg'
-import { PiKeyReturnFill } from "react-icons/pi"
+import { PiKeyReturnFill } from 'react-icons/pi'
 import FileUpload from '@/components/FileUpload'
-import "./index.scss"
+import './index.scss'
 
 // Masonry布局的响应式断点配置
 const breakpointColumnsObj = {
@@ -41,7 +41,7 @@ export default ({ multiple, open, onClose, onSelect, maxCount }: Props) => {
   // 目录列表数据
   const [dirList, setDirList] = useState<FileDir[]>([])
   // 当前选中的目录
-  const [dirName, setDirName] = useState("")
+  const [dirName, setDirName] = useState('')
   // 选中的文件列表
   const [selectedFiles, setSelectedFiles] = useState<File[]>([])
 
@@ -65,6 +65,7 @@ export default ({ multiple, open, onClose, onSelect, maxCount }: Props) => {
 
       setLoading(false)
     } catch (error) {
+      console.error(error)
       setLoading(false)
     }
   }
@@ -99,6 +100,7 @@ export default ({ multiple, open, onClose, onSelect, maxCount }: Props) => {
       setLoading(false)
       loadingRef.current = false
     } catch (error) {
+      console.error(error)
       setLoading(false)
       loadingRef.current = false
     }
@@ -171,7 +173,7 @@ export default ({ multiple, open, onClose, onSelect, maxCount }: Props) => {
   const reset = () => {
     setFileList([])
     setSelectedFiles([])
-    setDirName("")
+    setDirName('')
   }
 
   return (
@@ -191,11 +193,11 @@ export default ({ multiple, open, onClose, onSelect, maxCount }: Props) => {
       ] : null}
       zIndex={1100}
     >
-      <div className='flex justify-between mb-4 px-4'>
+      <div className="flex justify-between mb-4 px-4">
         {
           !fileList.length && !dirName
-            ? <PiKeyReturnFill className='text-4xl text-[#E0DFDF] cursor-pointer' />
-            : <PiKeyReturnFill className='text-4xl text-primary cursor-pointer' onClick={reset} />
+            ? <PiKeyReturnFill className="text-4xl text-[#E0DFDF] cursor-pointer" />
+            : <PiKeyReturnFill className="text-4xl text-primary cursor-pointer" onClick={reset} />
         }
 
         {
@@ -225,7 +227,7 @@ export default ({ multiple, open, onClose, onSelect, maxCount }: Props) => {
                         <div className="relative">
                           <Image
                             src={item.url}
-                            className='w-full rounded-md'
+                            className="w-full rounded-md"
                             loading="lazy"
                             fallback={errorImg}
                             preview={false}
@@ -245,10 +247,10 @@ export default ({ multiple, open, onClose, onSelect, maxCount }: Props) => {
               : dirList.map((item, index) => (
                 <div
                   key={index}
-                  className='group w-25 flex flex-col items-center cursor-pointer mx-4 my-2'
+                  className="group w-25 flex flex-col items-center cursor-pointer mx-4 my-2"
                   onClick={() => openDir(item.name)}>
                   <img src={fileSvg} alt="" />
-                  <p className='group-hover:text-primary transition-colors'>{item.name}</p>
+                  <p className="group-hover:text-primary transition-colors">{item.name}</p>
                 </div>
               ))
           }

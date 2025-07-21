@@ -9,7 +9,7 @@ import { getRoleListAPI, addRoleDataAPI, editRoleDataAPI, delRoleDataAPI, getRol
 import { Role } from '@/types/app/role';
 import { Permission } from '@/types/app/permission';
 import { useUserStore } from '@/stores'
-import "./index.scss"
+import './index.scss'
 import { DeleteOutlined, FormOutlined } from '@ant-design/icons';
 
 export default () => {
@@ -48,7 +48,7 @@ export default () => {
         {
             title: '操作', key: 'action',
             render: (_: string, record: Role) => (
-                <div className='space-x-2'>
+                <div className="space-x-2">
                     {record.mark !== 'admin' && <Button type="primary" onClick={() => bindingRoute(record)}>权限</Button>}
 
                     <Button onClick={() => editRoleData(record)} icon={<FormOutlined />} />
@@ -98,6 +98,7 @@ export default () => {
 
             setLoading(false);
         } catch (error) {
+            console.error(error);
             setLoading(false);
         }
     };
@@ -133,6 +134,7 @@ export default () => {
             setRole(record);
             setEditLoading(false);
         } catch (error) {
+            console.error(error);
             setEditLoading(false);
         }
     };
@@ -147,6 +149,7 @@ export default () => {
 
             setEditLoading(false);
         } catch (error) {
+            console.error(error);
             setEditLoading(false);
         }
     };
@@ -159,6 +162,7 @@ export default () => {
             getRoleList();
             message.success('🎉 删除角色成功');
         } catch (error) {
+            console.error(error);
             setLoading(false);
         }
     };
@@ -184,6 +188,7 @@ export default () => {
 
             setBtnLoading(false)
         } catch (error) {
+            console.error(error);
             setBtnLoading(false)
         }
     };
@@ -220,6 +225,7 @@ export default () => {
             // 刷新页面
             window.location.reload()
         } catch (error) {
+            console.error(error);
             setBindingLoading(false);
         }
     }
@@ -259,23 +265,23 @@ export default () => {
 
     // 分组名称
     const groupNames: { [key: string]: string } = {
-        "user": "用户管理",
-        "data": "数据管理",
-        "article": "文章管理",
-        "cate": "分类管理",
-        "comment": "评论管理",
-        "config": "配置管理",
-        "email": "邮件管理",
-        "file": "文件管理",
-        "oss": "OSS管理",
-        "record": "说说管理",
-        "role": "角色管理",
-        "route": "路由管理",
-        "swiper": "轮播图管理",
-        "tag": "标签管理",
-        "wall": "留言管理",
-        "permission": "权限管理",
-        "assistant": "助手管理",
+        'user': '用户管理',
+        'data': '数据管理',
+        'article': '文章管理',
+        'cate': '分类管理',
+        'comment': '评论管理',
+        'config': '配置管理',
+        'email': '邮件管理',
+        'file': '文件管理',
+        'oss': 'OSS管理',
+        'record': '说说管理',
+        'role': '角色管理',
+        'route': '路由管理',
+        'swiper': '轮播图管理',
+        'tag': '标签管理',
+        'wall': '留言管理',
+        'permission': '权限管理',
+        'assistant': '助手管理',
     };
 
     // 让n改变 触发Transfer重新渲染
@@ -285,14 +291,14 @@ export default () => {
         <div>
             <Title value="角色管理" />
 
-            <div className='flex md:justify-between flex-col md:flex-row mx-auto mt-2 min-h-[calc(100vh-160px)]'>
+            <div className="flex md:justify-between flex-col md:flex-row mx-auto mt-2 min-h-[calc(100vh-160px)]">
                 <Card className="w-full md:w-[40%] h-94">
                     <Form
                         form={form}
                         layout="vertical"
                         initialValues={role}
                         onFinish={onSubmit}
-                        size='large'
+                        size="large"
                     >
                         <Form.Item label="角色名称" name="name" rules={[{ required: true, message: '角色名称不能为空' }]}>
                             <Input placeholder="请输入角色名称" />
@@ -327,9 +333,9 @@ export default () => {
                 </Card>
             </div>
 
-            <Modal loading={editLoading} title="角色权限" open={isModalOpen} onCancel={() => [setIsModalOpen(false), setN(n + 1)]} footer={null} className='RolePageModal'>
-                <div className='flex flex-col justify-center mt-4'>
-                    <h2 className='flex justify-center my-4 text-lg'>页面权限</h2>
+            <Modal loading={editLoading} title="角色权限" open={isModalOpen} onCancel={() => [setIsModalOpen(false), setN(n + 1)]} footer={null} className="RolePageModal">
+                <div className="flex flex-col justify-center mt-4">
+                    <h2 className="flex justify-center my-4 text-lg">页面权限</h2>
 
                     <Transfer
                         key={n}
@@ -342,14 +348,14 @@ export default () => {
                     />
                 </div>
 
-                <div className='mt-10 mb-4'>
-                    <h2 className='flex justify-center my-4 text-lg'>接口权限</h2>
+                <div className="mt-10 mb-4">
+                    <h2 className="flex justify-center my-4 text-lg">接口权限</h2>
 
-                    <div className='overflow-y-auto h-55 p-4 border border-stroke rounded-md'>
+                    <div className="overflow-y-auto h-55 p-4 border border-stroke rounded-md">
                         {Object.keys(permissionList).map((group, index) => (
                             <div key={index}>
-                                <div className='flex justify-center items-center'>
-                                    <h3 className='text-base mr-3'>{groupNames[group]}</h3>
+                                <div className="flex justify-center items-center">
+                                    <h3 className="text-base mr-3">{groupNames[group]}</h3>
                                     <Checkbox
                                         indeterminate={checkedPermissions[group]?.length > 0 && checkedPermissions[group]?.length < permissionList[group].length}
                                         checked={checkedPermissions[group]?.length === permissionList[group].length}
@@ -364,14 +370,14 @@ export default () => {
                                         label: permission.description,
                                         value: permission.id
                                     }))}
-                                    className='flex-col'
+                                    className="flex-col"
                                 />
                             </div>
                         ))}
                     </div>
                 </div>
 
-                <Button type='primary' loading={bindingLoading} onClick={onBindingRouteSubmit} className='w-full mt-2'>保存</Button>
+                <Button type="primary" loading={bindingLoading} onClick={onBindingRouteSubmit} className="w-full mt-2">保存</Button>
             </Modal>
         </div>
     );

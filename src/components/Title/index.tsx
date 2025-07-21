@@ -1,8 +1,6 @@
-"use client"
-
-import { Card } from "antd"
+import { Card } from 'antd'
 import { titleSty } from '@/styles/sty'
-import { ReactNode } from "react"
+import { ReactNode } from 'react'
 
 interface Props {
     value: string,

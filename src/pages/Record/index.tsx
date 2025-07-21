@@ -32,6 +32,7 @@ export default () => {
 
       setLoading(false);
     } catch (error) {
+      console.error(error);
       setLoading(false);
     }
   };
@@ -51,6 +52,7 @@ export default () => {
 
       setBtnLoading(false);
     } catch (error) {
+      console.error(error);
       setBtnLoading(false);
     }
   };
@@ -69,7 +71,7 @@ export default () => {
       key: 'content',
       align: 'center',
       width: 300,
-      render: (text: string) => <div className='line-clamp-2'>{text}</div>,
+      render: (text: string) => <div className="line-clamp-2">{text}</div>,
     },
     {
       title: '图片',
@@ -81,10 +83,10 @@ export default () => {
         const list: string[] = JSON.parse(text || '[]')
 
         return (
-          <div className='flex space-x-2'>
+          <div className="flex space-x-2">
             {
               list.map((item, index) => (
-                <Image key={index} src={item} width={70} height={70} className='rounded-lg' />
+                <Image key={index} src={item} width={70} height={70} className="rounded-lg" />
               ))
             }
           </div>
@@ -107,7 +109,7 @@ export default () => {
       fixed: 'right',
       align: 'center',
       render: (_: string, record: Record) => (
-        <div className='flex justify-center space-x-2'>
+        <div className="flex justify-center space-x-2">
           <Link to={`/create_record?id=${record.id}`}>
             <Button icon={<FormOutlined />} />
           </Link>
@@ -135,6 +137,7 @@ export default () => {
 
       setLoading(false);
     } catch (error) {
+      console.error(error);
       setLoading(false);
     }
   }
@@ -143,17 +146,17 @@ export default () => {
     <div>
       <Title value="说说管理" />
 
-      <Card className='my-2 overflow-scroll'>
-        <Form form={form} layout="inline" onFinish={onFilterSubmit} autoComplete="off" className='flex-nowrap'>
-          <Form.Item label="内容" name="content" className='min-w-[200px]'>
-            <Input placeholder='请输入关键词' />
+      <Card className="my-2 overflow-scroll">
+        <Form form={form} layout="inline" onFinish={onFilterSubmit} autoComplete="off" className="flex-nowrap">
+          <Form.Item label="内容" name="content" className="min-w-[200px]">
+            <Input placeholder="请输入关键词" />
           </Form.Item>
 
-          <Form.Item label="时间范围" name="createTime" className='min-w-[250px]'>
-            <RangePicker placeholder={["选择起始时间", "选择结束时间"]} />
+          <Form.Item label="时间范围" name="createTime" className="min-w-[250px]">
+            <RangePicker placeholder={['选择起始时间', '选择结束时间']} />
           </Form.Item>
 
-          <Form.Item className='pr-6'>
+          <Form.Item className="pr-6">
             <Button type="primary" htmlType="submit">查询</Button>
           </Form.Item>
         </Form>

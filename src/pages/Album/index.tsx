@@ -105,6 +105,7 @@ export default () => {
       setAlbumList(data);
       setLoading(false);
     } catch (error) {
+      console.error(error);
       setLoading(false);
     }
   };
@@ -121,10 +122,7 @@ export default () => {
       loadingRef.current = true;
       setLoading(true);
 
-      const { data } = await getImagesByAlbumIdAPI(
-        albumId,
-        isLoadMore ? page + 1 : 1,
-      );
+      const { data } = await getImagesByAlbumIdAPI(albumId, isLoadMore ? page + 1 : 1);
 
       if (!isLoadMore) {
         setImageList(data.result);
@@ -139,6 +137,7 @@ export default () => {
       setLoading(false);
       loadingRef.current = false;
     } catch (error) {
+      console.error(error);
       setLoading(false);
       loadingRef.current = false;
     }
@@ -160,6 +159,7 @@ export default () => {
       setOpenImagePreviewDrawer(false);
       setBtnLoading(false);
     } catch (error) {
+      console.error(error);
       setBtnLoading(false);
     }
   };
@@ -185,6 +185,7 @@ export default () => {
         });
       setDownloadLoading(false);
     } catch (error) {
+      console.error(error);
       setDownloadLoading(false);
     }
   };
@@ -195,12 +196,7 @@ export default () => {
    */
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
-    if (
-      scrollHeight - scrollTop - clientHeight < 50 &&
-      hasMore &&
-      !loading &&
-      currentAlbum.id
-    ) {
+    if (scrollHeight - scrollTop - clientHeight < 50 && hasMore && !loading && currentAlbum.id) {
       getImageList(currentAlbum.id, true);
     }
   };
@@ -263,6 +259,7 @@ export default () => {
       getAlbumList();
       setAlbumFormLoading(false);
     } catch (error) {
+      console.error(error);
       setAlbumFormLoading(false);
     }
   };
@@ -279,6 +276,7 @@ export default () => {
       message.success('🎉 删除相册成功');
       setBtnLoading(false);
     } catch (error) {
+      console.error(error);
       setBtnLoading(false);
     }
   };
@@ -306,6 +304,7 @@ export default () => {
       getAlbumList();
       setUploadLoading(false);
     } catch (error) {
+      console.error(error);
       setUploadLoading(false);
     }
   };
@@ -330,10 +329,7 @@ export default () => {
 
           <Space>
             {currentAlbum.id ? (
-              <Button
-                type="primary"
-                onClick={() => setIsAddAlbumModalOpen(true)}
-              >
+              <Button type="primary" onClick={() => setIsAddAlbumModalOpen(true)}>
                 上传照片
               </Button>
             ) : (
@@ -347,8 +343,9 @@ export default () => {
         {/* 照片列表 */}
         <Spin spinning={loading}>
           <div
-            className={`flex flex-wrap ${currentAlbum.id ? '!justify-center' : 'justify-start!'
-              } md:justify-normal overflow-y-auto max-h-[calc(100vh-300px)]`}
+            className={`flex flex-wrap ${
+              currentAlbum.id ? '!justify-center' : 'justify-start!'
+            } md:justify-normal overflow-y-auto max-h-[calc(100vh-300px)]`}
             onScroll={handleScroll}
           >
             {imageList.length || (!imageList.length && currentAlbum.id) ? (
@@ -360,10 +357,9 @@ export default () => {
                 {imageList.map((item, index) => (
                   <div
                     key={index}
-                    className={`group relative overflow-hidden rounded-md cursor-pointer mb-4 border-2 border-stroke dark:border-transparent hover:!border-primary p-1 ${currentImage.id === item.id
-                        ? 'border-primary'
-                        : 'border-gray-100'
-                      }`}
+                    className={`group relative overflow-hidden rounded-md cursor-pointer mb-4 border-2 border-stroke dark:border-transparent hover:!border-primary p-1 ${
+                      currentImage.id === item.id ? 'border-primary' : 'border-gray-100'
+                    }`}
                     onClick={() => viewImageInfo(item)}
                   >
                     <Image
@@ -384,10 +380,7 @@ export default () => {
                   onClick={() => openAlbum(item)}
                 >
                   <div className="relative w-32 h-32">
-                    <img
-                      src={albumSvg}
-                      className="w-full h-full p-2 object-cover"
-                    />
+                    <img src={albumSvg} className="w-full h-full p-2 object-cover" />
 
                     <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all rounded-lg flex items-center justify-center">
                       <div className="opacity-0 group-hover:opacity-100 transition-opacity">
@@ -426,12 +419,8 @@ export default () => {
                     </div>
                   </div>
 
-                  <p className="group-hover:text-primary transition-colors text-sm mt-1">
-                    {item.name}
-                  </p>
-                  <p className="text-slate-400 text-xs mt-1">
-                    {item.count} 张照片
-                  </p>
+                  <p className="group-hover:text-primary transition-colors text-sm mt-1">{item.name}</p>
+                  <p className="text-slate-400 text-xs mt-1">{item.count} 张照片</p>
                 </div>
               ))
             )}
@@ -452,11 +441,7 @@ export default () => {
             <Input />
           </Form.Item>
 
-          <Form.Item
-            name="name"
-            label="相册名称"
-            rules={[{ required: true, message: '请输入相册名称' }]}
-          >
+          <Form.Item name="name" label="相册名称" rules={[{ required: true, message: '请输入相册名称' }]}>
             <Input placeholder="请输入相册名称" />
           </Form.Item>
 
@@ -475,10 +460,7 @@ export default () => {
               placeholder="请输入相册封面链接"
               prefix={<PictureOutlined />}
               addonAfter={
-                <CloudUploadOutlined
-                  className="text-xl cursor-pointer"
-                  onClick={() => setIsMaterialModalOpen(true)}
-                />
+                <CloudUploadOutlined className="text-xl cursor-pointer" onClick={() => setIsMaterialModalOpen(true)} />
               }
               className="customizeAntdInputAddonAfter"
             />
@@ -500,16 +482,12 @@ export default () => {
         <div className="flex flex-col">
           <div className="flex">
             <span className="min-w-20 font-bold">照片名称</span>
-            <span className="text-[#333] dark:text-white">
-              {currentImage.name}
-            </span>
+            <span className="text-[#333] dark:text-white">{currentImage.name}</span>
           </div>
 
           <div className="flex">
             <span className="min-w-20 font-bold">所属相册</span>
-            <span className="text-[#333] dark:text-white">
-              {currentAlbum.name}
-            </span>
+            <span className="text-[#333] dark:text-white">{currentAlbum.name}</span>
           </div>
 
           <div className="flex">
@@ -538,15 +516,7 @@ export default () => {
               _,
               {
                 transform: { scale },
-                actions: {
-                  onFlipY,
-                  onFlipX,
-                  onRotateLeft,
-                  onRotateRight,
-                  onZoomOut,
-                  onZoomIn,
-                  onReset,
-                },
+                actions: { onFlipY, onFlipX, onRotateLeft, onRotateRight, onZoomOut, onZoomIn, onReset },
               },
             ) => (
               <Space className="toolbar-wrapper flex-col">
@@ -561,9 +531,7 @@ export default () => {
                     <DeleteOutlined />
                   </Popconfirm>
 
-                  <DownloadOutlined
-                    onClick={() => onDownloadImage(currentImage)}
-                  />
+                  <DownloadOutlined onClick={() => onDownloadImage(currentImage)} />
                   <SwapOutlined rotate={90} onClick={onFlipY} />
                   <SwapOutlined onClick={onFlipX} />
                   <RotateLeftOutlined onClick={onRotateLeft} />
@@ -611,11 +579,7 @@ export default () => {
         confirmLoading={uploadLoading}
       >
         <Form form={uploadForm} layout="vertical" size="large">
-          <Form.Item
-            name="name"
-            label="照片名称"
-            rules={[{ required: true, message: '请输入照片名称' }]}
-          >
+          <Form.Item name="name" label="照片名称" rules={[{ required: true, message: '请输入照片名称' }]}>
             <Input placeholder="请输入照片名称" />
           </Form.Item>
 
@@ -650,11 +614,7 @@ export default () => {
             </Form.Item>
           </div>
 
-          <Form.Item
-            name="date"
-            label="照片日期"
-            rules={[{ required: true, message: '请选择照片日期' }]}
-          >
+          <Form.Item name="date" label="照片日期" rules={[{ required: true, message: '请选择照片日期' }]}>
             <DatePicker className="w-full" placeholder="请选择照片日期" />
           </Form.Item>
         </Form>

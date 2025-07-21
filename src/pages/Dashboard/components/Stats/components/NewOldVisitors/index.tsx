@@ -55,7 +55,7 @@ export default () => {
   const [loading, setLoading] = useState(true)
 
   const [result, setResult] = useState({ newVisitors: 0, oldVisitors: 0 })
-  const date = dayjs(new Date()).format("YYYY/MM/DD");
+  const date = dayjs(new Date()).format('YYYY/MM/DD');
 
   const [state, setState] = useState<ChartThreeState>({
     series: [0, 0],
@@ -65,15 +65,16 @@ export default () => {
     setLoading(true)
 
     try {
-      const { data } = await getStatisAPI("new-visitor", date, date);
+      const { data } = await getStatisAPI('new-visitor', date, date);
       const { result } = data as any;
 
-      const newVisitors = result.items[1][0][1] !== "--" ? Number(Number(result.items[1][0][1]).toFixed(2)) : 0
-      const oldVisitors = result.items[1][0][1] !== "--" ? Number((100 - result.items[1][0][1]).toFixed(2)) : 0
+      const newVisitors = result.items[1][0][1] !== '--' ? Number(Number(result.items[1][0][1]).toFixed(2)) : 0
+      const oldVisitors = result.items[1][0][1] !== '--' ? Number((100 - result.items[1][0][1]).toFixed(2)) : 0
 
       setState({ series: [newVisitors, oldVisitors] })
       setResult({ newVisitors, oldVisitors })
     } catch (error) {
+      console.error(error);
       setLoading(false)
     }
 

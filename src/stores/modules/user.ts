@@ -23,7 +23,7 @@ interface UserStore {
 export default create(
   persist<UserStore>(
     (set) => ({
-      token: "",
+      token: '',
       setToken: (token: string) => set(() => ({ token })),
 
       user: {} as User,
@@ -39,9 +39,9 @@ export default create(
       quitLogin: () => set(() => {
         localStorage.clear();
         sessionStorage.clear();
-        location.href = "/login";
+        location.href = '/login';
 
-        return { token: "", user: {} as User, role: {} as Role }
+        return { token: '', user: {} as User, role: {} as Role }
       })
     }),
     {

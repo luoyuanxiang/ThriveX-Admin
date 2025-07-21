@@ -6,11 +6,11 @@ import FileUpload from '@/components/FileUpload'
 import fileSvg from './image/file.svg'
 import { delFileDataAPI, getDirListAPI, getFileListAPI } from '@/api/File'
 import { File, FileDir } from '@/types/app/file'
-import { PiKeyReturnFill } from "react-icons/pi";
+import { PiKeyReturnFill } from 'react-icons/pi';
 import { DeleteOutlined, DownloadOutlined, RotateLeftOutlined, RotateRightOutlined, SwapOutlined, UndoOutlined, ZoomInOutlined, ZoomOutOutlined, } from '@ant-design/icons';
-import Masonry from "react-masonry-css";
+import Masonry from 'react-masonry-css';
 import errorImg from './image/error.png'
-import "./index.scss"
+import './index.scss'
 
 // Masonry布局的响应式断点配置
 const breakpointColumnsObj = {
@@ -44,7 +44,7 @@ export default () => {
     const [fileList, setFileList] = useState<File[]>([])
 
     // 当前选中的目录和文件
-    const [dirName, setDirName] = useState("")
+    const [dirName, setDirName] = useState('')
     const [file, setFile] = useState<File>({} as File)
 
     /**
@@ -64,17 +64,9 @@ export default () => {
 
             setDirList(data)
 
-            // // 过滤掉没有文件的目录
-            // const filteredDirs = await Promise.all(
-            //     data.map(async (dir) => {
-            //         const { data: fileData } = await getFileListAPI(dir.name, { page: 1, size: 1 })
-            //         return fileData.result.length > 0 ? dir : null
-            //     })
-            // )
-            // setDirList(filteredDirs.filter((dir): dir is FileDir => dir !== null))
-
             setLoading(false)
         } catch (error) {
+            console.error(error);
             setLoading(false)
         }
     }
@@ -109,6 +101,7 @@ export default () => {
             setLoading(false)
             loadingRef.current = false
         } catch (error) {
+            console.error(error);
             setLoading(false)
             loadingRef.current = false
         }
@@ -123,12 +116,13 @@ export default () => {
             setBtnLoading(true)
             await delFileDataAPI(data.url)
             await getFileList(dirName)
-            message.success("🎉 删除图片成功")
+            message.success('🎉 删除图片成功')
             setFile({} as File)
             setOpenFileInfoDrawer(false)
             setOpenFilePreviewDrawer(false)
             setBtnLoading(false)
         } catch (error) {
+            console.error(error);
             setBtnLoading(false)
         }
     }
@@ -154,6 +148,7 @@ export default () => {
                 });
             setDownloadLoading(false)
         } catch (error) {
+            console.error(error);
             setDownloadLoading(false)
         }
     };
@@ -195,16 +190,16 @@ export default () => {
 
     return (
         <div>
-            <Title value='文件管理' />
+            <Title value="文件管理" />
 
-            <Card className='FilePage mt-2 min-h-[calc(100vh-160px)]'>
-                <div className='flex justify-between mb-4 px-4'>
+            <Card className="FilePage mt-2 min-h-[calc(100vh-160px)]">
+                <div className="flex justify-between mb-4 px-4">
                     {
                         !fileList.length && !dirName
-                            ? <PiKeyReturnFill className='text-4xl text-[#E0DFDF] cursor-pointer' />
-                            : <PiKeyReturnFill className='text-4xl text-primary cursor-pointer' onClick={() => {
+                            ? <PiKeyReturnFill className="text-4xl text-[#E0DFDF] cursor-pointer" />
+                            : <PiKeyReturnFill className="text-4xl text-primary cursor-pointer" onClick={() => {
                                 setFileList([])
-                                setDirName("")
+                                setDirName('')
                             }} />
                     }
 
@@ -236,7 +231,7 @@ export default () => {
 
                                                     <Image
                                                         src={item.url}
-                                                        className='w-full rounded-md'
+                                                        className="w-full rounded-md"
                                                         loading="lazy"
                                                         preview={false}
                                                         fallback={errorImg}
@@ -249,10 +244,10 @@ export default () => {
                                 : dirList.map((item, index) => (
                                     <div
                                         key={index}
-                                        className='group w-25 flex flex-col items-center cursor-pointer mx-4 my-2'
+                                        className="group w-25 flex flex-col items-center cursor-pointer mx-4 my-2"
                                         onClick={() => openDir(item.name)}>
                                         <img src={fileSvg} alt="" />
-                                        <p className='group-hover:text-primary transition-colors'>{item.name}</p>
+                                        <p className="group-hover:text-primary transition-colors">{item.name}</p>
                                     </div>
                                 ))
                         }
@@ -276,27 +271,27 @@ export default () => {
                 open={openFileInfoDrawer}
                 onClose={() => { setOpenFileInfoDrawer(false); setFile({} as File) }}
             >
-                <div className='flex flex-col'>
-                    <div className='flex'>
-                        <span className='min-w-20 font-bold'>文件名称</span>
-                        <span className='text-[#333] dark:text-white'>{file.name}</span>
+                <div className="flex flex-col">
+                    <div className="flex">
+                        <span className="min-w-20 font-bold">文件名称</span>
+                        <span className="text-[#333] dark:text-white">{file.name}</span>
                     </div>
 
-                    <div className='flex'>
-                        <span className='min-w-20 font-bold'>文件类型</span>
-                        <span className='text-[#333] dark:text-white'>{file.type}</span>
+                    <div className="flex">
+                        <span className="min-w-20 font-bold">文件类型</span>
+                        <span className="text-[#333] dark:text-white">{file.type}</span>
                     </div>
 
-                    <div className='flex'>
-                        <span className='min-w-20 font-bold'>文件大小</span>
-                        <span className='text-[#333] dark:text-white'>{(file.size / 1048576).toFixed(2)}MB</span>
+                    <div className="flex">
+                        <span className="min-w-20 font-bold">文件大小</span>
+                        <span className="text-[#333] dark:text-white">{(file.size / 1048576).toFixed(2)}MB</span>
                     </div>
 
-                    <div className='flex'>
-                        <span className='min-w-20  font-bold'>文件链接</span>
-                        <span className='text-[#333] dark:text-white hover:text-primary cursor-pointer transition' onClick={async () => {
+                    <div className="flex">
+                        <span className="min-w-20  font-bold">文件链接</span>
+                        <span className="text-[#333] dark:text-white hover:text-primary cursor-pointer transition" onClick={async () => {
                             await navigator.clipboard.writeText(file.url)
-                            message.success("🎉 复制成功")
+                            message.success('🎉 复制成功')
                         }}>{file.url}</span>
                     </div>
                 </div>
@@ -304,7 +299,7 @@ export default () => {
                 <Divider orientation="center">图片预览</Divider>
                 <Image
                     src={file.url}
-                    className='rounded-md object-cover object-center'
+                    className="rounded-md object-cover object-center"
                     fallback={errorImg}
                     preview={{
                         onVisibleChange: (visible) => setOpenFilePreviewDrawer(visible),
@@ -317,7 +312,7 @@ export default () => {
                             },
                         ) => (
                             <Space className="toolbar-wrapper flex-col">
-                                <div className='customAntdPreviewsItem'>
+                                <div className="customAntdPreviewsItem">
                                     <Popconfirm
                                         title="警告"
                                         description="删除后无法恢复，确定要删除吗"
@@ -342,7 +337,7 @@ export default () => {
                     }} />
 
                 <Divider orientation="center">图片操作</Divider>
-                <Button type='primary' loading={downloadLoading} onClick={() => onDownloadImage(file)} className='w-full mb-2'>下载图片</Button>
+                <Button type="primary" loading={downloadLoading} onClick={() => onDownloadImage(file)} className="w-full mb-2">下载图片</Button>
                 <Popconfirm
                     title="警告"
                     description="删除后无法恢复，确定要删除吗"
@@ -350,7 +345,7 @@ export default () => {
                     okText="删除"
                     cancelText="取消"
                 >
-                    <Button type='primary' danger loading={btnLoading} className='w-full'>删除图片</Button>
+                    <Button type="primary" danger loading={btnLoading} className="w-full">删除图片</Button>
                 </Popconfirm>
             </Drawer>
         </div>

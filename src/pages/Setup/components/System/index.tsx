@@ -50,6 +50,7 @@ export default () => {
 
             setLoading(false)
         } catch (error) {
+            console.error(error);
             setLoading(false)
         }
     };
@@ -61,7 +62,7 @@ export default () => {
             <Form
                 form={form}
                 initialValues={initialValues}
-                size='large'
+                size="large"
                 layout="vertical"
                 onFinish={handleSubmit}
                 className="w-full lg:w-[500px] md:ml-10"

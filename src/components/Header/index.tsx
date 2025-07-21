@@ -10,7 +10,7 @@ const Header = (props: {
   return (
     <header className="sticky top-0 z-999 flex w-full bg-light-gradient dark:bg-dark-gradient drop-shadow-1 dark:drop-shadow-none backdrop-blur-lg">
       <div className="flex flex-grow items-center justify-between px-4 py-3 shadow-2 md:px-6 2xl:px-11">
-        <div className='flex items-center'>
+        <div className="flex items-center">
           <div className="flex items-center gap-4 lg:hidden">
             <button
               aria-controls="sidebar"
@@ -49,7 +49,7 @@ const Header = (props: {
             </button>
 
             <Link className="block flex-shrink-0 lg:hidden" to="/">
-              <img src={logo} alt="logo" className='w-8' />
+              <img src={logo} alt="logo" className="w-8" />
             </Link>
           </div>
 
@@ -58,14 +58,11 @@ const Header = (props: {
 
         <div className="flex items-center gap-3 2xsm:gap-7">
           <ul className="flex items-center gap-2 2xsm:gap-4">
-            <li className='hidden md:block'>
-              <a href="https://github.com/LiuYuYang01/ThriveX-Admin" target='_blank' className='hover:text-primary text-sm'>开源不易，赏个 Star 吧！！！</a>
+            <li className="hidden md:block">
+              <a href="https://github.com/LiuYuYang01/ThriveX-Admin" target="_blank" className="hover:text-primary text-sm" rel="noreferrer">开源不易，赏个 Star 吧！！！</a>
             </li>
 
             <DarkModeSwitcher />
-
-            {/* <DropdownNotification />
-            <DropdownMessage /> */}
           </ul>
 
           <DropdownUser />

@@ -30,21 +30,21 @@ export default () => {
             const data = await res.json()
             const result = data?.map((item: Commit) => (
                 {
-                    label: dayjs(item.commit.author.date).format("YYYY-MM-DD HH:mm:ss"),
+                    label: dayjs(item.commit.author.date).format('YYYY-MM-DD HH:mm:ss'),
                     children: item.commit.message
                 }
             ))
 
             switch (project) {
-                case "ThriveX-Blog":
+                case 'ThriveX-Blog':
                     sessionStorage.setItem('blog_project_iterative', JSON.stringify(result))
                     setBlog_IterativeRecording(result)
                     break;
-                case "ThriveX-Admin":
+                case 'ThriveX-Admin':
                     sessionStorage.setItem('admin_project_iterative', JSON.stringify(result))
                     setAdmin_IterativeRecording(result)
                     break;
-                case "ThriveX-Server":
+                case 'ThriveX-Server':
                     sessionStorage.setItem('server_project_iterative', JSON.stringify(result))
                     setServer_IterativeRecording(result)
                     break;
@@ -52,6 +52,7 @@ export default () => {
 
             setLoading(false)
         } catch (error) {
+            console.error(error);
             setLoading(false)
         }
     }
@@ -67,53 +68,56 @@ export default () => {
 
         // 如果缓存中有值就无需重新调接口
         const blog_project_iterative = JSON.parse(sessionStorage.getItem('blog_project_iterative') || '[]')
-        blog_project_iterative.length ? setBlog_IterativeRecording(blog_project_iterative) : getCommitData("ThriveX-Blog")
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        blog_project_iterative.length ? setBlog_IterativeRecording(blog_project_iterative) : getCommitData('ThriveX-Blog')
 
         const admin_project_iterative = JSON.parse(sessionStorage.getItem('admin_project_iterative') || '[]')
-        admin_project_iterative.length ? setAdmin_IterativeRecording(admin_project_iterative) : getCommitData("ThriveX-Admin")
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        admin_project_iterative.length ? setAdmin_IterativeRecording(admin_project_iterative) : getCommitData('ThriveX-Admin')
 
         const server_project_iterative = JSON.parse(sessionStorage.getItem('server_project_iterative') || '[]')
-        server_project_iterative.length ? setServer_IterativeRecording(server_project_iterative) : getCommitData("ThriveX-Server")
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        server_project_iterative.length ? setServer_IterativeRecording(server_project_iterative) : getCommitData('ThriveX-Server')
 
         setLoading(false)
     }, [])
 
     return (
         <div>
-            <Title value='项目迭代记录'></Title>
+            <Title value="项目迭代记录"></Title>
 
             <Spin spinning={loading}>
-                <Card className='mt-2 min-h-[calc(100vh-160px)]'>
-                    <div className='flex flex-col items-center mt-2 mb-22'>
-                        <div className='ml-5 mb-6'>
+                <Card className="mt-2 min-h-[calc(100vh-160px)]">
+                    <div className="flex flex-col items-center mt-2 mb-22">
+                        <div className="ml-5 mb-6">
                             <span>年份切换：</span>
 
                             <Select
-                                size='small'
+                                size="small"
                                 defaultValue={year}
                                 options={yearList}
                                 onChange={setYear}
-                                className='w-20'
+                                className="w-20"
                             />
                         </div>
 
                         <GitHubCalendar username="liuyuyang01" year={year} />
                     </div>
 
-                    <div className='overflow-auto w-full'>
-                        <div className='flex w-[1350px] mx-auto'>
-                            <div className='w-[400px]'>
-                                <h3 className='text-xl text-center pb-6 font-bold text-gradient block'>ThriveX-Blog</h3>
+                    <div className="overflow-auto w-full">
+                        <div className="flex w-[1350px] mx-auto">
+                            <div className="w-[400px]">
+                                <h3 className="text-xl text-center pb-6 font-bold text-gradient block">ThriveX-Blog</h3>
                                 <Timeline mode="left" items={blog_iterativeRecording} />
                             </div>
 
-                            <div className='w-[400px] mx-[50px]'>
-                                <h3 className='text-xl text-center pb-6 font-bold text-gradient block'>ThriveX-Admin</h3>
+                            <div className="w-[400px] mx-[50px]">
+                                <h3 className="text-xl text-center pb-6 font-bold text-gradient block">ThriveX-Admin</h3>
                                 <Timeline mode="left" items={admin_iterativeRecording} />
                             </div>
 
-                            <div className='w-[400px]'>
-                                <h3 className='text-xl text-center pb-6 font-bold text-gradient block'>ThriveX-Server</h3>
+                            <div className="w-[400px]">
+                                <h3 className="text-xl text-center pb-6 font-bold text-gradient block">ThriveX-Server</h3>
                                 <Timeline mode="left" items={server_iterativeRecording} />
                             </div>
                         </div>

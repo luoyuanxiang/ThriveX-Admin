@@ -30,11 +30,11 @@ interface FilterData {
 
 interface QueryData<T = FilterData> {
     // 通用的
-    sort?: "asc" | "desc",
-    pattern?: "list" | "recursion",
+    sort?: 'asc' | 'desc',
+    pattern?: 'list' | 'recursion',
     query?: T,
     pagination?: Page,
 
     // 文件相关
-    dir?: "all" | string
+    dir?: 'all' | string
 }

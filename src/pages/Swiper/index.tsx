@@ -50,6 +50,7 @@ export default () => {
 
             setLoading(false);
         } catch (error) {
+            console.error(error);
             setLoading(false);
         }
     };
@@ -69,6 +70,7 @@ export default () => {
 
             setEditLoading(false);
         } catch (error) {
+            console.error(error);
             setEditLoading(false);
         }
     };
@@ -83,6 +85,7 @@ export default () => {
 
             setBtnLoading(false);
         } catch (error) {
+            console.error(error);
             setBtnLoading(false);
         }
     };
@@ -108,6 +111,7 @@ export default () => {
 
             setBtnLoading(false)
         } catch (error) {
+            console.error(error);
             setBtnLoading(false)
         }
     };
@@ -120,7 +124,7 @@ export default () => {
 
     // 文件上传
     const UploadBtn = () => (
-        <CloudUploadOutlined className='text-xl cursor-pointer' onClick={() => setIsMaterialModalOpen(true)} />
+        <CloudUploadOutlined className="text-xl cursor-pointer" onClick={() => setIsMaterialModalOpen(true)} />
     )
 
     const tabItems = [
@@ -154,7 +158,7 @@ export default () => {
                         layout="vertical"
                         initialValues={swiper}
                         onFinish={onSubmit}
-                        size='large'
+                        size="large"
                         className="max-w-md mx-auto"
                     >
                         <Form.Item label="标题" name="title" rules={[{ required: true, message: '轮播图标题不能为空' }]}>
@@ -170,7 +174,7 @@ export default () => {
                         </Form.Item>
 
                         <Form.Item label="图片" name="image" rules={[{ required: true, message: '轮播图地址不能为空' }]}>
-                            <Input placeholder="https://liuyuyang.net/swiper.jpg" prefix={<PictureOutlined />} addonAfter={<UploadBtn />} className='customizeAntdInputAddonAfter' />
+                            <Input placeholder="https://liuyuyang.net/swiper.jpg" prefix={<PictureOutlined />} addonAfter={<UploadBtn />} className="customizeAntdInputAddonAfter" />
                         </Form.Item>
 
                         <Form.Item>
@@ -195,7 +199,7 @@ export default () => {
                 open={isMaterialModalOpen}
                 onClose={() => setIsMaterialModalOpen(false)}
                 onSelect={(url) => {
-                    form.setFieldValue("image", url.join("\n"));
+                    form.setFieldValue('image', url.join('\n'));
                     form.validateFields(['image']); // 手动触发 image 字段的校验
                 }}
             />

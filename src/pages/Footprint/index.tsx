@@ -4,8 +4,8 @@ import { titleSty } from '@/styles/sty';
 import Title from '@/components/Title';
 import { delFootprintDataAPI, getFootprintListAPI, addFootprintDataAPI, editFootprintDataAPI, getFootprintDataAPI } from '@/api/Footprint';
 import type { FilterForm, Footprint } from '@/types/app/footprint';
-import { GiPositionMarker } from "react-icons/gi";
-import { IoSearch } from "react-icons/io5";
+import { GiPositionMarker } from 'react-icons/gi';
+import { IoSearch } from 'react-icons/io5';
 import dayjs from 'dayjs';
 import axios from 'axios';
 import { CloudUploadOutlined, DeleteOutlined, FormOutlined } from '@ant-design/icons';
@@ -54,7 +54,7 @@ export default () => {
       key: 'content',
       align: 'center',
       width: 400,
-      render: (value: string) => <div className='line-clamp-3'>{value}</div>
+      render: (value: string) => <div className="line-clamp-3">{value}</div>
     },
     {
       title: '坐标纬度',
@@ -80,7 +80,7 @@ export default () => {
       fixed: 'right',
       align: 'center',
       render: (_: string, record: Footprint) => (
-        <div className='flex space-x-2'>
+        <div className="flex space-x-2">
           <Button onClick={() => editFootprintData(record.id!)} icon={<FormOutlined />} />
           <Popconfirm title="警告" description="你确定要删除吗" okText="确定" cancelText="取消" onConfirm={() => delFootprintData(record.id!)}>
             <Button type="primary" danger icon={<DeleteOutlined />} />
@@ -103,6 +103,7 @@ export default () => {
       const { data } = await getFootprintListAPI();
       setFootprintList(data as Footprint[]);
     } catch (error) {
+      console.error(error);
       setLoading(false);
     }
 
@@ -116,7 +117,7 @@ export default () => {
   }, []);
 
   const reset = () => {
-    setIsMethod("create");
+    setIsMethod('create');
     form.resetFields();
     setFootprint({} as Footprint);
     setIsModelOpen(false);
@@ -130,12 +131,13 @@ export default () => {
       notification.success({ message: '🎉 删除足迹成功' });
       getFootprintList();
     } catch (error) {
+      console.error(error);
       setLoading(false);
     }
   };
 
   const addFootprintData = () => {
-    setIsMethod("create");
+    setIsMethod('create');
     setIsModelOpen(true);
     form.resetFields();
     setFootprint({} as Footprint);
@@ -145,12 +147,12 @@ export default () => {
     try {
       setEditLoading(true);
 
-      setIsMethod("edit");
+      setIsMethod('edit');
       setIsModelOpen(true);
 
       const { data } = await getFootprintDataAPI(id);
 
-      data.images = (data.images as string[]).join("\n")
+      data.images = (data.images as string[]).join('\n')
       data.createTime = dayjs(+data.createTime)
 
       setFootprint(data);
@@ -158,6 +160,7 @@ export default () => {
 
       setEditLoading(false);
     } catch (error) {
+      console.error(error);
       setEditLoading(false);
     }
   };
@@ -168,9 +171,9 @@ export default () => {
 
       form.validateFields().then(async (values: Footprint) => {
         values.createTime = values.createTime.valueOf()
-        values.images = values.images ? (values.images as string).split("\n") : []
+        values.images = values.images ? (values.images as string).split('\n') : []
 
-        if (isMethod === "edit") {
+        if (isMethod === 'edit') {
           await editFootprintDataAPI({ ...footprint, ...values });
           message.success('🎉 修改足迹成功');
         } else {
@@ -185,6 +188,7 @@ export default () => {
 
       setBtnLoading(false)
     } catch (error) {
+      console.error(error);
       setBtnLoading(false)
     }
   };
@@ -206,6 +210,7 @@ export default () => {
 
       setLoading(false)
     } catch (error) {
+      console.error(error);
       setLoading(false)
     }
   }
@@ -215,7 +220,7 @@ export default () => {
     try {
       setSearchLoading(true)
 
-      const address = form.getFieldValue("address")
+      const address = form.getFieldValue('address')
 
       const { data } = await axios.get('https://restapi.amap.com/v3/geocode/geo', {
         params: {
@@ -226,7 +231,7 @@ export default () => {
 
       if (data.geocodes.length > 0) {
         const location = data.geocodes[0].location
-        form.setFieldValue("position", location)
+        form.setFieldValue('position', location)
 
         // 立即触发校验
         form.validateFields(['position']);
@@ -238,6 +243,7 @@ export default () => {
         message.warning('未找到该地址的经纬度');
       }
     } catch (error) {
+      console.error(error);
       setSearchLoading(false)
     }
   };
@@ -245,21 +251,21 @@ export default () => {
   return (
     <div>
       <Title value="足迹管理">
-        <Button type="primary" size='large' onClick={addFootprintData}>新增足迹</Button>
+        <Button type="primary" size="large" onClick={addFootprintData}>新增足迹</Button>
       </Title>
 
-      <Card className='my-2 overflow-scroll'>
-        <div className='flex'>
-          <Form layout="inline" onFinish={onFilterSubmit} autoComplete="off" className='flex-nowrap w-full'>
-            <Form.Item label="地址" name="address" className='min-w-[200px]'>
-              <Input placeholder='请输入地址关键词' />
+      <Card className="my-2 overflow-scroll">
+        <div className="flex">
+          <Form layout="inline" onFinish={onFilterSubmit} autoComplete="off" className="flex-nowrap w-full">
+            <Form.Item label="地址" name="address" className="min-w-[200px]">
+              <Input placeholder="请输入地址关键词" />
             </Form.Item>
 
-            <Form.Item label="时间范围" name="createTime" className='min-w-[250px]'>
-              <RangePicker placeholder={["选择起始时间", "选择结束时间"]} />
+            <Form.Item label="时间范围" name="createTime" className="min-w-[250px]">
+              <RangePicker placeholder={['选择起始时间', '选择结束时间']} />
             </Form.Item>
 
-            <Form.Item className='pr-6'>
+            <Form.Item className="pr-6">
               <Button type="primary" htmlType="submit">查询</Button>
             </Form.Item>
           </Form>
@@ -280,9 +286,9 @@ export default () => {
         />
       </Card>
 
-      <Modal loading={editLoading} title={isMethod === "edit" ? "编辑足迹" : "新增足迹"} open={isModelOpen} onCancel={closeModel} destroyOnClose footer={null}>
+      <Modal loading={editLoading} title={isMethod === 'edit' ? '编辑足迹' : '新增足迹'} open={isModelOpen} onCancel={closeModel} destroyOnClose footer={null}>
         <Spin spinning={searchLoading}>
-          <Form form={form} layout="vertical" initialValues={footprint} size='large' preserve={false} className='mt-6'>
+          <Form form={form} layout="vertical" initialValues={footprint} size="large" preserve={false} className="mt-6">
             <Form.Item label="标题" name="title" rules={[{ required: true, message: '标题不能为空' }]}>
               <Input placeholder="请输入标题" />
             </Form.Item>
@@ -292,10 +298,10 @@ export default () => {
             </Form.Item>
 
             <Form.Item label="坐标纬度" name="position" rules={[{ required: true, message: '坐标纬度不能为空' }]}>
-              <Input placeholder="请输入坐标纬度" prefix={<GiPositionMarker />} addonAfter={<IoSearch onClick={getGeocode} className='cursor-pointer' />} />
+              <Input placeholder="请输入坐标纬度" prefix={<GiPositionMarker />} addonAfter={<IoSearch onClick={getGeocode} className="cursor-pointer" />} />
             </Form.Item>
 
-            <div className='relative'>
+            <div className="relative">
               <Form.Item label="图片" name="images">
                 <Input.TextArea
                   autoSize={{ minRows: 2, maxRows: 10 }}
@@ -303,8 +309,8 @@ export default () => {
                 />
               </Form.Item>
 
-              <div onClick={() => setIsMaterialModalOpen(true)} className='absolute bottom-2 right-2 bg-white rounded-full border border-stroke cursor-pointer'>
-                <CloudUploadOutlined className='text-xl hover:text-primary transition-colors p-2' />
+              <div onClick={() => setIsMaterialModalOpen(true)} className="absolute bottom-2 right-2 bg-white rounded-full border border-stroke cursor-pointer">
+                <CloudUploadOutlined className="text-xl hover:text-primary transition-colors p-2" />
               </div>
             </div>
 
@@ -315,12 +321,12 @@ export default () => {
               />
             </Form.Item>
 
-            <Form.Item label="时间" name="createTime" rules={[{ required: true, message: '时间不能为空' }]} className='!mb-4'>
-              <DatePicker showTime placeholder='请选择时间' className='w-full' />
+            <Form.Item label="时间" name="createTime" rules={[{ required: true, message: '时间不能为空' }]} className="!mb-4">
+              <DatePicker showTime placeholder="请选择时间" className="w-full" />
             </Form.Item>
 
-            <Form.Item className='!mb-0 w-full'>
-              <Button type="primary" onClick={onSubmit} loading={btnLoading} className='w-full'>{isMethod === "edit" ? "编辑足迹" : "新增足迹"}</Button>
+            <Form.Item className="!mb-0 w-full">
+              <Button type="primary" onClick={onSubmit} loading={btnLoading} className="w-full">{isMethod === 'edit' ? '编辑足迹' : '新增足迹'}</Button>
             </Form.Item>
           </Form>
         </Spin>
@@ -331,7 +337,7 @@ export default () => {
         open={isMaterialModalOpen}
         onClose={() => setIsMaterialModalOpen(false)}
         onSelect={(url) => {
-          form.setFieldValue("images", url.join("\n"));
+          form.setFieldValue('images', url.join('\n'));
           form.validateFields(['images']);
         }}
       />

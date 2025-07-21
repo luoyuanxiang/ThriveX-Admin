@@ -19,7 +19,7 @@ export default () => {
         try {
             setLoading(true);
 
-            const { data } = await getWebConfigDataAPI<{ value: Theme }>("theme");
+            const { data } = await getWebConfigDataAPI<{ value: Theme }>('theme');
 
             const theme = data.value
             
@@ -27,14 +27,15 @@ export default () => {
 
             form.setFieldsValue({
                 ...theme,
-                social: theme.social.map(item => JSON.stringify(item)).join("\n"),
+                social: theme.social.map(item => JSON.stringify(item)).join('\n'),
                 swiper_text: theme.swiper_text.join('\n'),
-                covers: theme.covers.join("\n"),
-                reco_article: theme.reco_article.join("\n"),
+                covers: theme.covers.join('\n'),
+                reco_article: theme.reco_article.join('\n'),
             });
 
             setLoading(false);
         } catch (error) {
+            console.error(error);
             setLoading(false);
         }
     };
@@ -50,13 +51,13 @@ export default () => {
             const updatedLayout = {
                 ...theme,
                 ...values,
-                social: values.social.split("\n").map((item: string) => JSON.parse(item)),
+                social: values.social.split('\n').map((item: string) => JSON.parse(item)),
                 swiper_text: values.swiper_text.split('\n'),
                 covers: values.covers.split('\n'),
                 reco_article: values.reco_article.split('\n').map((item: string) => Number(item)),
             };
 
-            await editWebConfigDataAPI("theme", updatedLayout);
+            await editWebConfigDataAPI('theme', updatedLayout);
 
             notification.success({
                 message: '成功',
@@ -65,6 +66,7 @@ export default () => {
 
             setLoading(false);
         } catch (error) {
+            console.error(error);
             setLoading(false);
         }
     };
@@ -75,7 +77,7 @@ export default () => {
 
     const UploadBtn = ({ type }: { type: string }) => (
         <CloudUploadOutlined
-            className='text-xl cursor-pointer'
+            className="text-xl cursor-pointer"
             onClick={() => {
                 setCurrentUploadType(type);
                 setIsMaterialModalOpen(true);
@@ -87,14 +89,14 @@ export default () => {
         <div>
             <h2 className="text-xl pb-4 pl-10">综合配置</h2>
 
-            <div className='w-full lg:w-[500px] md:ml-10'>
+            <div className="w-full lg:w-[500px] md:ml-10">
                 <Form form={form} onFinish={editThemeData} layout="vertical">
                     <Divider orientation="left">亮色主题 Logo</Divider>
                     <Form.Item name="light_logo" label="亮色主题 Logo">
                         <Input
                             prefix={<PictureOutlined />}
                             addonAfter={<UploadBtn type="light_logo" />}
-                            size='large'
+                            size="large"
                             placeholder="请输入亮色Logo地址"
                         />
                     </Form.Item>
@@ -105,7 +107,7 @@ export default () => {
                         <Input
                             prefix={<PictureOutlined />}
                             addonAfter={<UploadBtn type="dark_logo" />}
-                            size='large'
+                            size="large"
                             placeholder="请输入暗色Logo地址"
                         />
                     </Form.Item>
@@ -116,7 +118,7 @@ export default () => {
                         <Input
                             prefix={<PictureOutlined />}
                             addonAfter={<UploadBtn type="swiper_image" />}
-                            size='large'
+                            size="large"
                             placeholder="请输入背景图地址"
                         />
                     </Form.Item>
@@ -126,7 +128,7 @@ export default () => {
                     <Form.Item name="swiper_text" label="打字机文本">
                         <Input.TextArea
                             autoSize={{ minRows: 2, maxRows: 4 }}
-                            size='large'
+                            size="large"
                             placeholder="请输入打字机文本"
                         />
                     </Form.Item>
@@ -136,7 +138,7 @@ export default () => {
                     <Form.Item name="social" label="社交网站">
                         <Input.TextArea
                             autoSize={{ minRows: 2, maxRows: 4 }}
-                            size='large'
+                            size="large"
                             placeholder="请输入社交网站"
                         />
                     </Form.Item>
@@ -146,7 +148,7 @@ export default () => {
                     <Form.Item name="covers" label="文章随机封面">
                         <Input.TextArea
                             autoSize={{ minRows: 2, maxRows: 4 }}
-                            size='large'
+                            size="large"
                             placeholder="请输入文章随机封面"
                         />
                     </Form.Item>
@@ -156,7 +158,7 @@ export default () => {
                     <Form.Item name="reco_article" label="作者推荐文章">
                         <Input.TextArea
                             autoSize={{ minRows: 2, maxRows: 4 }}
-                            size='large'
+                            size="large"
                             placeholder="请输入作者推荐文章ID"
                         />
                     </Form.Item>
@@ -179,7 +181,7 @@ export default () => {
                     </Checkbox.Group>
 
                     <Divider orientation="left">文章布局</Divider>
-                    <div className='overflow-auto w-full'>
+                    <div className="overflow-auto w-full">
                         <div className="article flex w-[650px]">
                             {['classics', 'card', 'waterfall'].map((item) => (
                                 <div key={item} onClick={() => setTheme({ ...theme, is_article_layout: item })} className={`item flex flex-col items-center p-4 m-4 border-2 rounded cursor-pointer ${theme.is_article_layout === item ? 'border-primary' : 'border-stroke'}`}>

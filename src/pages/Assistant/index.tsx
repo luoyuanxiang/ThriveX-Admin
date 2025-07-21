@@ -49,30 +49,33 @@ export default () => {
             <List.Item
               actions={[
                 <Button
+                  key="test"
                   type="link"
                   onClick={() => testConnection(item)}
                   loading={testingMap[item.id]}
                 >{testingMap[item.id] ? '测试中...' : '测试连接'}</Button>,
 
-                <Button onClick={() => {
+                <Button key="edit" onClick={() => {
                   form.setFieldsValue(item);
                   setId(item.id);
                   setIsModalOpen(true);
                 }} icon={<FormOutlined />} />,
 
                 <Popconfirm
+                  key="delete"
                   title="您确定要删除这个助手吗？"
                   onConfirm={() => delAssistantData(+item.id)}
                   okText="确定"
                   cancelText="取消"
                 >
-                  <Button type='primary' color="danger" danger icon={<DeleteOutlined />} />
+                  <Button key="delete" type="primary" color="danger" danger icon={<DeleteOutlined />} />
                 </Popconfirm>,
 
                 <Button
+                  key="default"
                   type={item.isDefault ? 'primary' : 'default'}
                   onClick={() => setDefaultAssistant(+item.id)}
-                >{item.isDefault ? '默认助手' : '设为默认'}</Button>,
+                >{item.isDefault ? '默认助手' : '设为默认'}</Button>
               ]}
             >
               <List.Item.Meta title={item.name} description={`模型: ${item.model}`} />
@@ -91,7 +94,7 @@ export default () => {
           setId(null);
         }}
       >
-        <Form form={form} layout="vertical" size='large'>
+        <Form form={form} layout="vertical" size="large">
           <Form.Item
             name="name"
             label="助手名称"

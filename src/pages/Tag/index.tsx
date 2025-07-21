@@ -41,6 +41,7 @@ export default () => {
 
             setLoading(false);
         } catch (error) {
+            console.error(error);
             setLoading(false);
         }
     };
@@ -59,6 +60,7 @@ export default () => {
 
             setEditLoading(false);
         } catch (error) {
+            console.error(error);
             setEditLoading(false);
         }
     };
@@ -71,6 +73,7 @@ export default () => {
             getTagList();
             message.success('🎉 删除标签成功');
         } catch (error) {
+            console.error(error);
             setLoading(false);
         }
     };
@@ -98,6 +101,7 @@ export default () => {
             setLoading(false);
             setBtnLoading(false);
         } catch (error) {
+            console.error(error);
             setLoading(false);
             setBtnLoading(false);
         }
@@ -107,8 +111,8 @@ export default () => {
         <div>
             <Title value="标签管理" />
 
-            <div className='flex md:justify-between flex-col md:flex-row mx-auto mt-2 h-[calc(100vh-180px)]'>
-                <div className='w-full md:w-[40%]'>
+            <div className="flex md:justify-between flex-col md:flex-row mx-auto mt-2 h-[calc(100vh-180px)]">
+                <div className="w-full md:w-[40%]">
                     <Spin spinning={editLoading}>
                         {/* <Card className="w-full md:w-[40%] h-46"> */}
                         <Card className="w-full h-46">
@@ -117,7 +121,7 @@ export default () => {
                                 layout="vertical"
                                 initialValues={tag}
                                 onFinish={onSubmit}
-                                size='large'
+                                size="large"
                             >
                                 <Form.Item label="标签名称" name="name" rules={[{ required: true, message: '标签名称不能为空' }]}>
                                     <Input placeholder="请输入标签名称" />

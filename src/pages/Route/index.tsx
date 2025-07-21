@@ -41,6 +41,7 @@ export default () => {
 
             setLoading(false);
         } catch (error) {
+            console.error(error);
             setLoading(false);
         }
     };
@@ -59,6 +60,7 @@ export default () => {
 
             setLoading(false)
         } catch (error) {
+            console.error(error);
             setLoading(false)
         }
     };
@@ -73,6 +75,7 @@ export default () => {
 
             setLoading(false)
         } catch (error) {
+            console.error(error);
             setLoading(false)
         }
     };
@@ -100,6 +103,7 @@ export default () => {
             setLoading(false)
             setBtnLoading(false)
         } catch (error) {
+            console.error(error);
             setLoading(false)
             setBtnLoading(true)
         }
@@ -109,14 +113,14 @@ export default () => {
         <div>
             <Title value="路由管理" />
 
-            <div className='flex md:justify-between flex-col md:flex-row mx-auto mt-2 min-h-[calc(100vh-160px)]'>
+            <div className="flex md:justify-between flex-col md:flex-row mx-auto mt-2 min-h-[calc(100vh-160px)]">
                 <Card className="w-full md:w-[40%] h-73">
                     <Form
                         form={form}
                         layout="vertical"
                         initialValues={route}
                         onFinish={onSubmit}
-                        size='large'
+                        size="large"
 
                     >
                         <Form.Item label="路由路径" name="path" rules={[{ required: true, message: '路由路径不能为空' }]}>

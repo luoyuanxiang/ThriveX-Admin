@@ -99,7 +99,7 @@ export default () => {
             fixed: 'right',
             align: 'center',
             render: (_: string, record: User) => (
-                <div className='flex space-x-2'>
+                <div className="flex space-x-2">
                     <Button onClick={() => editUserData(record.id!)} icon={<FormOutlined />} />
 
                     <Popconfirm title="警告" description="你确定要删除吗" okText="确定" cancelText="取消" onConfirm={() => delUserData(record.id!)}>
@@ -119,6 +119,7 @@ export default () => {
 
             setLoading(false);
         } catch (error) {
+            console.error(error);
             setLoading(false);
         }
     };
@@ -141,6 +142,7 @@ export default () => {
             getUserList();
             notification.success({ message: '🎉 删除用户成功' });
         } catch (error) {
+            console.error(error);
             setLoading(false);
         }
     };
@@ -156,6 +158,7 @@ export default () => {
 
             setEditLoading(false);
         } catch (error) {
+            console.error(error);
             setEditLoading(false);
         }
     };
@@ -174,7 +177,7 @@ export default () => {
                     await editUserDataAPI({ ...user, ...values });
                     notification.success({ message: '🎉 编辑用户成功' });
                 } else {
-                    await addUserDataAPI({ ...values, password: "123456", createTime: new Date().getTime().toString() });
+                    await addUserDataAPI({ ...values, password: '123456', createTime: new Date().getTime().toString() });
                     notification.success({ message: '🎉 创建用户成功' });
                 }
 
@@ -185,6 +188,7 @@ export default () => {
 
             setBtnLoading(false)
         } catch (error) {
+            console.error(error);
             setBtnLoading(false)
         }
     };
@@ -205,6 +209,7 @@ export default () => {
 
             setLoading(false)
         } catch (error) {
+            console.error(error);
             setLoading(false)
         }
     }
@@ -212,24 +217,24 @@ export default () => {
     return (
         <div>
             <Title value="用户管理">
-                <Button type="primary" size='large' onClick={() => setDrawerVisible(true)}>新增用户</Button>
+                <Button type="primary" size="large" onClick={() => setDrawerVisible(true)}>新增用户</Button>
             </Title>
 
-            <Card className='my-2 overflow-scroll'>
-                <Form layout="inline" onFinish={onFilterSubmit} autoComplete="off" className='flex-nowrap'>
-                    <Form.Item label="名称" name="name" className='min-w-[200px]'>
-                        <Input placeholder='请输入名称' />
+            <Card className="my-2 overflow-scroll">
+                <Form layout="inline" onFinish={onFilterSubmit} autoComplete="off" className="flex-nowrap">
+                    <Form.Item label="名称" name="name" className="min-w-[200px]">
+                        <Input placeholder="请输入名称" />
                     </Form.Item>
 
-                    <Form.Item label="角色" name="role" className='min-w-[230px]'>
+                    <Form.Item label="角色" name="role" className="min-w-[230px]">
                         <Select options={roleList.map(item => ({ label: item.name, value: item.id }))} placeholder="请选择角色" allowClear />
                     </Form.Item>
 
-                    <Form.Item label="时间范围" name="createTime" className='min-w-[250px]'>
-                        <RangePicker placeholder={["选择起始时间", "选择结束时间"]} />
+                    <Form.Item label="时间范围" name="createTime" className="min-w-[250px]">
+                        <RangePicker placeholder={['选择起始时间', '选择结束时间']} />
                     </Form.Item>
 
-                    <Form.Item className='pr-6'>
+                    <Form.Item className="pr-6">
                         <Button type="primary" htmlType="submit">查询</Button>
                     </Form.Item>
                 </Form>
@@ -250,8 +255,8 @@ export default () => {
             </Card>
 
             <Drawer
-                title={user.id ? "编辑用户" : "创建用户"}
-                size='large'
+                title={user.id ? '编辑用户' : '创建用户'}
+                size="large"
                 onClose={() => {
                     reset()
                     setDrawerVisible(false)
@@ -262,7 +267,7 @@ export default () => {
                 <Form
                     form={form}
                     layout="vertical"
-                    size='large'
+                    size="large"
                     onFinish={onSubmit}
                 >
                     <Form.Item
@@ -270,7 +275,7 @@ export default () => {
                         label="用户名"
                         rules={[{ required: true, message: '请输入用户名' }]}
                     >
-                        <Input placeholder='liuyuyang' />
+                        <Input placeholder="liuyuyang" />
                     </Form.Item>
 
                     <Form.Item
@@ -278,7 +283,7 @@ export default () => {
                         label="名称"
                         rules={[{ required: true, message: '请输入名称' }]}
                     >
-                        <Input placeholder='宇阳' />
+                        <Input placeholder="宇阳" />
                     </Form.Item>
 
                     <Form.Item
@@ -286,7 +291,7 @@ export default () => {
                         label="邮箱"
                         rules={[{ type: 'email', message: '请输入有效的邮箱' }]}
                     >
-                        <Input placeholder='3311118881@qq.com' />
+                        <Input placeholder="3311118881@qq.com" />
                     </Form.Item>
 
                     <Form.Item
@@ -294,14 +299,14 @@ export default () => {
                         label="头像链接"
                         rules={[{ type: 'url', message: '请输入有效的头像地址' }]}
                     >
-                        <Input placeholder='https://res.liuyuyang.net/usr/images/avatar.jpg' />
+                        <Input placeholder="https://res.liuyuyang.net/usr/images/avatar.jpg" />
                     </Form.Item>
 
                     <Form.Item
                         name="info"
                         label="介绍"
                     >
-                        <Input.TextArea placeholder='再渺小的星光也有属于它的光芒!' />
+                        <Input.TextArea placeholder="再渺小的星光也有属于它的光芒!" />
                     </Form.Item>
 
                     <Form.Item
@@ -313,7 +318,7 @@ export default () => {
                     </Form.Item>
 
                     <Form.Item>
-                        <Button type="primary" htmlType="submit" loading={btnLoading} className="w-full">{user.id ? "编辑用户" : "创建用户"}</Button>
+                        <Button type="primary" htmlType="submit" loading={btnLoading} className="w-full">{user.id ? '编辑用户' : '创建用户'}</Button>
                     </Form.Item>
                 </Form>
             </Drawer>

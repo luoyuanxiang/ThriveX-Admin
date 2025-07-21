@@ -1,6 +1,6 @@
-import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from "axios";
-import { Modal, notification } from "antd";
-import { useUserStore } from "@/stores";
+import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
+import { Modal, notification } from 'antd';
+import { useUserStore } from '@/stores';
 
 // 配置项目API域名
 // 最新调整：在本地 .env 文件配置你的后端API地址
@@ -25,10 +25,10 @@ let isHandling401Error = false;
 instance.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
         // 获取token
-        const token = JSON.parse(localStorage.getItem("user_storage") || "{}")?.state.token
+        const token = JSON.parse(localStorage.getItem('user_storage') || '{}')?.state.token
 
         // 如果有token就把赋值给请求头
-        if (token) config.headers["Authorization"] = `Bearer ${token}`;
+        if (token) config.headers['Authorization'] = `Bearer ${token}`;
 
         return config;
     },
@@ -51,7 +51,7 @@ instance.interceptors.response.use(
         if (res.data?.code !== 200) {
             notification.error({
                 message: '响应异常',
-                description: res.data?.message || "未知错误",
+                description: res.data?.message || '未知错误',
             })
 
             return Promise.reject(res.data);
@@ -69,7 +69,7 @@ instance.interceptors.response.use(
             Modal.error({
                 title: '暂无权限',
                 content: '🔒️ 登录已过期，请重新登录?',
-                okText: "去登录",
+                okText: '去登录',
                 onOk: () => {
                     const store = useUserStore.getState()
                     store.quitLogin()
@@ -85,7 +85,7 @@ instance.interceptors.response.use(
 
         notification.error({
             message: '程序异常',
-            description: err.message || "未知错误",
+            description: err.message || '未知错误',
         })
 
         return Promise.reject(err);

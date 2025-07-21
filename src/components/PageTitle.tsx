@@ -1,18 +1,16 @@
-import { useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
-interface PageTitleProps {
+interface Props {
   title: string;
 }
 
-const PageTitle: React.FC<PageTitleProps> = ({ title }) => {
+export default ({ title }: Props) => {
   const location = useLocation();
 
   useEffect(() => {
     document.title = title;
   }, [location, title]);
 
-  return null; // This component doesn't render anything
+  return null;
 };
-
-export default PageTitle;

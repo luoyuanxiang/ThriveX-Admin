@@ -10,7 +10,7 @@ import PublishForm from './components/PublishForm';
 import { Article } from '@/types/app/article';
 import { getArticleDataAPI } from '@/api/Article'
 
-import { BiSave } from "react-icons/bi";
+import { BiSave } from 'react-icons/bi';
 import { AiOutlineEdit, AiOutlineSend } from 'react-icons/ai';
 import { titleSty } from '@/styles/sty';
 
@@ -27,7 +27,11 @@ export default () => {
 
   // 下一步
   const nextBtn = () => {
-    content.trim().length >= 1 ? setPublishOpen(true) : message.error('请输入文章内容')
+    if (content.trim().length >= 1) {
+      setPublishOpen(true)
+    } else {
+      message.error('请输入文章内容')
+    }
   }
 
   // 获取文章数据
@@ -41,6 +45,7 @@ export default () => {
 
       setLoading(false)
     } catch (error) {
+      console.error(error);
       setLoading(false)
     }
   }
@@ -96,7 +101,6 @@ export default () => {
   const {
     list,
     assistant,
-    setAssistant,
     callAssistant
   } = useAssistant();
 
@@ -110,11 +114,11 @@ export default () => {
           setLoading(true);
           const reader = await callAssistant([
             { 
-              role: "system", 
-              content: "你是 Kimi，由 Moonshot AI 提供的人工智能助手，你更擅长中文和英文的对话。你会为用户提供安全，有帮助，准确的回答。"
+              role: 'system', 
+              content: '你是 Kimi，由 Moonshot AI 提供的人工智能助手，你更擅长中文和英文的对话。你会为用户提供安全，有帮助，准确的回答。'
             },
             {
-              role: "user",
+              role: 'user',
               content: `帮我续写：${content}`
             }
           ], { stream: true, temperature: 0.3 });
@@ -139,13 +143,15 @@ export default () => {
                     fullResponse += data.choices[0].delta.content;
                     setContent(content + fullResponse);
                   }
-                } catch (e) {
-                  console.error('Error parsing stream chunk:', e);
+                } catch (error) {
+                  console.error(error);
+                  message.error('调用助手失败');
                 }
               }
             }
           }
         } catch (error) {
+          console.error(error);
           message.error('调用助手失败');
         } finally {
           setLoading(false);
@@ -160,11 +166,11 @@ export default () => {
           setLoading(true);
           const reader = await callAssistant([
             { 
-              role: "system", 
-              content: "你是 Kimi，由 Moonshot AI 提供的人工智能助手，你更擅长中文和英文的对话。你会为用户提供安全，有帮助，准确的回答。"
+              role: 'system', 
+              content: '你是 Kimi，由 Moonshot AI 提供的人工智能助手，你更擅长中文和英文的对话。你会为用户提供安全，有帮助，准确的回答。'
             },
             {
-              role: "user",
+              role: 'user',
               content: `帮我优化该文章，意思不变：${content}`
             }
           ], { stream: true, temperature: 0.3 });
@@ -189,13 +195,15 @@ export default () => {
                     fullResponse += data.choices[0].delta.content;
                     setContent(fullResponse);
                   }
-                } catch (e) {
-                  console.error('Error parsing stream chunk:', e);
+                } catch (error) {
+                  console.error(error);
+                  message.error('调用助手失败');
                 }
               }
             }
           }
         } catch (error) {
+          console.error(error);
           message.error('调用助手失败');
         } finally {
           setLoading(false);
@@ -207,7 +215,7 @@ export default () => {
   return (
     <div>
       <Title value="创作">
-        <div className='flex items-center space-x-4 w-[390px]'>
+        <div className="flex items-center space-x-4 w-[390px]">
           <Dropdown.Button 
             menu={{ items }}
             onClick={() => {
@@ -216,18 +224,18 @@ export default () => {
               }
             }}
           >
-            <AiOutlineEdit className='text-base' /> 
+            <AiOutlineEdit className="text-base" /> 
             {assistant 
               ? list.find((a: { id: string | null }) => a.id === assistant)?.name || '选择助手'
               : '选择助手'}
           </Dropdown.Button>
 
-          <Button className='w-full flex justify-between' onClick={saveBtn} >
-            <BiSave className='text-base' /> 保存
+          <Button className="w-full flex justify-between" onClick={saveBtn} >
+            <BiSave className="text-base" /> 保存
           </Button>
 
-          <Button size='large' type="primary" className='w-full flex justify-between' onClick={nextBtn} >
-            <AiOutlineSend className='text-2xl' /> 发布
+          <Button size="large" type="primary" className="w-full flex justify-between" onClick={nextBtn} >
+            <AiOutlineSend className="text-2xl" /> 发布
           </Button>
         </div>
       </Title>
@@ -237,9 +245,9 @@ export default () => {
           <Editor value={content} onChange={(value) => setContent(value)} />
 
           <Drawer
-            title={(id && !isDraftParams) ? "编辑文章" : "发布文章"}
+            title={(id && !isDraftParams) ? '编辑文章' : '发布文章'}
             placement="right"
-            size='large'
+            size="large"
             onClose={() => setPublishOpen(false)}
             open={publishOpen}
           >

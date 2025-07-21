@@ -19,34 +19,34 @@ interface Setup {
 }
 
 export default () => {
-    const [active, setActive] = useState("system");
+    const [active, setActive] = useState('system');
     
-    const iconSty = "w-5 h-8 mr-1"
+    const iconSty = 'w-5 h-8 mr-1'
     
     const list: Setup[] = [
         {
-            title: "账户配置",
-            description: "配置管理员账号、密码等",
+            title: '账户配置',
+            description: '配置管理员账号、密码等',
             icon: <BiShieldQuarter className={iconSty} />,
-            key: "system"
+            key: 'system'
         },
         {
-            title: "网站配置",
-            description: "配置网站标题、LOGO、描述、SEO等",
+            title: '网站配置',
+            description: '配置网站标题、LOGO、描述、SEO等',
             icon: <BiGlobe className={iconSty} />,
-            key: "web"
+            key: 'web'
         },
         {
-            title: "主题配置",
-            description: "配置网站主题风格",
+            title: '主题配置',
+            description: '配置网站主题风格',
             icon: <BiLayout className={iconSty} />,
-            key: "theme"
+            key: 'theme'
         },
         {
-            title: "个人配置",
-            description: "配置个人信息等",
+            title: '个人配置',
+            description: '配置个人信息等',
             icon: <BiUser className={iconSty} />,
-            key: "my"
+            key: 'my'
         },
         // {
         //     title: "其他设置",
@@ -60,7 +60,7 @@ export default () => {
         <div>
             <Title value="系统配置" />
 
-            <Card className='mt-2 min-h-[calc(100vh-160px)]'>
+            <Card className="mt-2 min-h-[calc(100vh-160px)]">
                 <div className="flex flex-col md:flex-row">
                     <ul className="w-full md:w-[20%] md:mr-5 mb-10 md:mb-0 border-b-0 md:border-r border-stroke dark:border-strokedark divide-y divide-solid divide-[#F6F6F6] dark:divide-strokedark">
                         {list.map((item) => (
@@ -78,11 +78,11 @@ export default () => {
                         ))}
                     </ul>
 
-                    <div className='w-full md:w-[80%] px-0 md:px-8'>
-                        {active === "system" && <System />}
-                        {active === "web" && <Web />}
-                        {active === "theme" && <Theme />}
-                        {active === "my" && <My />}
+                    <div className="w-full md:w-[80%] px-0 md:px-8">
+                        {active === 'system' && <System />}
+                        {active === 'web' && <Web />}
+                        {active === 'theme' && <Theme />}
+                        {active === 'my' && <My />}
                         {/* {active === "other" && <Other />} */}
                     </div>
                 </div>

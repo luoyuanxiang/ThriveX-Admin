@@ -20,7 +20,7 @@ export default () => {
     const [list, setList] = useState<Wall[]>([]);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [replyInfo, setReplyInfo] = useState("");
+    const [replyInfo, setReplyInfo] = useState('');
     const [isReplyModalOpen, setIsReplyModalOpen] = useState(false);
 
     const getWallList = async () => {
@@ -32,6 +32,7 @@ export default () => {
 
             setLoading(false)
         } catch (error) {
+            console.error(error);
             setLoading(false)
         }
     }
@@ -44,6 +45,7 @@ export default () => {
             getWallList();
             message.success('🎉 删除留言成功');
         } catch (error) {
+            console.error(error);
             setLoading(false)
         }
 
@@ -67,13 +69,13 @@ export default () => {
             title: 'ID',
             dataIndex: 'id',
             key: 'id',
-            align: "center"
+            align: 'center'
         },
         {
             title: '分类',
             dataIndex: 'cate',
             key: 'cate',
-            render: ({ name }, { color }) => <Tag bordered={false} color={color} className='!text-[#565656] dark:!text-white'>{name}</Tag>,
+            render: ({ name }, { color }) => <Tag bordered={false} color={color} className="!text-[#565656] dark:!text-white">{name}</Tag>,
         },
         {
             title: '名称',
@@ -110,7 +112,7 @@ export default () => {
             fixed: 'right',
             align: 'center',
             render: (_: string, record: Wall) => (
-                <div className='flex justify-center space-x-2'>
+                <div className="flex justify-center space-x-2">
                     <Button type={record.isChoice === 1 ? 'primary' : 'default'} onClick={async () => {
                         try {
                             setLoading(true)
@@ -119,6 +121,7 @@ export default () => {
                             getWallList()
                             setLoading(false)
                         } catch (error) {
+                            console.error(error);
                             setLoading(false)
                         }
                     }} icon={record.isChoice === 1 ? <StarFilled /> : <StarOutlined />} />
@@ -154,6 +157,7 @@ export default () => {
 
             setLoading(false)
         } catch (error) {
+            console.error(error);
             setLoading(false)
         }
     }
@@ -164,36 +168,37 @@ export default () => {
             setLoading(true);
 
             await sendReplyWallEmailAPI({
-                to: wall?.email!,
-                recipient: wall?.name!,
-                your_content: wall?.content!,
+                to: wall?.email,
+                recipient: wall?.name,
+                your_content: wall?.content,
                 reply_content: replyInfo,
-                time: dayjs(+wall?.createTime!).format('YYYY-MM-DD HH:mm:ss'),
+                time: dayjs(+wall?.createTime).format('YYYY-MM-DD HH:mm:ss'),
                 url: web.url + '/wall/all',
             });
 
             message.success('🎉 回复留言成功');
             setIsReplyModalOpen(false);
-            setReplyInfo("");
+            setReplyInfo('');
             getWallList();
 
             setLoading(false);
         } catch (error) {
+            console.error(error);
             setLoading(false);
         }
     };
 
     return (
         <div>
-            <Title value='留言管理' />
+            <Title value="留言管理" />
 
-            <Card className='my-2 overflow-scroll'>
-                <Form layout="inline" onFinish={onFilterSubmit} autoComplete="off" className='flex-nowrap'>
-                    <Form.Item label="内容" name="content" className='min-w-[200px]'>
-                        <Input placeholder='请输入内容关键词' />
+            <Card className="my-2 overflow-scroll">
+                <Form layout="inline" onFinish={onFilterSubmit} autoComplete="off" className="flex-nowrap">
+                    <Form.Item label="内容" name="content" className="min-w-[200px]">
+                        <Input placeholder="请输入内容关键词" />
                     </Form.Item>
 
-                    <Form.Item label="分类" name="cateId" className='min-w-[200px]'>
+                    <Form.Item label="分类" name="cateId" className="min-w-[200px]">
                         <Select
                             allowClear
                             options={cateList}
@@ -202,11 +207,11 @@ export default () => {
                         />
                     </Form.Item>
 
-                    <Form.Item label="时间范围" name="createTime" className='min-w-[250px]'>
-                        <RangePicker placeholder={["选择起始时间", "选择结束时间"]} />
+                    <Form.Item label="时间范围" name="createTime" className="min-w-[250px]">
+                        <RangePicker placeholder={['选择起始时间', '选择结束时间']} />
                     </Form.Item>
 
-                    <Form.Item className='pr-6'>
+                    <Form.Item className="pr-6">
                         <Button type="primary" htmlType="submit">查询</Button>
                     </Form.Item>
                 </Form>
@@ -227,9 +232,9 @@ export default () => {
                 />
             </Card>
 
-            <Modal title='留言详情' open={isModalOpen} onCancel={() => setIsModalOpen(false)} footer={null}>
-                <div className='pt-2 space-y-2'>
-                    <div><b>留言时间：</b> {dayjs(+wall?.createTime!).format("YYYY-MM-DD HH:mm:ss")}</div>
+            <Modal title="留言详情" open={isModalOpen} onCancel={() => setIsModalOpen(false)} footer={null}>
+                <div className="pt-2 space-y-2">
+                    <div><b>留言时间：</b> {dayjs(+wall?.createTime).format('YYYY-MM-DD HH:mm:ss')}</div>
                     <div><b>留言用户：</b> {wall?.name}</div>
                     <div><b>内容：</b> {wall?.content}</div>
                 </div>

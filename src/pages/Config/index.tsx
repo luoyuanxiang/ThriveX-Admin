@@ -83,7 +83,9 @@ export default () => {
     try {
       const { data: list } = await tabConfig[type].getList();
       setData(d => ({ ...d, [type]: list }));
-    } catch (e) { }
+    } catch (e) {
+      console.error(e);
+    }
     setLoading(l => ({ ...l, [type]: false }));
   };
 
@@ -110,6 +112,7 @@ export default () => {
       try {
         parsed = JSON.parse(values.value);
       } catch (e) {
+        console.error(e);
         message.error('请输入合法的JSON格式');
         setBtnLoading(false);
         return;
@@ -121,6 +124,7 @@ export default () => {
       setEditItem(null);
       setBtnLoading(false);
     } catch (e) {
+      console.error(e);
       setBtnLoading(false);
     }
   };
@@ -161,7 +165,7 @@ export default () => {
       render: (value: object) => (
         <>
           {activeTab === 'page'
-            ? <span className='text-sm text-gray-500'>内容过多，不易展示</span>
+            ? <span className="text-sm text-gray-500">内容过多，不易展示</span>
             : <pre className="min-w-[200px] whitespace-pre-wrap break-all bg-slate-50 dark:bg-slate-800 p-2 rounded text-xs overflow-auto">{JSON.stringify(value, null, 2)}</pre>
           }
         </>
@@ -198,7 +202,7 @@ export default () => {
               />
             ),
           }))}
-          className='[&_.ant-tabs-nav]:mb-0 [&_.ant-tabs-nav-wrap]:justify-center'
+          className="[&_.ant-tabs-nav]:mb-0 [&_.ant-tabs-nav-wrap]:justify-center"
         />
       </Card>
 

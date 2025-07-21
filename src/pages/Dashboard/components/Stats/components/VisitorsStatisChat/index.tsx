@@ -20,9 +20,9 @@ export default () => {
     const [loading, setLoading] = useState<boolean>(false);
 
     const [result, setResult] = useState<Result | null>(null);
-    const [scope, setScope] = useState<"day" | "month" | "year">("day");
-    const [startDate, setStartDate] = useState(dayjs(new Date()).subtract(7, "day").format("YYYYMMDD"));
-    const endDate = dayjs(new Date()).format("YYYYMMDD");
+    const [scope, setScope] = useState<'day' | 'month' | 'year'>('day');
+    const [startDate, setStartDate] = useState(dayjs(new Date()).subtract(7, 'day').format('YYYYMMDD'));
+    const endDate = dayjs(new Date()).format('YYYYMMDD');
 
     // 图表相关配置
     const [options, setOptions] = useState<ApexOptions>({
@@ -123,11 +123,12 @@ export default () => {
         const fetchData = async () => {
             try {
                 setLoading(true);
-                const { data } = await getStatisAPI("basic-overview", startDate, endDate);
+                const { data } = await getStatisAPI('basic-overview', startDate, endDate);
                 const { result } = data as any;
                 setResult(result);
                 setLoading(false);
             } catch (error) {
+                console.error(error);
                 setLoading(false);
             }
         };
@@ -149,7 +150,7 @@ export default () => {
         const currentMonth = now.month() + 1; // month() 从0开始
 
         switch (scope) {
-            case "day": {
+            case 'day': {
                 // 只生成本月1号到今天
                 const today = now.date();
                 categories = Array.from({ length: today }, (_, i) => `${currentMonth}/${(i + 1).toString().padStart(2, '0')}`);
@@ -173,7 +174,7 @@ export default () => {
                 ipList = categories.map(day => dayMap[day]?.ip || 0);
                 break;
             }
-            case "month": {
+            case 'month': {
                 // 生成1-12月，全部用两位数
                 categories = Array.from({ length: 12 }, (_, i) => (i + 1).toString().padStart(2, '0'));
                 // 过滤本年数据
@@ -195,7 +196,7 @@ export default () => {
                 ipList = categories.map(m => monthMap[m]?.ip || 0);
                 break;
             }
-            case "year": {
+            case 'year': {
                 // 统计所有年
                 const dateArr: string[][] = result.items[0];
                 const valueArr: (string | number)[][] = result.items[1];
@@ -232,21 +233,21 @@ export default () => {
     }, [scopeData]);
 
     // 处理范围变更并相应地更新日期范围
-    const handleScopeChange = (newScope: "day" | "month" | "year") => {
+    const handleScopeChange = (newScope: 'day' | 'month' | 'year') => {
         setScope(newScope);
         const now = dayjs();
         switch (newScope) {
-            case "day": {
+            case 'day': {
                 // 本月1号到本月最后一天
                 setStartDate(now.startOf('month').format('YYYY/MM/DD'));
                 break;
             }
-            case "month": {
+            case 'month': {
                 // 本年1月1日到12月31日
                 setStartDate(now.startOf('year').format('YYYY/MM/DD'));
                 break;
             }
-            case "year": {
+            case 'year': {
                 // 近五年（含今年），起始时间为五年前的1月1日
                 const startYear = now.year() - 4;
                 setStartDate(dayjs(`${startYear}-01-01`).format('YYYY/MM/DD'));
@@ -261,15 +262,15 @@ export default () => {
                 <h3 className="text-xl font-bold text-slate-800 dark:text-white">访客统计</h3>
 
                 <div className="inline-flex items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 space-x-1">
-                    <button className={`rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:bg-meta-4 dark:text-white dark:hover:bg-boxdark ${scope === "day" ? "bg-white dark:!bg-[#4e5969] shadow-card" : ""}`} onClick={() => handleScopeChange("day")}>
+                    <button className={`rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:bg-meta-4 dark:text-white dark:hover:bg-boxdark ${scope === 'day' ? 'bg-white dark:!bg-[#4e5969] shadow-card' : ''}`} onClick={() => handleScopeChange('day')}>
                         天
                     </button>
 
-                    <button className={`rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:bg-meta-4 dark:text-white dark:hover:bg-boxdark ${scope === "month" ? "bg-white dark:!bg-[#4e5969] shadow-card" : ""}`} onClick={() => handleScopeChange("month")}>
+                    <button className={`rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:bg-meta-4 dark:text-white dark:hover:bg-boxdark ${scope === 'month' ? 'bg-white dark:!bg-[#4e5969] shadow-card' : ''}`} onClick={() => handleScopeChange('month')}>
                         月
                     </button>
 
-                    <button className={`rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:bg-meta-4 dark:text-white dark:hover:bg-boxdark ${scope === "year" ? "bg-white dark:!bg-[#4e5969] shadow-card" : ""}`} onClick={() => handleScopeChange("year")}>
+                    <button className={`rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:bg-meta-4 dark:text-white dark:hover:bg-boxdark ${scope === 'year' ? 'bg-white dark:!bg-[#4e5969] shadow-card' : ''}`} onClick={() => handleScopeChange('year')}>
                         年
                     </button>
                 </div>
@@ -280,43 +281,43 @@ export default () => {
                     <ReactECharts
                         option={{
                             tooltip: {
-                                trigger: "axis",
-                                backgroundColor: "#fff",
-                                borderColor: "#e5eaf3",
+                                trigger: 'axis',
+                                backgroundColor: '#fff',
+                                borderColor: '#e5eaf3',
                                 borderWidth: 1,
                                 textStyle: {
-                                    color: "#1a2757",
+                                    color: '#1a2757',
                                     fontSize: 14,
                                 },
                                 padding: 16,
-                                extraCssText: "box-shadow: 0 4px 24px rgba(0,0,0,0.08); border-radius: 10px;",
+                                extraCssText: 'box-shadow: 0 4px 24px rgba(0,0,0,0.08); border-radius: 10px;',
                                 formatter: function (params: any) {
-                                    let str = `<div style=\"font-weight:700;margin-bottom:8px;\">${params[0].axisValue}${scope === 'month' ? '月' : scope === 'year' ? '年' : ''}</div>`;
+                                    let str = `<div style="font-weight:700;margin-bottom:8px;">${params[0].axisValue}${scope === 'month' ? '月' : scope === 'year' ? '年' : ''}</div>`;
                                     params.forEach((item: any) => {
                                         let color;
-                                        if (item.seriesName === "访客") {
-                                            color = "#6a8eff";
-                                        } else if (item.seriesName === "IP") {
-                                            color = "#4fc3ff";
+                                        if (item.seriesName === '访客') {
+                                            color = '#6a8eff';
+                                        } else if (item.seriesName === 'IP') {
+                                            color = '#4fc3ff';
                                         }
-                                        str += `\n          <div style=\"display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;\">\n            <span style=\"display:inline-flex;align-items:center;\">\n              <span style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:${color};margin-right:6px;\"></span>\n              ${item.seriesName}：\n            </span>\n            <span style=\"font-weight:700;margin-left:16px;\">${item.data}</span>\n          </div>\n        `;
+                                        str += `\n          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">\n            <span style="display:inline-flex;align-items:center;">\n              <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${color};margin-right:6px;"></span>\n              ${item.seriesName}：\n            </span>\n            <span style="font-weight:700;margin-left:16px;">${item.data}</span>\n          </div>\n        `;
                                     });
                                     return str;
                                 }
                             },
                             legend: {
                                 data: [
-                                    { name: "访客", icon: "circle", itemStyle: { color: "#6a8eff" } },
-                                    { name: "IP", icon: "circle", itemStyle: { color: "#4fc3ff" } }
+                                    { name: '访客', icon: 'circle', itemStyle: { color: '#6a8eff' } },
+                                    { name: 'IP', icon: 'circle', itemStyle: { color: '#4fc3ff' } }
                                 ],
                                 bottom: 0,
-                                left: "center",
+                                left: 'center',
                                 itemWidth: 18,
                                 itemHeight: 18,
                                 itemGap: 32,
                                 textStyle: {
                                     fontSize: 14,
-                                    color: "#1a2757",
+                                    color: '#1a2757',
                                     margin: 30,
                                 },
                             },
@@ -327,7 +328,7 @@ export default () => {
                                 bottom: 60,
                             },
                             xAxis: {
-                                type: "category",
+                                type: 'category',
                                 boundaryGap: false,
                                 data: scopeData.categories,
                                 axisLine: { show: false },   // 隐藏x轴轴线
@@ -335,34 +336,34 @@ export default () => {
                                 axisLabel: { fontSize: 12 },
                             },
                             yAxis: {
-                                type: "value",
+                                type: 'value',
                                 min: 0,
                                 splitNumber: 5,
                                 axisLine: { show: false },
                                 axisLabel: { fontSize: 12 },
-                                splitLine: { lineStyle: { type: 'dashed', color: "#f0f4fa" } },
+                                splitLine: { lineStyle: { type: 'dashed', color: '#f0f4fa' } },
                             },
                             series: [
                                 {
-                                    name: "访客",
-                                    type: "line",
+                                    name: '访客',
+                                    type: 'line',
                                     smooth: false,
-                                    symbol: "circle",
+                                    symbol: 'circle',
                                     symbolSize: 8,
                                     itemStyle: {
-                                        color: "#fff",
-                                        borderColor: "#6a8eff",
+                                        color: '#fff',
+                                        borderColor: '#6a8eff',
                                         borderWidth: 3,
                                     },
                                     emphasis: {
                                         itemStyle: {
-                                            borderColor: "#6a8eff",
+                                            borderColor: '#6a8eff',
                                             borderWidth: 5
                                         }
                                     },
                                     lineStyle: {
                                         width: 3,
-                                        color: "#6a8eff", // 纯色
+                                        color: '#6a8eff', // 纯色
                                     },
                                     areaStyle: {
                                         color: {
@@ -377,25 +378,25 @@ export default () => {
                                     data: scopeData.series[0],
                                 },
                                 {
-                                    name: "IP",
-                                    type: "line",
+                                    name: 'IP',
+                                    type: 'line',
                                     smooth: false,
-                                    symbol: "circle",
+                                    symbol: 'circle',
                                     symbolSize: 8,
                                     itemStyle: {
-                                        color: "#fff",
-                                        borderColor: "#4fc3ff",
+                                        color: '#fff',
+                                        borderColor: '#4fc3ff',
                                         borderWidth: 3,
                                     },
                                     emphasis: {
                                         itemStyle: {
-                                            borderColor: "#4fc3ff",
+                                            borderColor: '#4fc3ff',
                                             borderWidth: 5
                                         }
                                     },
                                     lineStyle: {
                                         width: 3,
-                                        color: "#4fc3ff", // 纯色
+                                        color: '#4fc3ff', // 纯色
                                     },
                                     areaStyle: {
                                         color: {

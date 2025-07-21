@@ -1,5 +1,20 @@
 import { useState, useEffect, useRef } from 'react';
-import { Table, Button, Tag, notification, Card, Popconfirm, Form, Input, Select, DatePicker, Modal, message, Pagination, Dropdown, Menu } from 'antd';
+import {
+  Table,
+  Button,
+  Tag,
+  notification,
+  Card,
+  Popconfirm,
+  Form,
+  Input,
+  Select,
+  DatePicker,
+  Modal,
+  message,
+  Pagination,
+  Dropdown,
+} from 'antd';
 import { DeleteOutlined, FormOutlined, InboxOutlined, DownloadOutlined } from '@ant-design/icons';
 import type { UploadFile, UploadFileStatus, RcFile } from 'antd/es/upload/interface';
 import { titleSty } from '@/styles/sty';
@@ -9,7 +24,13 @@ import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import { getCateListAPI } from '@/api/Cate';
 import { getTagListAPI } from '@/api/Tag';
-import { delArticleDataAPI, getArticlePagingAPI, addArticleDataAPI, getArticleListAPI, delBatchArticleDataAPI } from '@/api/Article';
+import {
+  delArticleDataAPI,
+  getArticlePagingAPI,
+  addArticleDataAPI,
+  getArticleListAPI,
+  delBatchArticleDataAPI,
+} from '@/api/Article';
 import type { Tag as ArticleTag } from '@/types/app/tag';
 import type { Cate } from '@/types/app/cate';
 import type { Article, Config, FilterArticle, FilterForm } from '@/types/app/article';
@@ -58,6 +79,7 @@ export default () => {
       setArticleList(data.result);
       setLoading(false);
     } catch (error) {
+      console.error(error);
       setLoading(false);
     }
   };
@@ -100,6 +122,7 @@ export default () => {
           href={`${web.url}/article/${record.id}`}
           target="_blank"
           className="hover:text-primary line-clamp-1"
+          rel="noreferrer"
         >
           {text}
         </a>
@@ -111,11 +134,7 @@ export default () => {
       key: 'description',
       align: 'center',
       width: 350,
-      render: (text: string) => (
-        <div className="line-clamp-2">
-          {text ? text : '该文章暂未设置文章摘要'}
-        </div>
-      ),
+      render: (text: string) => <div className="line-clamp-2">{text ? text : '该文章暂未设置文章摘要'}</div>,
     },
     {
       title: '分类',
@@ -280,6 +299,7 @@ export default () => {
             message.success(`${article.title}--导入成功~`);
           }
         } catch (error) {
+          console.error(error);
           message.error(`${article.title}--导入失败~`);
         }
       });
@@ -331,9 +351,7 @@ export default () => {
 
     const files = Array.from(e.dataTransfer.files);
     const validFiles = files.filter(
-      (file) =>
-        file.name.toLowerCase().endsWith('.md') ||
-        file.name.toLowerCase().endsWith('.json'),
+      (file) => file.name.toLowerCase().endsWith('.md') || file.name.toLowerCase().endsWith('.json'),
     );
 
     if (validFiles.length === 0) {
@@ -365,9 +383,7 @@ export default () => {
     const files = Array.from(e.target.files || []);
 
     const validFiles = files.filter(
-      (file) =>
-        file.name.toLowerCase().endsWith('.md') ||
-        file.name.toLowerCase().endsWith('.json'),
+      (file) => file.name.toLowerCase().endsWith('.md') || file.name.toLowerCase().endsWith('.json'),
     );
 
     if (validFiles.length === 0) {
@@ -398,15 +414,7 @@ export default () => {
 
   // 导出为markdown文件
   const generateMarkdown = (article: Article) => {
-    const {
-      title,
-      description,
-      content,
-      cover,
-      createTime,
-      cateList,
-      tagList,
-    } = article;
+    const { title, description, content, cover, createTime, cateList, tagList } = article;
 
     // 格式化时间为 `YYYY-MM-DD HH:mm:ss`
     const formatDate = (timestamp: string) => {
@@ -431,10 +439,7 @@ export default () => {
    * @param allTags - 全部可用 tag 列表
    * @returns 标签 ID 数组，如 [82, 87]
    */
-  const getTagIdsByNames = (
-    names: string[],
-    allTags: { id?: number; name: string }[],
-  ) => {
+  const getTagIdsByNames = (names: string[], allTags: { id?: number; name: string }[]) => {
     const lowerCaseMap = new Map<string, number>();
 
     // 可选：忽略大小写（如果不需要，请移除 toLowerCase）
@@ -442,18 +447,19 @@ export default () => {
       lowerCaseMap.set(tag.name.toLowerCase(), tag.id as number);
     }
 
-    return names
-      .map((name) => lowerCaseMap.get(name.toLowerCase()))
-      // 去除未匹配项
-      .filter((id): id is number => id !== undefined);
+    return (
+      names
+        .map((name) => lowerCaseMap.get(name.toLowerCase()))
+        // 去除未匹配项
+        .filter((id): id is number => id !== undefined)
+    );
   };
 
   // 从 markdown 字符串解析为 Article JSON
   const parseMarkdownToArticle = (mdText: string): Article => {
     // 提取 frontmatter 块
     const frontmatterMatch = mdText.match(/^---\n([\s\S]*?)\n---/);
-    if (!frontmatterMatch)
-      throw new Error('Markdown 文件格式错误，缺少 frontmatter');
+    if (!frontmatterMatch) throw new Error('Markdown 文件格式错误，缺少 frontmatter');
 
     const frontmatterText = frontmatterMatch[1];
     // 去除 frontmatter 后的正文
@@ -506,12 +512,8 @@ export default () => {
       content: item.content || '',
       cover: item.cover || '',
       createTime: item.createTime,
-      cateIds: (item.cateList || [])
-        .map((cate) => cate.id)
-        .filter((id): id is number => id !== undefined),
-      tagIds: (item.tagList || [])
-        .map((tag) => tag.id)
-        .filter((id): id is number => id !== undefined),
+      cateIds: (item.cateList || []).map((cate) => cate.id).filter((id): id is number => id !== undefined),
+      tagIds: (item.tagList || []).map((tag) => tag.id).filter((id): id is number => id !== undefined),
       config: {
         status: item.config?.status || 'default',
         password: item.config?.password || '',
@@ -526,11 +528,7 @@ export default () => {
   };
 
   // 下载文件
-  const downloadFile = (
-    content: string,
-    fileName: string,
-    mimeType: string = 'text/plain;charset=utf-8',
-  ) => {
+  const downloadFile = (content: string, fileName: string, mimeType: string = 'text/plain;charset=utf-8') => {
     const blob = new Blob([content], { type: mimeType });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -566,9 +564,7 @@ export default () => {
 
   // 导出选中
   const exportSelected = () => {
-    const selectedArticles = articleList.filter((item: Article) =>
-      selectedRowKeys.includes(item.id as number),
-    );
+    const selectedArticles = articleList.filter((item: Article) => selectedRowKeys.includes(item.id as number));
 
     if (!selectedArticles.length) return message.warning('请选择要导出的文章');
 
@@ -682,13 +678,7 @@ export default () => {
 
       <Card className="my-2 overflow-scroll">
         <div className="w-full flex justify-between">
-          <Form
-            form={form}
-            layout="inline"
-            onFinish={onFilterSubmit}
-            autoComplete="off"
-            className="flex-nowrap"
-          >
+          <Form form={form} layout="inline" onFinish={onFilterSubmit} autoComplete="off" className="flex-nowrap">
             <Form.Item label="标题" name="title" className="min-w-[200px]">
               <Input placeholder="请输入关键词" />
             </Form.Item>
@@ -711,29 +701,25 @@ export default () => {
                 placeholder="请选择标签"
                 filterOption={(input, option) => {
                   if (option?.name) {
-                    return option.name
-                      .toLowerCase()
-                      .includes(input.toLowerCase());
+                    return option.name.toLowerCase().includes(input.toLowerCase());
                   }
                   return false;
                 }}
               />
             </Form.Item>
 
-            <Form.Item
-              label="时间范围"
-              name="createTime"
-              className="min-w-[250px]"
-            >
+            <Form.Item label="时间范围" name="createTime" className="min-w-[250px]">
               <RangePicker placeholder={['选择起始时间', '选择结束时间']} />
             </Form.Item>
 
             <Form.Item className="pr-6">
-              <Button type="primary" htmlType="submit">筛选</Button>
+              <Button type="primary" htmlType="submit">
+                筛选
+              </Button>
             </Form.Item>
           </Form>
 
-          <div className='flex space-x-3 pl-32 pr-10'>
+          <div className="flex space-x-3 pl-32 pr-10">
             <Dropdown.Button
               menu={{
                 items: [
@@ -749,13 +735,13 @@ export default () => {
                   },
                 ],
               }}
-            >导出文章</Dropdown.Button>
+            >
+              导出文章
+            </Dropdown.Button>
 
-            <Button
-              type="primary"
-              className="mr-1"
-              onClick={() => setIsModalOpen(true)}
-            >导入文章</Button>
+            <Button type="primary" className="mr-1" onClick={() => setIsModalOpen(true)}>
+              导入文章
+            </Button>
 
             <Popconfirm
               title="警告"
@@ -764,7 +750,9 @@ export default () => {
               cancelText="取消"
               onConfirm={() => delSelected()}
             >
-              <Button type="primary" danger>删除选中</Button>
+              <Button type="primary" danger>
+                删除选中
+              </Button>
             </Popconfirm>
           </div>
         </div>
@@ -775,7 +763,9 @@ export default () => {
         open={isModalOpen}
         onCancel={handleCancel}
         footer={[
-          <Button key="cancel" onClick={handleCancel}>取消</Button>,
+          <Button key="cancel" onClick={handleCancel}>
+            取消
+          </Button>,
 
           <Button
             key="import"
@@ -783,7 +773,9 @@ export default () => {
             onClick={handleArticleImport}
             loading={importLoading}
             disabled={fileList.length === 0}
-          >开始导入</Button>,
+          >
+            开始导入
+          </Button>,
         ]}
       >
         <div className="py-4">
@@ -793,22 +785,17 @@ export default () => {
             onDragEnter={handleDragEnter}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
-            className={`w-full h-40 p-4 border border-dashed rounded-lg transition-all duration-300 ${isDragging
-              ? 'border-primary bg-primary/5'
-              : 'border-[#D7D7D7] hover:border-primary bg-[#FAFAFA]'
-              } space-y-2 cursor-pointer`}
+            className={`w-full h-40 p-4 border border-dashed rounded-lg transition-all duration-300 ${
+              isDragging ? 'border-primary bg-primary/5' : 'border-[#D7D7D7] hover:border-primary bg-[#FAFAFA]'
+            } space-y-2 cursor-pointer`}
           >
             <div className="flex justify-center">
               <InboxOutlined className="text-5xl text-primary" />
             </div>
 
-            <p className="text-base text-center">
-              {isDragging ? '文件放在此处即上传' : '点击或拖动文件到此区域'}
-            </p>
+            <p className="text-base text-center">{isDragging ? '文件放在此处即上传' : '点击或拖动文件到此区域'}</p>
 
-            <p className="text-sm text-[#999] text-center">
-              仅支持 Markdown 或 JSON 格式
-            </p>
+            <p className="text-sm text-[#999] text-center">仅支持 Markdown 或 JSON 格式</p>
           </div>
 
           <input
@@ -826,10 +813,7 @@ export default () => {
               <p className="text-sm text-gray-500 mb-2">已选择的文件：</p>
               <ul className="space-y-2">
                 {fileList.map((file) => (
-                  <li
-                    key={file.uid}
-                    className="flex items-center justify-between bg-gray-50 p-2 rounded"
-                  >
+                  <li key={file.uid} className="flex items-center justify-between bg-gray-50 p-2 rounded">
                     <span className="text-sm">{file.name}</span>
 
                     <Button
@@ -837,7 +821,9 @@ export default () => {
                       danger
                       size="small"
                       onClick={() => setFileList(fileList.filter((f) => f.uid !== file.uid))}
-                    >删除</Button>
+                    >
+                      删除
+                    </Button>
                   </li>
                 ))}
               </ul>
@@ -849,8 +835,12 @@ export default () => {
               <span>你可以下载模板后填写再导入：</span>
 
               <div className="space-x-2">
-                <Button type="link" size="small" onClick={downloadMarkdownTemplate}>下载 Markdown 模板</Button>
-                <Button type="link" size="small" onClick={downloadJsonTemplate}>下载 JSON 模板</Button>
+                <Button type="link" size="small" onClick={downloadMarkdownTemplate}>
+                  下载 Markdown 模板
+                </Button>
+                <Button type="link" size="small" onClick={downloadJsonTemplate}>
+                  下载 JSON 模板
+                </Button>
               </div>
             </div>
           )}
@@ -866,7 +856,7 @@ export default () => {
           pagination={false}
           loading={loading}
           scroll={{ x: 'max-content' }}
-          className='[&_.ant-table-selection-column]:w-18'
+          className="[&_.ant-table-selection-column]:w-18"
         />
 
         <div className="flex justify-center my-5">
@@ -874,9 +864,7 @@ export default () => {
             total={total}
             current={paging.page}
             pageSize={paging.size}
-            onChange={(page, pageSize) =>
-              setPaging({ ...paging, page, size: pageSize })
-            }
+            onChange={(page, pageSize) => setPaging({ ...paging, page, size: pageSize })}
           />
         </div>
       </Card>

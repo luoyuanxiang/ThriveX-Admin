@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import { Form, Input, Button, message } from "antd";
-import { useUserStore } from "@/stores"; // 假设你有一个状态管理库类似于pinia
-import { editUserDataAPI, getUserDataAPI } from "@/api/User";
-import { User } from "@/types/app/user";
+import { useEffect, useState } from 'react';
+import { Form, Input, Button, message } from 'antd';
+import { useUserStore } from '@/stores'; // 假设你有一个状态管理库类似于pinia
+import { editUserDataAPI, getUserDataAPI } from '@/api/User';
+import { User } from '@/types/app/user';
 
 interface UserForm {
     name: string;
@@ -27,6 +27,7 @@ export default () => {
 
             setLoading(false);
         } catch (error) {
+            console.error(error);
             setLoading(false);
         }
     };
@@ -45,9 +46,10 @@ export default () => {
             });
 
             getUserData();
-            message.success("🎉 修改用户信息成功");
+            message.success('🎉 修改用户信息成功');
             store.setUser(values as User);
         } catch (error) {
+            console.error(error);
             setLoading(false)
         }
     };
@@ -66,7 +68,7 @@ export default () => {
                 <Form.Item
                     label="名称"
                     name="name"
-                    rules={[{ required: true, message: "名称不能为空" }]}
+                    rules={[{ required: true, message: '名称不能为空' }]}
                 >
                     <Input placeholder="宇阳" />
                 </Form.Item>
@@ -74,7 +76,7 @@ export default () => {
                 <Form.Item
                     label="邮箱"
                     name="email"
-                    rules={[{ required: true, message: "邮箱不能为空" }]}
+                    rules={[{ required: true, message: '邮箱不能为空' }]}
                 >
                     <Input placeholder="liuyuyang1024@yeah.net" />
                 </Form.Item>
@@ -82,7 +84,7 @@ export default () => {
                 <Form.Item
                     label="头像"
                     name="avatar"
-                    rules={[{ required: true, message: "头像不能为空" }]}
+                    rules={[{ required: true, message: '头像不能为空' }]}
                 >
                     <Input placeholder="https://liuyuyang.net/logo.png" />
                 </Form.Item>
@@ -90,7 +92,7 @@ export default () => {
                 <Form.Item
                     label="介绍"
                     name="info"
-                    rules={[{ required: true, message: "介绍不能为空" }]}
+                    rules={[{ required: true, message: '介绍不能为空' }]}
                 >
                     <Input placeholder="互联网从不缺乏天才, 而努力才是最终的入场劵" />
                 </Form.Item>
