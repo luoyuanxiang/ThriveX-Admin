@@ -1,16 +1,16 @@
-import { useEffect, useState, useRef } from 'react'
-import { Image, Card, Space, Spin, message, Popconfirm, Button, Drawer, Divider } from 'antd'
-import Title from '@/components/Title'
-import FileUpload from '@/components/FileUpload'
-
-import fileSvg from './image/file.svg'
-import { delFileDataAPI, getDirListAPI, getFileListAPI } from '@/api/File'
-import { File, FileDir } from '@/types/app/file'
+import { useEffect, useState, useRef } from 'react';
+import { Image, Card, Space, Spin, message, Popconfirm, Button, Drawer, Divider } from 'antd';
 import { PiKeyReturnFill } from 'react-icons/pi';
-import { DeleteOutlined, DownloadOutlined, RotateLeftOutlined, RotateRightOutlined, SwapOutlined, UndoOutlined, ZoomInOutlined, ZoomOutOutlined, } from '@ant-design/icons';
+import { DeleteOutlined, DownloadOutlined, RotateLeftOutlined, RotateRightOutlined, SwapOutlined, UndoOutlined, ZoomInOutlined, ZoomOutOutlined } from '@ant-design/icons';
 import Masonry from 'react-masonry-css';
-import errorImg from './image/error.png'
-import './index.scss'
+
+import Title from '@/components/Title';
+import FileUpload from '@/components/FileUpload';
+import { delFileDataAPI, getDirListAPI, getFileListAPI } from '@/api/File';
+import { File, FileDir } from '@/types/app/file';
+import fileSvg from './image/file.svg';
+import errorImg from './image/error.png';
+import './index.scss';
 
 // Masonry布局的响应式断点配置
 const breakpointColumnsObj = {

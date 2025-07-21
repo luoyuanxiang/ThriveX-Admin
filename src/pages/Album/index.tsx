@@ -1,18 +1,19 @@
-import { useEffect, useState, useRef } from 'react';
-import { Image, Card, Space, Spin, message, Popconfirm, Button, Drawer, Divider, Modal, Form, Input, DatePicker } from 'antd';
-import TextArea from 'antd/es/input/TextArea';
+import { useEffect, useRef, useState } from 'react';
+
+import { Button, Card, DatePicker, Divider, Drawer, Form, Image, Input, Modal, Popconfirm, Space, Spin, message } from 'antd';
 import Masonry from 'react-masonry-css';
-import { DeleteOutlined, DownloadOutlined, RotateLeftOutlined, RotateRightOutlined, SwapOutlined, UndoOutlined, ZoomInOutlined, ZoomOutOutlined, EditOutlined, PictureOutlined, CloudUploadOutlined } from '@ant-design/icons';
+import { CloudUploadOutlined, DeleteOutlined, DownloadOutlined, EditOutlined, PictureOutlined, RotateLeftOutlined, RotateRightOutlined, SwapOutlined, UndoOutlined, ZoomInOutlined, ZoomOutOutlined } from '@ant-design/icons';
 import { PiKeyReturnFill } from 'react-icons/pi';
+import TextArea from 'antd/es/input/TextArea';
 
-import Title from '@/components/Title';
+import { addAlbumCateDataAPI, delAlbumCateDataAPI, editAlbumCateDataAPI, getAlbumCateListAPI, getImagesByAlbumIdAPI } from '@/api/AlbumCate';
+import { addAlbumImageDataAPI, delAlbumImageDataAPI } from '@/api/AlbumImage';
 import Material from '@/components/Material';
-import { getAlbumCateListAPI, getImagesByAlbumIdAPI, delAlbumCateDataAPI, addAlbumCateDataAPI, editAlbumCateDataAPI } from '@/api/AlbumCate';
-import { delAlbumImageDataAPI, addAlbumImageDataAPI } from '@/api/AlbumImage';
-import { AlbumCate } from '@/types/app/album';
+import Title from '@/components/Title';
+import { AlbumCate, AlbumImage } from '@/types/app/album';
 
-import errorImg from '../File/image/error.png';
 import albumSvg from '../File/image/file.svg';
+import errorImg from '../File/image/error.png';
 
 import './index.scss';
 
@@ -46,11 +47,11 @@ export default () => {
 
   // 相册和照片列表数据
   const [albumList, setAlbumList] = useState<AlbumCate[]>([]);
-  const [imageList, setImageList] = useState<any[]>([]);
+  const [imageList, setImageList] = useState<AlbumImage[]>([]);
 
   // 当前选中的相册和照片
   const [currentAlbum, setCurrentAlbum] = useState<AlbumCate>({} as AlbumCate);
-  const [currentImage, setCurrentImage] = useState<any>({});
+  const [currentImage, setCurrentImage] = useState<AlbumImage>({} as AlbumImage);
 
   // 相册表单
   const [albumForm] = Form.useForm();
@@ -118,14 +119,14 @@ export default () => {
    * 删除照片
    * @param data 要删除的照片数据
    */
-  const onDeleteImage = async (data: any) => {
+  const onDeleteImage = async (data: AlbumImage) => {
     try {
       setBtnLoading(true);
-      await delAlbumImageDataAPI(data.id);
+      await delAlbumImageDataAPI(data.id!);
       await getImageList(currentAlbum.id!);
       await getAlbumList();
       message.success('🎉 删除照片成功');
-      setCurrentImage({});
+      setCurrentImage({} as AlbumImage);
       setOpenImageInfoDrawer(false);
       setOpenImagePreviewDrawer(false);
       setBtnLoading(false);
@@ -139,21 +140,19 @@ export default () => {
    * 下载照片
    * @param data 要下载的照片数据
    */
-  const onDownloadImage = (data: any) => {
+  const onDownloadImage = async (data: AlbumImage) => {
     try {
       setDownloadLoading(true);
-      fetch(data.image)
-        .then((response) => response.blob())
-        .then((blob) => {
-          const url = URL.createObjectURL(new Blob([blob]));
-          const link = document.createElement<'a'>('a');
-          link.href = url;
-          link.download = data.name;
-          document.body.appendChild(link);
-          link.click();
-          URL.revokeObjectURL(url);
-          link.remove();
-        });
+      const response = await fetch(data.image);
+      const blob = await response.blob();
+      const url = URL.createObjectURL(new Blob([blob]));
+      const link = document.createElement<'a'>('a');
+      link.href = url;
+      link.download = data.name;
+      document.body.appendChild(link);
+      link.click();
+      URL.revokeObjectURL(url);
+      link.remove();
       setDownloadLoading(false);
     } catch (error) {
       console.error(error);
@@ -190,9 +189,9 @@ export default () => {
    * 查看照片信息
    * @param image 照片数据
    */
-  const viewImageInfo = (image: any) => {
+  const viewImageInfo = (data: AlbumImage) => {
     setOpenImageInfoDrawer(true);
-    setCurrentImage(image);
+    setCurrentImage(data);
   };
 
   /**
@@ -403,7 +402,7 @@ export default () => {
         open={openImageInfoDrawer}
         onClose={() => {
           setOpenImageInfoDrawer(false);
-          setCurrentImage({});
+          setCurrentImage({} as AlbumImage);
         }}
       >
         <div className="flex flex-col">

@@ -1,18 +1,15 @@
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-
-import { Button, Card, Dropdown, Image, Input, message, Modal, Spin } from 'antd'
-
-import { addRecordDataAPI, editRecordDataAPI, getRecordDataAPI } from '@/api/Record'
-
-import Title from '@/components/Title'
-import { titleSty } from '@/styles/sty'
-
+import { Button, Card, Dropdown, Image, Input, message, Modal, Spin } from 'antd';
 import { BiLogoTelegram } from 'react-icons/bi';
 import { LuImagePlus } from 'react-icons/lu';
 import { RiDeleteBinLine } from 'react-icons/ri';
+
+import Title from '@/components/Title';
+import { titleSty } from '@/styles/sty';
 import Material from '@/components/Material';
 import WangEditor from '@/components/WangEditor';
+import { addRecordDataAPI, editRecordDataAPI, getRecordDataAPI } from '@/api/Record';
 
 interface EditorRef {
     setValue: (value: string) => void,

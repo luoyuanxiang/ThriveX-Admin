@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Cate } from '@/types/app/cate';
-import { addCateDataAPI, delCateDataAPI, editCateDataAPI, getCateDataAPI, getCateListAPI } from '@/api/Cate';
+
 import { DownOutlined } from '@ant-design/icons';
 import { Form, Input, Button, Tree, Modal, Spin, Dropdown, Card, MenuProps, Popconfirm, message, Radio } from 'antd';
+
+import { Cate } from '@/types/app/cate';
+import { addCateDataAPI, delCateDataAPI, editCateDataAPI, getCateDataAPI, getCateListAPI } from '@/api/Cate';
 import Title from '@/components/Title';
+
 import './index.scss';
 
 const CatePage = () => {
@@ -133,13 +136,7 @@ const CatePage = () => {
         {
           key: '3',
           label: (
-            <Popconfirm
-              title="警告"
-              description="你确定要删除吗"
-              okText="确定"
-              cancelText="取消"
-              onConfirm={() => delCateData(item.id!)}
-            >
+            <Popconfirm title="警告" description="你确定要删除吗" okText="确定" cancelText="取消" onConfirm={() => delCateData(item.id!)}>
               <span>删除</span>
             </Popconfirm>
           ),
@@ -173,21 +170,12 @@ const CatePage = () => {
         </Button>
       </Title>
 
-      <Card
-        className={`CatePage [&>.ant-card-body]:!p-[30px_20px] [&>.ant-card-body]:!pb-6 mt-2 min-h-[calc(100vh-160px)]`}
-      >
+      <Card className={`CatePage [&>.ant-card-body]:!p-[30px_20px] [&>.ant-card-body]:!pb-6 mt-2 min-h-[calc(100vh-160px)]`}>
         <Spin spinning={loading}>
           <Tree defaultExpandAll={true} treeData={treeData(list)} />
         </Spin>
 
-        <Modal
-          loading={editLoading}
-          title={isMethod === 'edit' ? '编辑分类' : '新增分类'}
-          open={isModelOpen}
-          onCancel={closeModel}
-          destroyOnClose
-          footer={null}
-        >
+        <Modal loading={editLoading} title={isMethod === 'edit' ? '编辑分类' : '新增分类'} open={isModelOpen} onCancel={closeModel} destroyOnClose footer={null}>
           <Form form={form} layout="vertical" initialValues={cate} size="large" preserve={false} className="mt-6">
             <Form.Item label="名称" name="name" rules={[{ required: true, message: '分类名称不能为空' }]}>
               <Input placeholder="请输入分类名称" />
@@ -215,7 +203,7 @@ const CatePage = () => {
               <Radio.Group
                 onChange={(e) => {
                   const type = e.target.value;
-                  
+
                   if (type === 'nav') {
                     setIsCateShow(true);
                   } else {

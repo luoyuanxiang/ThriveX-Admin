@@ -1,15 +1,16 @@
 import { useState } from 'react';
+
 import { Button, Dropdown, message, Modal } from 'antd';
-import { delLinkDataAPI, auditWebDataAPI } from '@/api/Web';
+import dayjs from 'dayjs';
+
 import { auditCommentDataAPI, delCommentDataAPI, addCommentDataAPI } from '@/api/Comment';
 import { auditWallDataAPI, delWallDataAPI } from '@/api/Wall';
+import { delLinkDataAPI, auditWebDataAPI } from '@/api/Web';
+import { sendDismissEmailAPI, sendReplyWallEmailAPI } from '@/api/Email';
 
-import dayjs from 'dayjs';
 import RandomAvatar from '@/components/RandomAvatar';
-
 import { useUserStore, useWebStore } from '@/stores';
 import TextArea from 'antd/es/input/TextArea';
-import { sendDismissEmailAPI, sendReplyWallEmailAPI } from '@/api/Email';
 
 type Menu = 'comment' | 'link' | 'wall';
 
@@ -181,11 +182,7 @@ export default ({ item, type, fetchData, setLoading }: ListItemProps) => {
 
       <div className="flex justify-between md:p-7 !pt-3 rounded-md transition-colors">
         <div className="flex">
-          {item.avatar || item.image ? (
-            <img src={item.avatar || item.image} alt="" className="w-13 h-13 border border-stroke rounded-full" />
-          ) : (
-            <RandomAvatar className="w-13 h-13 border border-stroke rounded-full" />
-          )}
+          {item.avatar || item.image ? <img src={item.avatar || item.image} alt="" className="w-13 h-13 border border-stroke rounded-full" /> : <RandomAvatar className="w-13 h-13 border border-stroke rounded-full" />}
 
           <div className="flex flex-col justify-center ml-4 px-4 py-2 min-w-[210px] text-xs md:text-sm bg-[#F9F9FD] dark:bg-[#4e5969] rounded-md">
             {type === 'link' ? (
@@ -220,12 +217,7 @@ export default ({ item, type, fetchData, setLoading }: ListItemProps) => {
                 </div>
                 <div>
                   所属文章：
-                  <a
-                    href={`${web.url}/article/${item.articleId}`}
-                    target="_blank"
-                    className="hover:text-primary"
-                    rel="noreferrer"
-                  >
+                  <a href={`${web.url}/article/${item.articleId}`} target="_blank" className="hover:text-primary" rel="noreferrer">
                     {item.articleTitle || '暂无'}
                   </a>
                 </div>
@@ -265,29 +257,14 @@ export default ({ item, type, fetchData, setLoading }: ListItemProps) => {
         </div>
       </div>
 
-      <Modal
-        title={btnType === 'reply' ? '回复内容' : '驳回原因'}
-        open={isModalOpen}
-        footer={null}
-        onCancel={() => setIsModalOpen(false)}
-      >
-        <TextArea
-          value={btnType === 'reply' ? replyInfo : dismissInfo}
-          onChange={(e) => (btnType === 'reply' ? setReplyInfo(e.target.value) : setDismissInfo(e.target.value))}
-          placeholder={btnType === 'reply' ? '请输入回复内容' : '请输入驳回原因'}
-          autoSize={{ minRows: 3, maxRows: 5 }}
-        />
+      <Modal title={btnType === 'reply' ? '回复内容' : '驳回原因'} open={isModalOpen} footer={null} onCancel={() => setIsModalOpen(false)}>
+        <TextArea value={btnType === 'reply' ? replyInfo : dismissInfo} onChange={(e) => (btnType === 'reply' ? setReplyInfo(e.target.value) : setDismissInfo(e.target.value))} placeholder={btnType === 'reply' ? '请输入回复内容' : '请输入驳回原因'} autoSize={{ minRows: 3, maxRows: 5 }} />
 
         <div className="flex space-x-4">
           <Button className="w-full mt-2" onClick={() => setIsModalOpen(false)}>
             取消
           </Button>
-          <Button
-            type="primary"
-            onClick={btnType === 'reply' ? handleReply : handleDismiss}
-            loading={btnLoading}
-            className="w-full mt-2"
-          >
+          <Button type="primary" onClick={btnType === 'reply' ? handleReply : handleDismiss} loading={btnLoading} className="w-full mt-2">
             确定
           </Button>
         </div>

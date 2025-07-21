@@ -1,22 +1,23 @@
 import { useState, useEffect } from 'react';
 import { Table, Button, Tag, notification, Card, Popconfirm, Form, Input, DatePicker, Modal, Spin, message } from 'antd';
-import { titleSty } from '@/styles/sty';
-import Title from '@/components/Title';
-import { delFootprintDataAPI, getFootprintListAPI, addFootprintDataAPI, editFootprintDataAPI, getFootprintDataAPI } from '@/api/Footprint';
-import type { FilterForm, Footprint } from '@/types/app/footprint';
 import { GiPositionMarker } from 'react-icons/gi';
 import { IoSearch } from 'react-icons/io5';
 import dayjs from 'dayjs';
 import axios from 'axios';
 import { CloudUploadOutlined, DeleteOutlined, FormOutlined } from '@ant-design/icons';
+
+import { titleSty } from '@/styles/sty';
+import Title from '@/components/Title';
 import Material from '@/components/Material';
+import { delFootprintDataAPI, getFootprintListAPI, addFootprintDataAPI, editFootprintDataAPI, getFootprintDataAPI } from '@/api/Footprint';
 import { getEnvConfigDataAPI } from '@/api/Config';
+import type { FilterForm, Footprint } from '@/types/app/footprint';
 
 export default () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [searchLoading, setSearchLoading] = useState<boolean>(false);
-  const [btnLoading, setBtnLoading] = useState(false)
-  const [editLoading, setEditLoading] = useState(false)
+  const [btnLoading, setBtnLoading] = useState(false);
+  const [editLoading, setEditLoading] = useState(false);
 
   const [gaodeApKey, setGaodeApKey] = useState<string>('');
   const [footprintList, setFootprintList] = useState<Footprint[]>([]);
@@ -54,7 +55,7 @@ export default () => {
       key: 'content',
       align: 'center',
       width: 400,
-      render: (value: string) => <div className="line-clamp-3">{value}</div>
+      render: (value: string) => <div className="line-clamp-3">{value}</div>,
     },
     {
       title: '坐标纬度',
@@ -62,7 +63,7 @@ export default () => {
       key: 'position',
       align: 'center',
       width: 250,
-      render: (value: string) => <Tag>{value}</Tag>
+      render: (value: string) => <Tag>{value}</Tag>,
     },
     {
       title: '时间',
@@ -72,7 +73,7 @@ export default () => {
       width: 230,
       render: (time: string) => dayjs(+time).format('YYYY-MM-DD HH:mm:ss'),
       sorter: (a: Footprint, b: Footprint) => +a.createTime! - +b.createTime!,
-      showSorterTooltip: false
+      showSorterTooltip: false,
     },
     {
       title: '操作',
@@ -95,8 +96,8 @@ export default () => {
   // 获取高德地图秘钥
   const getEnvConfigData = async () => {
     const { data } = await getEnvConfigDataAPI('gaode_coordinate');
-    setGaodeApKey(data.value.key)
-  }
+    setGaodeApKey(data.value.key);
+  };
 
   const getFootprintList = async () => {
     try {
@@ -112,7 +113,7 @@ export default () => {
 
   useEffect(() => {
     setLoading(true);
-    getEnvConfigData()
+    getEnvConfigData();
     getFootprintList();
   }, []);
 
@@ -121,7 +122,7 @@ export default () => {
     form.resetFields();
     setFootprint({} as Footprint);
     setIsModelOpen(false);
-  }
+  };
 
   const delFootprintData = async (id: number) => {
     setLoading(true);
@@ -152,8 +153,8 @@ export default () => {
 
       const { data } = await getFootprintDataAPI(id);
 
-      data.images = (data.images as string[]).join('\n')
-      data.createTime = dayjs(+data.createTime)
+      data.images = (data.images as string[]).join('\n');
+      data.createTime = dayjs(+data.createTime);
 
       setFootprint(data);
       form.setFieldsValue(data);
@@ -167,11 +168,11 @@ export default () => {
 
   const onSubmit = async () => {
     try {
-      setBtnLoading(true)
+      setBtnLoading(true);
 
       form.validateFields().then(async (values: Footprint) => {
-        values.createTime = values.createTime.valueOf()
-        values.images = values.images ? (values.images as string).split('\n') : []
+        values.createTime = values.createTime.valueOf();
+        values.images = values.images ? (values.images as string).split('\n') : [];
 
         if (isMethod === 'edit') {
           await editFootprintDataAPI({ ...footprint, ...values });
@@ -181,15 +182,15 @@ export default () => {
           message.success('🎉 新增足迹成功');
         }
 
-        setBtnLoading(false)
+        setBtnLoading(false);
         getFootprintList();
-        reset()
+        reset();
       });
 
-      setBtnLoading(false)
+      setBtnLoading(false);
     } catch (error) {
       console.error(error);
-      setBtnLoading(false)
+      setBtnLoading(false);
     }
   };
 
@@ -197,61 +198,63 @@ export default () => {
 
   const onFilterSubmit = async (values: FilterForm) => {
     try {
-      setLoading(true)
+      setLoading(true);
 
       const query: FilterData = {
         key: values.address,
         startDate: values.createTime && values.createTime[0].valueOf() + '',
-        endDate: values.createTime && values.createTime[1].valueOf() + ''
-      }
+        endDate: values.createTime && values.createTime[1].valueOf() + '',
+      };
 
       const { data } = await getFootprintListAPI({ query });
       setFootprintList(data);
 
-      setLoading(false)
+      setLoading(false);
     } catch (error) {
       console.error(error);
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   // 通过详细地址获取纬度
   const getGeocode = async () => {
     try {
-      setSearchLoading(true)
+      setSearchLoading(true);
 
-      const address = form.getFieldValue('address')
+      const address = form.getFieldValue('address');
 
       const { data } = await axios.get('https://restapi.amap.com/v3/geocode/geo', {
         params: {
           address,
-          key: gaodeApKey
-        }
+          key: gaodeApKey,
+        },
       });
 
       if (data.geocodes.length > 0) {
-        const location = data.geocodes[0].location
-        form.setFieldValue('position', location)
+        const location = data.geocodes[0].location;
+        form.setFieldValue('position', location);
 
         // 立即触发校验
         form.validateFields(['position']);
 
-        setSearchLoading(false)
+        setSearchLoading(false);
         return data.geocodes[0].location;
       } else {
-        setSearchLoading(false)
+        setSearchLoading(false);
         message.warning('未找到该地址的经纬度');
       }
     } catch (error) {
       console.error(error);
-      setSearchLoading(false)
+      setSearchLoading(false);
     }
   };
 
   return (
     <div>
       <Title value="足迹管理">
-        <Button type="primary" size="large" onClick={addFootprintData}>新增足迹</Button>
+        <Button type="primary" size="large" onClick={addFootprintData}>
+          新增足迹
+        </Button>
       </Title>
 
       <Card className="my-2 overflow-scroll">
@@ -266,7 +269,9 @@ export default () => {
             </Form.Item>
 
             <Form.Item className="pr-6">
-              <Button type="primary" htmlType="submit">查询</Button>
+              <Button type="primary" htmlType="submit">
+                查询
+              </Button>
             </Form.Item>
           </Form>
         </div>
@@ -281,7 +286,7 @@ export default () => {
           scroll={{ x: 'max-content' }}
           pagination={{
             position: ['bottomCenter'],
-            pageSize: 8
+            pageSize: 8,
           }}
         />
       </Card>
@@ -303,10 +308,7 @@ export default () => {
 
             <div className="relative">
               <Form.Item label="图片" name="images">
-                <Input.TextArea
-                  autoSize={{ minRows: 2, maxRows: 10 }}
-                  placeholder="请输入图片链接"
-                />
+                <Input.TextArea autoSize={{ minRows: 2, maxRows: 10 }} placeholder="请输入图片链接" />
               </Form.Item>
 
               <div onClick={() => setIsMaterialModalOpen(true)} className="absolute bottom-2 right-2 bg-white rounded-full border border-stroke cursor-pointer">
@@ -315,10 +317,7 @@ export default () => {
             </div>
 
             <Form.Item label="内容" name="content">
-              <Input.TextArea
-                autoSize={{ minRows: 5, maxRows: 10 }}
-                placeholder="请输入内容"
-              />
+              <Input.TextArea autoSize={{ minRows: 5, maxRows: 10 }} placeholder="请输入内容" />
             </Form.Item>
 
             <Form.Item label="时间" name="createTime" rules={[{ required: true, message: '时间不能为空' }]} className="!mb-4">
@@ -326,7 +325,9 @@ export default () => {
             </Form.Item>
 
             <Form.Item className="!mb-0 w-full">
-              <Button type="primary" onClick={onSubmit} loading={btnLoading} className="w-full">{isMethod === 'edit' ? '编辑足迹' : '新增足迹'}</Button>
+              <Button type="primary" onClick={onSubmit} loading={btnLoading} className="w-full">
+                {isMethod === 'edit' ? '编辑足迹' : '新增足迹'}
+              </Button>
             </Form.Item>
           </Form>
         </Spin>

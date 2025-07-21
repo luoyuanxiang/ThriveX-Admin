@@ -1,13 +1,15 @@
 import { useEffect, useState, useRef } from 'react';
 import { Table, Button, Modal, Form, message, Card, Tabs } from 'antd';
-import { getEnvConfigListAPI, updateEnvConfigDataAPI, getPageConfigListAPI, updatePageConfigDataAPI } from '@/api/Config';
-import { Config } from '@/types/app/config';
-import Title from '@/components/Title';
 import { FormOutlined } from '@ant-design/icons';
-import { titleSty } from '@/styles/sty';
+import type { FormInstance } from 'antd/es/form';
+
 import CodeMirror from '@uiw/react-codemirror';
 import { json } from '@codemirror/lang-json';
-import type { FormInstance } from 'antd/es/form';
+
+import Title from '@/components/Title';
+import { getEnvConfigListAPI, updateEnvConfigDataAPI, getPageConfigListAPI, updatePageConfigDataAPI } from '@/api/Config';
+import { Config } from '@/types/app/config';
+import { titleSty } from '@/styles/sty';
 
 interface Props {
   open: boolean;
@@ -26,25 +28,16 @@ function ConfigEditModal({ open, onCancel, onSave, value, error, onChange, onFor
   return (
     <Modal title={title} open={open} onCancel={onCancel} width={1000} footer={null}>
       <Form form={form} layout="vertical" onFinish={onSave} size="large">
-        <Form.Item
-          name="value"
-          rules={[{ required: true, message: '请输入配置内容' }]}
-          className="mb-4"
-          validateStatus={error ? 'error' : ''}
-          help={error ? `JSON格式错误: ${error}` : ''}
-        >
-          <CodeMirror
-            value={value}
-            extensions={[json()]}
-            onChange={onChange}
-            theme={document.body.classList.contains('dark') ? 'dark' : 'light'}
-            basicSetup={{ lineNumbers: true, foldGutter: true }}
-            style={error ? { border: '1px solid #ff4d4f', borderRadius: 6 } : { borderRadius: 6 }}
-          />
+        <Form.Item name="value" rules={[{ required: true, message: '请输入配置内容' }]} className="mb-4" validateStatus={error ? 'error' : ''} help={error ? `JSON格式错误: ${error}` : ''}>
+          <CodeMirror value={value} extensions={[json()]} onChange={onChange} theme={document.body.classList.contains('dark') ? 'dark' : 'light'} basicSetup={{ lineNumbers: true, foldGutter: true }} style={error ? { border: '1px solid #ff4d4f', borderRadius: 6 } : { borderRadius: 6 }} />
         </Form.Item>
 
-        <Button onClick={onFormat} className="w-full mb-2">格式化</Button>
-        <Button type="primary" htmlType="submit" loading={loading} className="w-full">保存配置</Button>
+        <Button onClick={onFormat} className="w-full mb-2">
+          格式化
+        </Button>
+        <Button type="primary" htmlType="submit" loading={loading} className="w-full">
+          保存配置
+        </Button>
       </Form>
     </Modal>
   );
@@ -79,14 +72,14 @@ export default () => {
 
   // 获取配置列表
   const fetchList = async (type: 'env' | 'page') => {
-    setLoading(l => ({ ...l, [type]: true }));
+    setLoading((l) => ({ ...l, [type]: true }));
     try {
       const { data: list } = await tabConfig[type].getList();
-      setData(d => ({ ...d, [type]: list }));
+      setData((d) => ({ ...d, [type]: list }));
     } catch (e) {
       console.error(e);
     }
-    setLoading(l => ({ ...l, [type]: false }));
+    setLoading((l) => ({ ...l, [type]: false }));
   };
 
   useEffect(() => {
@@ -162,22 +155,13 @@ export default () => {
       title: '配置内容',
       dataIndex: 'value',
       key: 'value',
-      render: (value: object) => (
-        <>
-          {activeTab === 'page'
-            ? <span className="text-sm text-gray-500">内容过多，不易展示</span>
-            : <pre className="min-w-[200px] whitespace-pre-wrap break-all bg-slate-50 dark:bg-slate-800 p-2 rounded text-xs overflow-auto">{JSON.stringify(value, null, 2)}</pre>
-          }
-        </>
-      ),
+      render: (value: object) => <>{activeTab === 'page' ? <span className="text-sm text-gray-500">内容过多，不易展示</span> : <pre className="min-w-[200px] whitespace-pre-wrap break-all bg-slate-50 dark:bg-slate-800 p-2 rounded text-xs overflow-auto">{JSON.stringify(value, null, 2)}</pre>}</>,
     },
     {
       title: '操作',
       key: 'action',
       align: 'center' as const,
-      render: (_: any, record: Config) => (
-        <Button icon={<FormOutlined />} onClick={() => handleEdit(record)} />
-      ),
+      render: (_: any, record: Config) => <Button icon={<FormOutlined />} onClick={() => handleEdit(record)} />,
     },
   ];
 
@@ -188,37 +172,17 @@ export default () => {
       <Card className={`${titleSty} min-h-[calc(100vh-200px)]`}>
         <Tabs
           activeKey={activeTab}
-          onChange={key => setActiveTab(key as 'env' | 'page')}
-          items={Object.keys(tabConfig).map(key => ({
+          onChange={(key) => setActiveTab(key as 'env' | 'page')}
+          items={Object.keys(tabConfig).map((key) => ({
             key,
             label: tabConfig[key as 'env' | 'page'].label,
-            children: (
-              <Table
-                rowKey="id"
-                dataSource={data[key]}
-                columns={columns}
-                loading={loading[key]}
-                pagination={false}
-              />
-            ),
+            children: <Table rowKey="id" dataSource={data[key]} columns={columns} loading={loading[key]} pagination={false} />,
           }))}
           className="[&_.ant-tabs-nav]:mb-0 [&_.ant-tabs-nav-wrap]:justify-center"
         />
       </Card>
 
-      <ConfigEditModal
-        key={activeTab}
-        open={isModalOpen}
-        onCancel={() => setIsModalOpen(false)}
-        onSave={handleSave}
-        value={jsonValue}
-        error={jsonError}
-        onChange={handleJsonChange}
-        onFormat={handleFormatJson}
-        loading={btnLoading}
-        title={editItem ? tabConfig[activeTab].modalTitle : ''}
-        form={formRef.current[activeTab][0]}
-      />
+      <ConfigEditModal key={activeTab} open={isModalOpen} onCancel={() => setIsModalOpen(false)} onSave={handleSave} value={jsonValue} error={jsonError} onChange={handleJsonChange} onFormat={handleFormatJson} loading={btnLoading} title={editItem ? tabConfig[activeTab].modalTitle : ''} form={formRef.current[activeTab][0]} />
     </div>
   );
-}
+};

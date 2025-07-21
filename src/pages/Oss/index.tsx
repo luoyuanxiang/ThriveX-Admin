@@ -1,20 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Table, Button, Form, Input, Popconfirm, message, Card, Modal, Select } from 'antd';
-import {
-  addOssDataAPI,
-  delOssDataAPI,
-  editOssDataAPI,
-  getOssListAPI,
-  enableOssDataAPI,
-  disableOssDataAPI,
-  getOssDataAPI,
-  getOssPlatformListAPI,
-} from '@/api/Oss';
-import type { Oss } from '@/types/app/oss';
-import Title from '@/components/Title';
-import type { ColumnsType } from 'antd/es/table';
-import { titleSty } from '@/styles/sty';
 import { DeleteOutlined, FormOutlined, PoweroffOutlined, StarOutlined } from '@ant-design/icons';
+
+import Title from '@/components/Title';
+import { titleSty } from '@/styles/sty';
+import type { Oss } from '@/types/app/oss';
+import type { ColumnsType } from 'antd/es/table';
+import { addOssDataAPI, delOssDataAPI, editOssDataAPI, getOssListAPI, enableOssDataAPI, disableOssDataAPI, getOssDataAPI, getOssPlatformListAPI } from '@/api/Oss';
 
 export default () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -62,21 +54,11 @@ export default () => {
       width: 280,
       render: (_, record: Oss) => (
         <div className="space-x-2">
-          {record.isEnable ? (
-            <Button type="primary" disabled onClick={() => disableOssData(record.id!)} icon={<StarOutlined />} />
-          ) : (
-            <Button type="primary" onClick={() => enableOssData(record.id!)} icon={<PoweroffOutlined />} />
-          )}
+          {record.isEnable ? <Button type="primary" disabled onClick={() => disableOssData(record.id!)} icon={<StarOutlined />} /> : <Button type="primary" onClick={() => enableOssData(record.id!)} icon={<PoweroffOutlined />} />}
 
           <Button onClick={() => editOssData(record)} icon={<FormOutlined />} />
 
-          <Popconfirm
-            title="警告"
-            description="你确定要删除吗"
-            okText="确定"
-            cancelText="取消"
-            onConfirm={() => delOssData(record.id!)}
-          >
+          <Popconfirm title="警告" description="你确定要删除吗" okText="确定" cancelText="取消" onConfirm={() => delOssData(record.id!)}>
             <Button type="primary" danger icon={<DeleteOutlined />} />
           </Popconfirm>
         </div>
@@ -106,7 +88,6 @@ export default () => {
 
       const { data } = await getOssListAPI();
       setOssList(data);
-
     } catch (error) {
       console.error(error);
       setLoading(false);
@@ -231,14 +212,7 @@ export default () => {
         />
       </Card>
 
-      <Modal
-        loading={editLoading}
-        title={oss.id ? '编辑存储配置' : '新增存储配置'}
-        open={isModalOpen}
-        onCancel={handleCancel}
-        footer={null}
-        destroyOnClose
-      >
+      <Modal loading={editLoading} title={oss.id ? '编辑存储配置' : '新增存储配置'} open={isModalOpen} onCancel={handleCancel} footer={null} destroyOnClose>
         <Form form={form} layout="vertical" onFinish={onSubmit} size="large" className="mt-6">
           {!oss.id && (
             <Form.Item label="选择平台" name="platform" className="w-full">

@@ -1,18 +1,17 @@
 import { useState, useEffect } from 'react';
 import { Table, Button, Image, notification, Card, Popconfirm, Form, Input, DatePicker } from 'antd';
-import { titleSty } from '@/styles/sty'
-import Title from '@/components/Title';
 import { Link } from 'react-router-dom';
-
-import { delRecordDataAPI, getRecordListAPI } from '@/api/Record';
-import type { Record } from '@/types/app/record';
-
 import dayjs from 'dayjs';
 import { DeleteOutlined, FormOutlined } from '@ant-design/icons';
 
+import { titleSty } from '@/styles/sty';
+import Title from '@/components/Title';
+import { delRecordDataAPI, getRecordListAPI } from '@/api/Record';
+import type { Record } from '@/types/app/record';
+
 export interface FilterForm {
-  content: string,
-  createTime: Date[]
+  content: string;
+  createTime: Date[];
 }
 
 export default () => {
@@ -38,7 +37,7 @@ export default () => {
   };
 
   useEffect(() => {
-    getRecordList()
+    getRecordList();
   }, []);
 
   const delRecordData = async (id: number) => {
@@ -47,8 +46,8 @@ export default () => {
 
       await delRecordDataAPI(id);
       getRecordList();
-      form.resetFields()
-      notification.success({ message: '🎉 删除说说成功' })
+      form.resetFields();
+      notification.success({ message: '🎉 删除说说成功' });
 
       setBtnLoading(false);
     } catch (error) {
@@ -80,17 +79,15 @@ export default () => {
       align: 'center',
       width: 250,
       render: (text: string) => {
-        const list: string[] = JSON.parse(text || '[]')
+        const list: string[] = JSON.parse(text || '[]');
 
         return (
           <div className="flex space-x-2">
-            {
-              list.map((item, index) => (
-                <Image key={index} src={item} width={70} height={70} className="rounded-lg" />
-              ))
-            }
+            {list.map((item, index) => (
+              <Image key={index} src={item} width={70} height={70} className="rounded-lg" />
+            ))}
           </div>
-        )
+        );
       },
     },
     {
@@ -101,7 +98,7 @@ export default () => {
       width: 200,
       render: (text: string) => dayjs(+text).format('YYYY-MM-DD HH:mm:ss'),
       sorter: (a: Record, b: Record) => +a.createTime! - +b.createTime!,
-      showSorterTooltip: false
+      showSorterTooltip: false,
     },
     {
       title: '操作',
@@ -129,8 +126,8 @@ export default () => {
       const query = {
         key: values.content,
         startDate: values.createTime && values.createTime[0].valueOf() + '',
-        endDate: values.createTime && values.createTime[1].valueOf() + ''
-      }
+        endDate: values.createTime && values.createTime[1].valueOf() + '',
+      };
 
       const { data } = await getRecordListAPI({ query });
       setRecordList(data);
@@ -140,7 +137,7 @@ export default () => {
       console.error(error);
       setLoading(false);
     }
-  }
+  };
 
   return (
     <div>
@@ -157,7 +154,9 @@ export default () => {
           </Form.Item>
 
           <Form.Item className="pr-6">
-            <Button type="primary" htmlType="submit">查询</Button>
+            <Button type="primary" htmlType="submit">
+              查询
+            </Button>
           </Form.Item>
         </Form>
       </Card>

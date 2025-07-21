@@ -4,6 +4,8 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Form, Input, Button, Select, DatePicker, Cascader, message, Switch, Radio } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import { RuleObject } from 'antd/es/form';
+import dayjs from 'dayjs';
+import { CloudUploadOutlined, PictureOutlined } from '@ant-design/icons';
 
 import { addArticleDataAPI, editArticleDataAPI } from '@/api/Article';
 import { getCateListAPI } from '@/api/Cate';
@@ -14,9 +16,7 @@ import { Cate } from '@/types/app/cate';
 import { Tag } from '@/types/app/tag';
 import { Article, Status } from '@/types/app/article';
 
-import dayjs from 'dayjs';
 import Material from '@/components/Material';
-import { CloudUploadOutlined, PictureOutlined } from '@ant-design/icons';
 
 interface Props {
   data: Article;
@@ -100,9 +100,7 @@ const PublishForm = ({ data, closeModel }: Props) => {
 
   // 校验文章封面
   const validateURL = (_: RuleObject, value: string) => {
-    return !value || /^(https?:\/\/)/.test(value)
-      ? Promise.resolve()
-      : Promise.reject(new Error('请输入有效的封面链接'));
+    return !value || /^(https?:\/\/)/.test(value) ? Promise.resolve() : Promise.reject(new Error('请输入有效的封面链接'));
   };
 
   const onSubmit = async (values: FieldType, isDraft?: boolean) => {
@@ -243,8 +241,7 @@ ${content}
         [
           {
             role: 'system',
-            content:
-              '你是 Kimi，由 Moonshot AI 提供的人工智能助手，你更擅长中文和英文的对话。你会为用户提供安全，有帮助，准确的回答。',
+            content: '你是 Kimi，由 Moonshot AI 提供的人工智能助手，你更擅长中文和英文的对话。你会为用户提供安全，有帮助，准确的回答。',
           },
           { role: 'user', content: prompt },
         ],
@@ -286,21 +283,11 @@ ${content}
   };
 
   // 文件上传
-  const UploadBtn = () => (
-    <CloudUploadOutlined className="text-xl cursor-pointer" onClick={() => setIsMaterialModalOpen(true)} />
-  );
+  const UploadBtn = () => <CloudUploadOutlined className="text-xl cursor-pointer" onClick={() => setIsMaterialModalOpen(true)} />;
 
   return (
     <div>
-      <Form
-        form={form}
-        name="basic"
-        size="large"
-        layout="vertical"
-        onFinish={onSubmit}
-        autoComplete="off"
-        initialValues={initialValues}
-      >
+      <Form form={form} name="basic" size="large" layout="vertical" onFinish={onSubmit} autoComplete="off" initialValues={initialValues}>
         <Form.Item label="文章标题" name="title" rules={[{ required: true, message: '请输入文章标题' }]}>
           <Input placeholder="请输入文章标题" />
         </Form.Item>
@@ -316,35 +303,15 @@ ${content}
         </Form.Item>
 
         <Form.Item label="文章封面" name="cover" rules={[{ validator: validateURL }]}>
-          <Input
-            placeholder="请输入文章封面"
-            prefix={<PictureOutlined />}
-            addonAfter={<UploadBtn />}
-            className="customizeAntdInputAddonAfter"
-          />
+          <Input placeholder="请输入文章封面" prefix={<PictureOutlined />} addonAfter={<UploadBtn />} className="customizeAntdInputAddonAfter" />
         </Form.Item>
 
         <Form.Item label="选择分类" name="cateIds" rules={[{ required: true, message: '请选择文章分类' }]}>
-          <Cascader
-            options={cateList}
-            maxTagCount="responsive"
-            multiple
-            fieldNames={{ label: 'name', value: 'id' }}
-            placeholder="请选择文章分类"
-            className="w-full"
-          />
+          <Cascader options={cateList} maxTagCount="responsive" multiple fieldNames={{ label: 'name', value: 'id' }} placeholder="请选择文章分类" className="w-full" />
         </Form.Item>
 
         <Form.Item label="选择标签" name="tagIds">
-          <Select
-            allowClear
-            mode="tags"
-            options={tagList}
-            fieldNames={{ label: 'name', value: 'id' }}
-            filterOption={(input, option) => !!option?.name.includes(input)}
-            placeholder="请选择文章标签"
-            className="w-full"
-          />
+          <Select allowClear mode="tags" options={tagList} fieldNames={{ label: 'name', value: 'id' }} filterOption={(input, option) => !!option?.name.includes(input)} placeholder="请选择文章标签" className="w-full" />
         </Form.Item>
 
         <Form.Item label="选择发布时间" name="createTime">
@@ -368,11 +335,7 @@ ${content}
         </Form.Item>
 
         {isEncryptEnabled && (
-          <Form.Item
-            label="访问密码"
-            name={['config', 'password']}
-            rules={[{ required: isEncryptEnabled, message: '请输入访问密码' }]}
-          >
+          <Form.Item label="访问密码" name={['config', 'password']} rules={[{ required: isEncryptEnabled, message: '请输入访问密码' }]}>
             <Input.Password placeholder="请输入访问密码" />
           </Form.Item>
         )}

@@ -1,20 +1,16 @@
 import { useState, useEffect } from 'react';
+import dayjs from 'dayjs';
 
-import TextArea from 'antd/es/input/TextArea';
 import { Card, message, Table, Popconfirm, Button, Modal, Form, Input, DatePicker } from 'antd';
-
-import { addCommentDataAPI, getCommentListAPI } from '@/api/Comment';
-import { delCommentDataAPI } from '@/api/Comment';
+import TextArea from 'antd/es/input/TextArea';
 import { ColumnsType } from 'antd/es/table';
+import { DeleteOutlined, SendOutlined } from '@ant-design/icons';
 
+import { addCommentDataAPI, getCommentListAPI, delCommentDataAPI } from '@/api/Comment';
 import { titleSty } from '@/styles/sty';
 import Title from '@/components/Title';
 import { Comment, FilterForm } from '@/types/app/comment';
-
 import { useWebStore, useUserStore } from '@/stores';
-
-import dayjs from 'dayjs';
-import { DeleteOutlined, SendOutlined } from '@ant-design/icons';
 
 export default () => {
   const [loading, setLoading] = useState(false);
@@ -99,12 +95,7 @@ export default () => {
       key: 'articleTitle',
       render: (text: string, record: Comment) =>
         text ? (
-          <a
-            href={`${web.url}/article/${record.articleId}`}
-            target="_blank"
-            className="hover:text-primary"
-            rel="noreferrer"
-          >
+          <a href={`${web.url}/article/${record.articleId}`} target="_blank" className="hover:text-primary" rel="noreferrer">
             {text}
           </a>
         ) : (
@@ -134,13 +125,7 @@ export default () => {
             icon={<SendOutlined />}
           />
 
-          <Popconfirm
-            title="警告"
-            description="你确定要删除吗"
-            okText="确定"
-            cancelText="取消"
-            onConfirm={() => delCommentData(record.id!)}
-          >
+          <Popconfirm title="警告" description="你确定要删除吗" okText="确定" cancelText="取消" onConfirm={() => delCommentData(record.id!)}>
             <Button type="primary" danger icon={<DeleteOutlined />} />
           </Popconfirm>
         </div>
@@ -291,12 +276,7 @@ export default () => {
       </Modal>
 
       <Modal title="回复评论" open={isReplyModalOpen} footer={null} onCancel={() => setIsReplyModalOpen(false)}>
-        <TextArea
-          value={replyInfo}
-          onChange={(e) => setReplyInfo(e.target.value)}
-          placeholder="请输入回复内容"
-          autoSize={{ minRows: 3, maxRows: 5 }}
-        />
+        <TextArea value={replyInfo} onChange={(e) => setReplyInfo(e.target.value)} placeholder="请输入回复内容" autoSize={{ minRows: 3, maxRows: 5 }} />
 
         <div className="flex space-x-4">
           <Button className="w-full mt-2" onClick={() => setIsReplyModalOpen(false)}>

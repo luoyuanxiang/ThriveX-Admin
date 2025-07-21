@@ -1,17 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Table, Button, Tag, notification, Card, Popconfirm, Form } from 'antd';
-import { titleSty } from '@/styles/sty'
-import Title from '@/components/Title';
+import { DeleteOutlined } from '@ant-design/icons';
+import dayjs from 'dayjs';
 
+import { titleSty } from '@/styles/sty';
+import Title from '@/components/Title';
 import { delArticleDataAPI, getArticleListAPI, reductionArticleDataAPI } from '@/api/Article';
+import { useWebStore } from '@/stores';
 import type { Tag as ArticleTag } from '@/types/app/tag';
 import type { Cate } from '@/types/app/cate';
 import type { Article } from '@/types/app/article';
-
-import { useWebStore } from '@/stores';
-import dayjs from 'dayjs';
-import { DeleteOutlined } from '@ant-design/icons';
 
 export default () => {
     const [loading, setLoading] = useState<boolean>(false);
