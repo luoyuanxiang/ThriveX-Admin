@@ -9,7 +9,7 @@ import Title from '@/components/Title';
 
 import './index.scss';
 
-const CatePage = () => {
+export default () => {
   const [loading, setLoading] = useState(false);
   const [btnLoading, setBtnLoading] = useState(false);
   const [editLoading, setEditLoading] = useState(false);
@@ -227,5 +227,3 @@ const CatePage = () => {
     </div>
   );
 };
-
-export default CatePage;

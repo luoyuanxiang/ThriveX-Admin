@@ -246,15 +246,19 @@ export default () => {
           <div>
             <b>所属文章：</b> {comment?.articleTitle}
           </div>
+
           <div>
             <b>评论时间：</b> {dayjs(+comment?.createTime).format('YYYY-MM-DD HH:mm:ss')}
           </div>
+
           <div>
             <b>评论用户：</b> {comment?.name}
           </div>
+
           <div>
             <b>邮箱：</b> {comment?.email ? comment?.email : '暂无邮箱'}
           </div>
+
           <div>
             <b>网站：</b>{' '}
             {comment?.url ? (
@@ -265,6 +269,7 @@ export default () => {
               '无网站'
             )}
           </div>
+
           <div>
             <b>内容：</b> {comment?.content}
           </div>
