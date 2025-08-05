@@ -1,5 +1,5 @@
 export interface Assistant {
-  id: string;
+  id: number;
   name: string;
   url: string;
   key: string;
