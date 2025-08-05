@@ -23,7 +23,7 @@ const useVersionData = () => {
 
                 // 如果没有缓存或缓存无效，则调用接口获取数据
                 // https://api.github.com/repos/LiuYuYang01/ThriveX-Blog/releases
-                const { data } = await axios.get("https://api.github.com/repos/LiuYuYang01/ThriveX-Admin/releases/latest");
+                const { data } = await axios.get('https://api.github.com/repos/LiuYuYang01/ThriveX-Admin/releases/latest');
                 setVersion(data);
                 // 将新数据存储到 sessionStorage
                 sessionStorage.setItem('project_version', JSON.stringify(data));

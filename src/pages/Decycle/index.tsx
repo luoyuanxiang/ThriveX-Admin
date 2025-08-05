@@ -1,17 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Table, Button, Tag, notification, Card, Popconfirm, Form } from 'antd';
-import { titleSty } from '@/styles/sty'
-import Title from '@/components/Title';
+import { DeleteOutlined } from '@ant-design/icons';
+import dayjs from 'dayjs';
 
+import { titleSty } from '@/styles/sty';
+import Title from '@/components/Title';
 import { delArticleDataAPI, getArticleListAPI, reductionArticleDataAPI } from '@/api/Article';
+import { useWebStore } from '@/stores';
 import type { Tag as ArticleTag } from '@/types/app/tag';
 import type { Cate } from '@/types/app/cate';
 import type { Article } from '@/types/app/article';
-
-import { useWebStore } from '@/stores';
-import dayjs from 'dayjs';
-import { DeleteOutlined } from '@ant-design/icons';
 
 export default () => {
     const [loading, setLoading] = useState<boolean>(false);
@@ -33,6 +32,7 @@ export default () => {
 
             setLoading(false);
         } catch (error) {
+            console.error(error);
             setLoading(false);
         }
     };
@@ -52,6 +52,7 @@ export default () => {
             setCurrent(1)
             notification.success({ message: '🎉 删除文章成功' })
         } catch (error) {
+            console.error(error);
             setLoading(false);
         }
     };
@@ -62,10 +63,11 @@ export default () => {
 
             await reductionArticleDataAPI(id)
             notification.success({ message: '🎉 还原文章成功' })
-            navigate("/article")
+            navigate('/article')
 
             setLoading(false)
         } catch (error) {
+            console.error(error);
             setLoading(false);
         }
     }
@@ -87,7 +89,7 @@ export default () => {
             key: 'title',
             align: 'center',
             width: 300,
-            render: (text: string, record: Article) => <a href={`${web.url}/article/${record.id}`} target='_blank' className='hover:text-primary line-clamp-1'>{text}</a>,
+            render: (text: string, record: Article) => <a href={`${web.url}/article/${record.id}`} target="_blank" className="hover:text-primary line-clamp-1" rel="noreferrer">{text}</a>,
         },
         {
             title: '摘要',
@@ -95,7 +97,7 @@ export default () => {
             key: 'description',
             align: 'center',
             width: 350,
-            render: (text: string) => <div className='line-clamp-2'>{text ? text : '该文章暂未设置文章摘要'}</div>,
+            render: (text: string) => <div className="line-clamp-2">{text ? text : '该文章暂未设置文章摘要'}</div>,
         },
         {
             title: '分类',
@@ -149,7 +151,7 @@ export default () => {
             fixed: 'right',
             align: 'center',
             render: (_: string, record: Article) => (
-                <div className='flex justify-center space-x-2'>
+                <div className="flex justify-center space-x-2">
                     <Button onClick={() => reductionArticleData(record.id!)}>还原</Button>
 
                     <Popconfirm title="警告" description="此操作会彻底文章且无法恢复" okText="确定" cancelText="取消" onConfirm={() => delArticleData(record.id!)}>

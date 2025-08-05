@@ -1,30 +1,30 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import { Form, Input, Button, Select, DatePicker, Cascader, message, Switch, Radio } from "antd";
-import TextArea from "antd/es/input/TextArea";
-import { RuleObject } from "antd/es/form";
-
-import { addArticleDataAPI, editArticleDataAPI } from '@/api/Article'
-import { getCateListAPI } from '@/api/Cate'
-import useAssistant from '@/hooks/useAssistant';
-import { addTagDataAPI, getTagListAPI } from '@/api/Tag'
-
-import { Cate } from "@/types/app/cate";
-import { Tag } from "@/types/app/tag";
-import { Article, Status } from "@/types/app/article";
-
+import { Form, Input, Button, Select, DatePicker, Cascader, message, Switch, Radio } from 'antd';
+import TextArea from 'antd/es/input/TextArea';
+import { RuleObject } from 'antd/es/form';
 import dayjs from 'dayjs';
-import Material from "@/components/Material";
-import { CloudUploadOutlined, PictureOutlined } from "@ant-design/icons";
+import { CloudUploadOutlined, PictureOutlined } from '@ant-design/icons';
+
+import { addArticleDataAPI, editArticleDataAPI } from '@/api/Article';
+import { getCateListAPI } from '@/api/Cate';
+import useAssistant from '@/hooks/useAssistant';
+import { addTagDataAPI, getTagListAPI } from '@/api/Tag';
+
+import { Cate } from '@/types/app/cate';
+import { Tag } from '@/types/app/tag';
+import { Article, Status } from '@/types/app/article';
+
+import Material from '@/components/Material';
 
 interface Props {
-  data: Article,
-  closeModel: () => void
+  data: Article;
+  closeModel: () => void;
 }
 
 interface FieldType {
-  title: string,
+  title: string;
   createTime: number;
   cateIds: number[];
   tagIds: (number | string)[];
@@ -35,38 +35,38 @@ interface FieldType {
     status: Status;
     password: string;
     isEncrypt: number;
-  }
+  };
 }
 
 const PublishForm = ({ data, closeModel }: Props) => {
-  const [params] = useSearchParams()
-  const id = +params.get('id')!
-  const isDraftParams = Boolean(params.get('draft'))
+  const [params] = useSearchParams();
+  const id = +params.get('id')!;
+  const isDraftParams = Boolean(params.get('draft'));
 
-  const [btnLoading, setBtnLoading] = useState(false)
+  const [btnLoading, setBtnLoading] = useState(false);
 
-  const [isMaterialModalOpen, setIsMaterialModalOpen] = useState(false)
+  const [isMaterialModalOpen, setIsMaterialModalOpen] = useState(false);
 
-  const [form] = Form.useForm()
-  const navigate = useNavigate()
+  const [form] = Form.useForm();
+  const navigate = useNavigate();
 
-  const [cateList, setCateList] = useState<Cate[]>([])
-  const [tagList, setTagList] = useState<Tag[]>([])
+  const [cateList, setCateList] = useState<Cate[]>([]);
+  const [tagList, setTagList] = useState<Tag[]>([]);
   const [isEncryptEnabled, setIsEncryptEnabled] = useState(false);
 
   useEffect(() => {
-    if (!id) return form.resetFields()
+    if (!id) return form.resetFields();
 
     // 把数据处理成[[1], [4, 5], [4, 6]]格式
-    const cateIds = data?.cateList?.flatMap(item => {
+    const cateIds = data?.cateList?.flatMap((item) => {
       if (item?.children?.length) {
-        return item.children.map(child => [item.id, child.id]);
+        return item.children.map((child) => [item.id, child.id]);
       } else {
         return [[item.id]];
       }
     });
 
-    const tagIds = data.tagList!.map(item => item.id)
+    const tagIds = data.tagList!.map((item) => item.id);
 
     const formValues = {
       ...data,
@@ -75,28 +75,28 @@ const PublishForm = ({ data, closeModel }: Props) => {
       isEncrypt: !!data.config.isEncrypt,
       cateIds,
       tagIds,
-      createTime: dayjs(+data.createTime!)
-    }
+      createTime: dayjs(+data.createTime!),
+    };
 
-    form.setFieldsValue(formValues)
+    form.setFieldsValue(formValues);
     // 设置初始的加密状态
-    setIsEncryptEnabled(!!formValues.isEncrypt)
-  }, [data, id])
+    setIsEncryptEnabled(!!formValues.isEncrypt);
+  }, [data, id]);
 
   const getCateList = async () => {
-    const { data } = await getCateListAPI()
-    setCateList(data.filter(item => item.type === "cate") as Cate[])
-  }
+    const { data } = await getCateListAPI();
+    setCateList(data.filter((item) => item.type === 'cate') as Cate[]);
+  };
 
   const getTagList = async () => {
-    const { data } = await getTagListAPI()
-    setTagList(data as Tag[])
-  }
+    const { data } = await getTagListAPI();
+    setTagList(data as Tag[]);
+  };
 
   useEffect(() => {
-    getCateList()
-    getTagList()
-  }, [])
+    getCateList();
+    getTagList();
+  }, []);
 
   // 校验文章封面
   const validateURL = (_: RuleObject, value: string) => {
@@ -104,36 +104,36 @@ const PublishForm = ({ data, closeModel }: Props) => {
   };
 
   const onSubmit = async (values: FieldType, isDraft?: boolean) => {
-    setBtnLoading(true)
+    setBtnLoading(true);
 
-    values.config.isEncrypt = values.config.isEncrypt ? 1 : 0
+    values.config.isEncrypt = values.config.isEncrypt ? 1 : 0;
 
     try {
       // 如果是文章标签，则先判断是否存在，如果不存在则添加
-      let tagIds: number[] = []
-      for (const item of (values.tagIds ? values.tagIds : [])) {
-        if (typeof item === "string") {
+      const tagIds: number[] = [];
+      for (const item of values.tagIds ? values.tagIds : []) {
+        if (typeof item === 'string') {
           // 如果已经有这个标签了，就没必要再创建一个了
           // 先转换为大写进行查找，否则会出现大小写不匹配问题
-          const tag1 = tagList.find(t => t.name.toUpperCase() === item.toUpperCase())?.id;
+          const tag1 = tagList.find((t) => t.name.toUpperCase() === item.toUpperCase())?.id;
 
           if (tag1) {
-            tagIds.push(tag1)
-            continue
+            tagIds.push(tag1);
+            continue;
           }
 
           await addTagDataAPI({ name: item });
           const { data: list } = await getTagListAPI();
           // 添加成功后查找对应的标签id
-          const tag2 = list.find(t => t.name === item)?.id;
+          const tag2 = list.find((t) => t.name === item)?.id;
           if (tag2) tagIds.push(tag2);
         } else {
           tagIds.push(item);
         }
       }
 
-      values.createTime = values.createTime.valueOf()
-      values.cateIds = [...new Set(values.cateIds?.flat())]
+      values.createTime = values.createTime.valueOf();
+      values.cateIds = [...new Set(values.cateIds?.flat())];
 
       if (id && !isDraftParams) {
         await editArticleDataAPI({
@@ -144,10 +144,10 @@ const PublishForm = ({ data, closeModel }: Props) => {
           config: {
             isDraft: 0,
             isDel: 0,
-            ...values.config
-          }
-        } as any)
-        message.success("🎉 编辑成功")
+            ...values.config,
+          },
+        } as any);
+        message.success('🎉 编辑成功');
       } else {
         if (!isDraftParams) {
           await addArticleDataAPI({
@@ -158,12 +158,16 @@ const PublishForm = ({ data, closeModel }: Props) => {
             config: {
               isDraft: isDraft ? 1 : 0,
               isDel: 0,
-              ...values.config
+              ...values.config,
             },
-            createTime: values.createTime.toString()
-          })
+            createTime: values.createTime.toString(),
+          });
 
-          isDraft ? message.success("🎉 保存为草稿成功") : message.success("🎉 发布成功")
+          if (isDraft) {
+            message.success('🎉 保存为草稿成功');
+          } else {
+            message.success('🎉 发布成功');
+          }
         } else {
           // 修改草稿状态为发布文章
           await editArticleDataAPI({
@@ -173,37 +177,42 @@ const PublishForm = ({ data, closeModel }: Props) => {
             tagIds,
             config: {
               isDraft: isDraft ? 1 : 0,
-              ...values.config
-            }
-          } as any)
+              ...values.config,
+            },
+          } as any);
         }
       }
 
       // 关闭弹框
-      closeModel()
+      closeModel();
       // 清除本地持久化的数据
-      localStorage.removeItem('article_content')
+      localStorage.removeItem('article_content');
       // 如果是草稿就跳转到草稿页，否则文章页
-      isDraft ? navigate("/draft") : navigate("/article")
+      if (isDraft) {
+        navigate('/draft');
+      } else {
+        navigate('/article');
+      }
       // 初始化表单
-      form.resetFields()
+      form.resetFields();
     } catch (error) {
-      setBtnLoading(false)
+      console.error(error);
+      setBtnLoading(false);
     }
 
-    setBtnLoading(false)
-  }
+    setBtnLoading(false);
+  };
 
   // 初始表单数据
   const initialValues = {
     config: {
       top: false,
-      status: "default",
-      password: "",
-      isEncrypt: 0
+      status: 'default',
+      password: '',
+      isEncrypt: 0,
     },
-    createTime: dayjs(new Date())
-  }
+    createTime: dayjs(new Date()),
+  };
 
   const { callAssistant } = useAssistant();
   const [generating, setGenerating] = useState(false);
@@ -228,13 +237,16 @@ ${content}
 2. 简介要概括文章主要内容，不超过100字
 3. 返回格式为JSON对象，包含title和description字段`;
 
-      const response = await callAssistant([
-        {
-          role: "system",
-          content: "你是 Kimi，由 Moonshot AI 提供的人工智能助手，你更擅长中文和英文的对话。你会为用户提供安全，有帮助，准确的回答。"
-        },
-        { role: "user", content: prompt }
-      ], { max_tokens: 200, temperature: 0.3 });
+      const response = await callAssistant(
+        [
+          {
+            role: 'system',
+            content: '你是 Kimi，由 Moonshot AI 提供的人工智能助手，你更擅长中文和英文的对话。你会为用户提供安全，有帮助，准确的回答。',
+          },
+          { role: 'user', content: prompt },
+        ],
+        { max_tokens: 200, temperature: 0.3 },
+      );
 
       if (response) {
         const result = response.choices[0]?.message?.content?.trim();
@@ -242,13 +254,16 @@ ${content}
           try {
             let jsonStr = result;
             if (jsonStr.startsWith('```json')) {
-              jsonStr = jsonStr.replace(/```json/g, '').replace(/```/g, '').trim();
+              jsonStr = jsonStr
+                .replace(/```json/g, '')
+                .replace(/```/g, '')
+                .trim();
             }
 
             const { title, description } = JSON.parse(jsonStr);
             form.setFieldsValue({
               title: title || '',
-              description: description || ''
+              description: description || '',
             });
             message.success('标题和简介生成成功');
           } catch (e) {
@@ -260,6 +275,7 @@ ${content}
         }
       }
     } catch (error) {
+      console.error(error);
       message.error('调用助手失败');
     } finally {
       setGenerating(false);
@@ -267,66 +283,35 @@ ${content}
   };
 
   // 文件上传
-  const UploadBtn = () => (
-    <CloudUploadOutlined className='text-xl cursor-pointer' onClick={() => setIsMaterialModalOpen(true)} />
-  )
+  const UploadBtn = () => <CloudUploadOutlined className="text-xl cursor-pointer" onClick={() => setIsMaterialModalOpen(true)} />;
 
   return (
     <div>
-      <Form
-        form={form}
-        name="basic"
-        size="large"
-        layout="vertical"
-        onFinish={onSubmit}
-        autoComplete="off"
-        initialValues={initialValues}
-      >
-        <Form.Item label="文章标题" name="title" rules={[{ required: true, message: "请输入文章标题" }]}>
+      <Form form={form} name="basic" size="large" layout="vertical" onFinish={onSubmit} autoComplete="off" initialValues={initialValues}>
+        <Form.Item label="文章标题" name="title" rules={[{ required: true, message: '请输入文章标题' }]}>
           <Input placeholder="请输入文章标题" />
         </Form.Item>
 
         <Form.Item label="文章简介" name="description">
-          <TextArea
-            autoSize={{ minRows: 2, maxRows: 5 }}
-            showCount
-            placeholder="请输入文章简介"
-          />
+          <TextArea autoSize={{ minRows: 2, maxRows: 5 }} showCount placeholder="请输入文章简介" />
         </Form.Item>
 
         <Form.Item>
-          <Button
-            type="primary"
-            onClick={generateTitleAndDescription}
-            loading={generating}
-          >一键生成标题和简介</Button>
+          <Button type="primary" onClick={generateTitleAndDescription} loading={generating}>
+            一键生成标题和简介
+          </Button>
         </Form.Item>
 
         <Form.Item label="文章封面" name="cover" rules={[{ validator: validateURL }]}>
-          <Input placeholder="请输入文章封面" prefix={<PictureOutlined />} addonAfter={<UploadBtn />} className='customizeAntdInputAddonAfter' />
+          <Input placeholder="请输入文章封面" prefix={<PictureOutlined />} addonAfter={<UploadBtn />} className="customizeAntdInputAddonAfter" />
         </Form.Item>
 
         <Form.Item label="选择分类" name="cateIds" rules={[{ required: true, message: '请选择文章分类' }]}>
-          <Cascader
-            options={cateList}
-            maxTagCount="responsive"
-            multiple
-            fieldNames={{ label: "name", value: "id" }}
-            placeholder="请选择文章分类"
-            className="w-full"
-          />
+          <Cascader options={cateList} maxTagCount="responsive" multiple fieldNames={{ label: 'name', value: 'id' }} placeholder="请选择文章分类" className="w-full" />
         </Form.Item>
 
         <Form.Item label="选择标签" name="tagIds">
-          <Select
-            allowClear
-            mode="tags"
-            options={tagList}
-            fieldNames={{ label: 'name', value: 'id' }}
-            filterOption={(input, option) => !!option?.name.includes(input)}
-            placeholder="请选择文章标签"
-            className="w-full"
-          />
+          <Select allowClear mode="tags" options={tagList} fieldNames={{ label: 'name', value: 'id' }} filterOption={(input, option) => !!option?.name.includes(input)} placeholder="请选择文章标签" className="w-full" />
         </Form.Item>
 
         <Form.Item label="选择发布时间" name="createTime">
@@ -337,7 +322,7 @@ ${content}
           <Switch />
         </Form.Item> */}
 
-        <Form.Item label="状态" name={["config", "status"]}>
+        <Form.Item label="状态" name={['config', 'status']}>
           <Radio.Group>
             <Radio value="default">正常</Radio>
             <Radio value="no_home">不在首页显示</Radio>
@@ -345,28 +330,28 @@ ${content}
           </Radio.Group>
         </Form.Item>
 
-        <Form.Item label="是否加密" name={["config", "isEncrypt"]} valuePropName="checked">
+        <Form.Item label="是否加密" name={['config', 'isEncrypt']} valuePropName="checked">
           <Switch onChange={(checked: boolean) => setIsEncryptEnabled(checked)} />
         </Form.Item>
 
         {isEncryptEnabled && (
-          <Form.Item
-            label="访问密码"
-            name={["config", "password"]}
-            rules={[{ required: isEncryptEnabled, message: '请输入访问密码' }]}
-          >
+          <Form.Item label="访问密码" name={['config', 'password']} rules={[{ required: isEncryptEnabled, message: '请输入访问密码' }]}>
             <Input.Password placeholder="请输入访问密码" />
           </Form.Item>
         )}
 
         <Form.Item className="!mb-0">
-          <Button type="primary" htmlType="submit" loading={btnLoading} className="w-full">{(id && !isDraftParams) ? "编辑文章" : "发布文章"}</Button>
+          <Button type="primary" htmlType="submit" loading={btnLoading} className="w-full">
+            {id && !isDraftParams ? '编辑文章' : '发布文章'}
+          </Button>
         </Form.Item>
 
         {/* 草稿和编辑状态下不再显示保存草稿按钮 */}
         {((isDraftParams && id) || !id) && (
           <Form.Item className="!mt-2 !mb-0">
-            <Button className="w-full" onClick={() => form.validateFields().then(values => onSubmit(values, true))}>{isDraftParams ? '保存' : '保存为草稿'}</Button>
+            <Button className="w-full" onClick={() => form.validateFields().then((values) => onSubmit(values, true))}>
+              {isDraftParams ? '保存' : '保存为草稿'}
+            </Button>
           </Form.Item>
         )}
       </Form>
@@ -376,7 +361,7 @@ ${content}
         open={isMaterialModalOpen}
         onClose={() => setIsMaterialModalOpen(false)}
         onSelect={(url) => {
-          form.setFieldValue("cover", url[0]);
+          form.setFieldValue('cover', url[0]);
           form.validateFields(['cover']); // 手动触发 image 字段的校验
         }}
       />

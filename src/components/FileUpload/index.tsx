@@ -6,7 +6,7 @@ import { DirList } from '@/types/app/file';
 import { baseURL } from '@/utils/request';
 import Compressor from 'compressorjs';
 
-interface UploadFileProps {
+interface Props {
   multiple?: boolean;
   dir: DirList;
   open: boolean;
@@ -14,13 +14,7 @@ interface UploadFileProps {
   onCancel: () => void;
 }
 
-export default ({
-  multiple,
-  dir,
-  open,
-  onCancel,
-  onSuccess,
-}: UploadFileProps) => {
+export default ({ multiple, dir, open, onCancel, onSuccess }: Props) => {
   const store = useUserStore();
   const dragCounterRef = useRef(0);
 
@@ -77,10 +71,10 @@ export default ({
         // 把数据写入到剪贴板
         await navigator.clipboard.writeText(data.join('\n'));
       } catch (error) {
+        console.error(error);
         message.error('复制到剪贴板失败，请手动复制');
         onSuccess(data);
         setIsLoading(false);
-        // onCloseModel()
         return;
       }
 
@@ -89,7 +83,7 @@ export default ({
       onCloseModel();
     } catch (error) {
       message.error('文件上传失败：' + (error as Error).message);
-      onCloseModel()
+      onCloseModel();
     }
   };
 
@@ -157,9 +151,7 @@ export default ({
             <Radio.Group
               defaultValue={0}
               value={isCompressionUpload ? 1 : 0}
-              onChange={(e) =>
-                setIsCompressionUpload(e.target.value ? true : false)
-              }
+              onChange={(e) => setIsCompressionUpload(e.target.value ? true : false)}
             >
               <Radio value={0}>无损上传</Radio>
               <Radio value={1}>压缩上传</Radio>
@@ -195,30 +187,18 @@ export default ({
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
             className={`w-full h-40 p-4 border border-dashed rounded-lg transition-all duration-300 ${
-              isDragging
-                ? 'border-primary bg-primary/5'
-                : 'border-[#D7D7D7] hover:border-primary bg-[#FAFAFA]'
+              isDragging ? 'border-primary bg-primary/5' : 'border-[#D7D7D7] hover:border-primary bg-[#FAFAFA]'
             } space-y-2 cursor-pointer`}
           >
             <div className="flex justify-center">
               <InboxOutlined className="text-5xl text-primary" />
             </div>
 
-            <p className="text-base text-center">
-              {isDragging ? '释放文件以上传' : '点击或拖动文件到此区域进行上传'}
-            </p>
-            <p className="text-sm text-[#999] text-center">
-              支持单个或多个上传
-            </p>
+            <p className="text-base text-center">{isDragging ? '释放文件以上传' : '点击或拖动文件到此区域进行上传'}</p>
+            <p className="text-sm text-[#999] text-center">支持单个或多个上传</p>
           </div>
 
-          <input
-            multiple={multiple}
-            type="file"
-            onChange={handleFileInput}
-            ref={fileInputRef}
-            className="hidden"
-          />
+          <input multiple={multiple} type="file" onChange={handleFileInput} ref={fileInputRef} className="hidden" />
         </Spin>
       </Modal>
     </>

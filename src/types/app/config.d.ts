@@ -25,8 +25,8 @@ export interface Web {
     create_time?: number
 }
 
-export type ArticleLayout = "classics" | "card" | "waterfall" | ""
-export type RightSidebar = "author" | "hotArticle" | "randomArticle" | "newComments"
+export type ArticleLayout = 'classics' | 'card' | 'waterfall' | ''
+export type RightSidebar = 'author' | 'hotArticle' | 'randomArticle' | 'newComments'
 
 // 主题配置
 export interface Theme {

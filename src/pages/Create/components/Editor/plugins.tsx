@@ -1,15 +1,3 @@
-import { Modal, Input, message } from 'antd';
-
-import videoSvg from "./icon/video.svg?raw";
-import markerSvg from './icon/marker.svg?raw';
-import calloutSvg from './icon/callout.svg?raw';
-import noteSvg from './icon/note.svg?raw';
-import tipSvg from './icon/tip.svg?raw';
-import warningSvg from './icon/warning.svg?raw';
-import checkSvg from './icon/check.svg?raw';
-import dangerSvg from './icon/danger.svg?raw';
-import imageSvg from './icon/image.svg?raw';
-
 import gemoji from '@bytemd/plugin-gemoji';
 import gfm from '@bytemd/plugin-gfm';
 import highlight from '@bytemd/plugin-highlight';
@@ -23,6 +11,17 @@ import { remarkMark } from 'remark-mark-highlight';
 import type { Plugin } from 'unified';
 import { visit } from 'unist-util-visit';
 import type { Element, Root } from 'hast';
+import { Modal, Input, message } from 'antd';
+
+import videoSvg from './icon/video.svg?raw';
+import markerSvg from './icon/marker.svg?raw';
+import calloutSvg from './icon/callout.svg?raw';
+import noteSvg from './icon/note.svg?raw';
+import tipSvg from './icon/tip.svg?raw';
+import warningSvg from './icon/warning.svg?raw';
+import checkSvg from './icon/check.svg?raw';
+import dangerSvg from './icon/danger.svg?raw';
+import imageSvg from './icon/image.svg?raw';
 
 const rehypeDouyinVideo: Plugin<[], Root> = () => {
   return (tree) => {
@@ -81,7 +80,7 @@ const videos = (): BytemdPlugin => {
               title: '插入抖音视频',
               content: (
                 <div>
-                  <div className='mb-2 text-xs'>目前仅支持插入抖音视频</div>
+                  <div className="mb-2 text-xs">目前仅支持插入抖音视频</div>
                   <Input placeholder="请输入抖音视频ID" onChange={(e) => videoId = e.target.value.trim()} />
                 </div>
               ),
@@ -115,7 +114,7 @@ const markers = (): BytemdPlugin => {
         handler: {
           type: 'action',
           click: (ctx) => {
-            ctx.wrapText("==", "==");
+            ctx.wrapText('==', '==');
           }
         }
       }

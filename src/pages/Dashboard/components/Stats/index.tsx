@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react"
-import { Spin } from "antd";
-import VisitorsStatisChat from "./components/VisitorsStatisChat"
+import { useEffect, useState } from 'react'
+import { Spin } from 'antd';
+import VisitorsStatisChat from './components/VisitorsStatisChat'
 import NewOldVisitors from './components/NewOldVisitors'
-import CardDataStats from "@/components/CardDataStats"
+import CardDataStats from '@/components/CardDataStats'
 
-import { AiOutlineEye, AiOutlineMeh, AiOutlineStock, AiOutlineFieldTime } from "react-icons/ai";
+import { AiOutlineEye, AiOutlineMeh, AiOutlineStock, AiOutlineFieldTime } from 'react-icons/ai';
 import dayjs from 'dayjs';
-import { getStatisAPI } from "@/api/Statis";
+import { getStatisAPI } from '@/api/Statis';
 
 export default () => {
     const [loading, setLoading] = useState(false)
@@ -15,10 +15,10 @@ export default () => {
         pv: 0,
         ip: 0,
         bounce: 0,
-        avgTime: "",
+        avgTime: '',
     });
 
-    const date = dayjs(new Date()).format("YYYY/MM/DD");
+    const date = dayjs(new Date()).format('YYYY/MM/DD');
 
     const formatTime = (seconds: number) => {
         // 四舍五入到最接近的整数
@@ -35,7 +35,7 @@ export default () => {
         try {
             setLoading(true)
 
-            const { data } = await getStatisAPI("overview", date, date);
+            const { data } = await getStatisAPI('overview', date, date);
             const { result } = data as any;
 
             let pv = 0;
@@ -82,6 +82,7 @@ export default () => {
 
             setLoading(false)
         } catch (error) {
+            console.error(error);
             setLoading(false)
         }
     };

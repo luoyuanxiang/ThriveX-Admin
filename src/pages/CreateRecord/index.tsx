@@ -1,18 +1,15 @@
-import { useEffect, useState, useRef } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect, useState, useRef } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Button, Card, Dropdown, Image, Input, message, Modal, Spin } from 'antd';
+import { BiLogoTelegram } from 'react-icons/bi';
+import { LuImagePlus } from 'react-icons/lu';
+import { RiDeleteBinLine } from 'react-icons/ri';
 
-import { Button, Card, Dropdown, Image, Input, message, Modal, Spin } from "antd"
-
-import { addRecordDataAPI, editRecordDataAPI, getRecordDataAPI } from '@/api/Record'
-
-import Title from "@/components/Title"
-import { titleSty } from "@/styles/sty"
-
-import { BiLogoTelegram } from "react-icons/bi";
-import { LuImagePlus } from "react-icons/lu";
-import { RiDeleteBinLine } from "react-icons/ri";
-import Material from "@/components/Material";
-import WangEditor from "@/components/WangEditor";
+import Title from '@/components/Title';
+import { titleSty } from '@/styles/sty';
+import Material from '@/components/Material';
+import WangEditor from '@/components/WangEditor';
+import { addRecordDataAPI, editRecordDataAPI, getRecordDataAPI } from '@/api/Record';
 
 interface EditorRef {
     setValue: (value: string) => void,
@@ -48,22 +45,23 @@ export default () => {
             }
 
             if (!data.content.trim().length) {
-                message.error("请输入内容")
+                message.error('请输入内容')
                 setLoading(false)
                 return
             }
 
             if (id) {
                 await editRecordDataAPI({ id, content: data.content, images: data.images })
-                message.success("编辑闪念成功")
+                message.success('编辑闪念成功')
             } else {
                 await addRecordDataAPI(data)
-                message.success("发布闪念成功")
+                message.success('发布闪念成功')
             }
 
             setLoading(false)
-            navigate("/record")
+            navigate('/record')
         } catch (error) {
+            console.error(error);
             setLoading(false)
         }
     }
@@ -78,6 +76,7 @@ export default () => {
 
             setLoading(false)
         } catch (error) {
+            console.error(error);
             setLoading(false)
         }
     }
@@ -164,7 +163,7 @@ export default () => {
                                             key={index}
                                             src={item}
                                             preview={false}
-                                            className='rounded-lg md:!w-[100px] md:!h-[100px] xs:!w-20 xs:!h-20 !w-15 !h-15 object-cover'
+                                            className="rounded-lg md:!w-[100px] md:!h-[100px] xs:!w-20 xs:!h-20 !w-15 !h-15 object-cover"
                                         />
                                     </div>
                                 ))}

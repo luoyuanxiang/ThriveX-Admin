@@ -50,6 +50,7 @@ export default function useAssistant() {
       message.success(assistant.id ? '助手已更新' : '助手已添加');
       return true;
     } catch (error) {
+      console.error(error);
       message.error('保存失败');
       return false;
     } finally {

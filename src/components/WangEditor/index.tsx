@@ -58,12 +58,12 @@ export default forwardRef((props, ref) => {
     }, [editor]);
 
     return (
-        <div className='overflow-hidden border border-stroke rounded-xl z-40 w-full'>
+        <div className="overflow-hidden border border-stroke rounded-xl z-40 w-full">
             <Toolbar
                 editor={editor}
                 defaultConfig={toolbarConfig}
                 mode="default"
-                className='border-b border-stroke'
+                className="border-b border-stroke"
             />
 
             <Editor
@@ -72,7 +72,7 @@ export default forwardRef((props, ref) => {
                 onCreated={setEditor}
                 onChange={editor => setHtml(editor.getHtml())}
                 mode="default"
-                className='min-h-64'
+                className="min-h-64"
             />
         </div>
     )

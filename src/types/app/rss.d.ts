@@ -1,5 +1,5 @@
-import { Web } from "./web";
+import { Web } from './web';
 
-export interface Rss extends Omit<Web, "id" | "type" | "typeId" | "rss"> {
+export interface Rss extends Omit<Web, 'id' | 'type' | 'typeId' | 'rss'> {
     type: string
 }
