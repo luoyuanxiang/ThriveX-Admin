@@ -24,7 +24,7 @@ export default function useAssistant() {
 
     // 设置默认助手
     const defaultAssistant = data.find(a => a.isDefault);
-    if (defaultAssistant) setAssistant(defaultAssistant.id);
+    if (defaultAssistant) setAssistant(String(defaultAssistant.id));
   }
 
   // 初始化加载助手列表
@@ -51,7 +51,6 @@ export default function useAssistant() {
       return true;
     } catch (error) {
       console.error(error);
-      message.error('保存失败');
       return false;
     } finally {
       setLoading(false);
@@ -97,7 +96,7 @@ export default function useAssistant() {
       return null;
     }
 
-    const data = list.find(a => a.id === assistant);
+    const data = list.find(a => a.id === Number(assistant));
     if (!data) {
       message.error('助手不存在');
       return null;

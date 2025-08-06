@@ -1,21 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState, useMemo } from 'react';
 import { Spin } from 'antd';
 import { ApexOptions } from 'apexcharts';
 import dayjs from 'dayjs';
 import { getStatisAPI } from '@/api/Statis';
 import ReactECharts from 'echarts-for-react';
-
-interface Result {
-    timeSpan: string[];
-    fields: string[];
-    items: [
-        string[][],
-        number[][],
-        any[],
-        any[]
-    ];
-}
+import { EChartsParams, Result, StatisResponse } from './type';
 
 export default () => {
     const [loading, setLoading] = useState<boolean>(false);
@@ -125,7 +114,7 @@ export default () => {
             try {
                 setLoading(true);
                 const { data } = await getStatisAPI('basic-overview', startDate, endDate);
-                const { result } = data as any;
+                const { result } = data as StatisResponse;
                 setResult(result);
                 setLoading(false);
             } catch (error) {
@@ -292,9 +281,9 @@ export default () => {
                                 },
                                 padding: 16,
                                 extraCssText: 'box-shadow: 0 4px 24px rgba(0,0,0,0.08); border-radius: 10px;',
-                                formatter: function (params: any) {
+                                formatter: function (params: EChartsParams[]) {
                                     let str = `<div style="font-weight:700;margin-bottom:8px;">${params[0].axisValue}${scope === 'month' ? '月' : scope === 'year' ? '年' : ''}</div>`;
-                                    params.forEach((item: any) => {
+                                    params.forEach((item: EChartsParams) => {
                                         let color;
                                         if (item.seriesName === '访客') {
                                             color = '#6a8eff';

@@ -4,6 +4,7 @@ import ReactApexChart from 'react-apexcharts';
 import dayjs from 'dayjs';
 import { Spin } from 'antd';
 import { getStatisAPI } from '@/api/Statis';
+import { StatisResponse } from '../VisitorsStatisChat/type';
 
 interface ChartThreeState {
   series: number[];
@@ -52,9 +53,9 @@ const options: ApexOptions = {
 };
 
 export default () => {
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
 
-  const [result, setResult] = useState({ newVisitors: 0, oldVisitors: 0 })
+  const [result, setResult] = useState({ newVisitors: 0, oldVisitors: 0 });
   const date = dayjs(new Date()).format('YYYY/MM/DD');
 
   const [state, setState] = useState<ChartThreeState>({
@@ -62,38 +63,35 @@ export default () => {
   });
 
   const getDataList = async () => {
-    setLoading(true)
+    setLoading(true);
 
     try {
       const { data } = await getStatisAPI('new-visitor', date, date);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { result } = data as any;
+      const { result } = data as StatisResponse;
 
-      const newVisitors = result.items[1][0][1] !== '--' ? Number(Number(result.items[1][0][1]).toFixed(2)) : 0
-      const oldVisitors = result.items[1][0][1] !== '--' ? Number((100 - result.items[1][0][1]).toFixed(2)) : 0
+      const newVisitors = result.items[1][0][1] !== '--' ? Number(Number(result.items[1][0][1]).toFixed(2)) : 0;
+      const oldVisitors = result.items[1][0][1] !== '--' ? Number((100 - Number(result.items[1][0][1])).toFixed(2)) : 0;
 
-      setState({ series: [newVisitors, oldVisitors] })
-      setResult({ newVisitors, oldVisitors })
+      setState({ series: [newVisitors, oldVisitors] });
+      setResult({ newVisitors, oldVisitors });
     } catch (error) {
       console.error(error);
-      setLoading(false)
+      setLoading(false);
     }
 
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
   useEffect(() => {
-    getDataList()
-  }, [])
+    getDataList();
+  }, []);
 
   return (
     <div className="sm:px-7.5 col-span-12 rounded-2xl border border-stroke bg-light-gradient dark:bg-dark-gradient px-5 pb-5 pt-7.5 shadow-default dark:border-transparent xl:col-span-4">
       <Spin spinning={loading}>
         <div className="mb-3 justify-between gap-4 sm:flex">
           <div>
-            <h5 className="text-xl font-semibold text-black dark:text-white">
-              新老访客
-            </h5>
+            <h5 className="text-xl font-semibold text-black dark:text-white">新老访客</h5>
           </div>
         </div>
 

@@ -6,6 +6,7 @@ import { CloudUploadOutlined, PictureOutlined } from '@ant-design/icons';
 import { Theme } from '@/types/app/config';
 import { editWebConfigDataAPI, getWebConfigDataAPI } from '@/api/Config';
 import Material from '@/components/Material';
+import { ThemeFormValues } from './type';
 
 export default () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -46,8 +47,7 @@ export default () => {
     getLayoutData();
   }, []);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const editThemeData = async (values: any) => {
+  const editThemeData = async (values: ThemeFormValues) => {
     try {
       setLoading(true);
 
