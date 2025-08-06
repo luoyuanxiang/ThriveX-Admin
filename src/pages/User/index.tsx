@@ -14,6 +14,7 @@ import Title from '@/components/Title';
 import logo from '/logo.png';
 import dayjs from 'dayjs';
 import { DeleteOutlined, FormOutlined } from '@ant-design/icons';
+import { ColumnType } from 'antd/es/table';
 
 export default () => {
   const store = useUserStore();
@@ -30,7 +31,7 @@ export default () => {
 
   const { RangePicker } = DatePicker;
 
-  const columns = [
+  const columns: ColumnType<User>[] = [
     {
       title: 'ID',
       dataIndex: 'id',
@@ -248,7 +249,7 @@ export default () => {
         <Table
           rowKey="id"
           dataSource={userList}
-          columns={columns as any}
+          columns={columns}
           loading={loading}
           pagination={{
             position: ['bottomCenter'],

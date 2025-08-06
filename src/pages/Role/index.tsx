@@ -201,7 +201,7 @@ export default () => {
   };
 
   // 设置目标路由
-  const onRouteChange: any = (list: number[]) => setTargetRouteKeys(list);
+  const onRouteChange = (targetKeys: React.Key[]) => setTargetRouteKeys(targetKeys as number[]);
 
   // 绑定路由和权限
   const onBindingRouteSubmit = async () => {

@@ -3,19 +3,19 @@ import { useEffect, useRef, useState } from 'react';
 const DropdownDefault = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  const trigger = useRef<any>(null);
-  const dropdown = useRef<any>(null);
+  const trigger = useRef<HTMLButtonElement>(null);
+  const dropdown = useRef<HTMLDivElement>(null);
 
   // 监听点击事件，如果点击发生在下拉菜单外部，则关闭下拉菜单
   useEffect(() => {
     const clickHandler = ({ target }: MouseEvent) => {
       // 如果下拉菜单未挂载，直接返回
-      if (!dropdown.current) return;
+      if (!dropdown.current || !trigger.current) return;
       // 如果下拉菜单未打开，或者点击目标在下拉菜单或触发按钮内部，则不做处理
       if (
         !dropdownOpen ||
-        dropdown.current.contains(target) ||
-        trigger.current.contains(target)
+        dropdown.current.contains(target as Node) ||
+        trigger.current.contains(target as Node)
       )
         return;
       // 否则关闭下拉菜单

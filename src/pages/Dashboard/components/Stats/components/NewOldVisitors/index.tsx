@@ -66,6 +66,7 @@ export default () => {
 
     try {
       const { data } = await getStatisAPI('new-visitor', date, date);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { result } = data as any;
 
       const newVisitors = result.items[1][0][1] !== '--' ? Number(Number(result.items[1][0][1]).toFixed(2)) : 0

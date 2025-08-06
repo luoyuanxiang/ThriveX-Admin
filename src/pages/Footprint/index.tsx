@@ -12,6 +12,7 @@ import Material from '@/components/Material';
 import { delFootprintDataAPI, getFootprintListAPI, addFootprintDataAPI, editFootprintDataAPI, getFootprintDataAPI } from '@/api/Footprint';
 import { getEnvConfigDataAPI } from '@/api/Config';
 import type { FilterForm, Footprint } from '@/types/app/footprint';
+import { ColumnType } from 'antd/es/table';
 
 export default () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -27,7 +28,7 @@ export default () => {
   const [isMethod, setIsMethod] = useState<'create' | 'edit'>('create');
   const [form] = Form.useForm();
 
-  const columns = [
+  const columns: ColumnType<Footprint>[] = [
     {
       title: 'ID',
       dataIndex: 'id',
@@ -96,7 +97,7 @@ export default () => {
   // 获取高德地图秘钥
   const getEnvConfigData = async () => {
     const { data } = await getEnvConfigDataAPI('gaode_coordinate');
-    setGaodeApKey(data.value.key);
+    setGaodeApKey((data.value as { key: string }).key);
   };
 
   const getFootprintList = async () => {
@@ -281,7 +282,7 @@ export default () => {
         <Table
           rowKey="id"
           dataSource={footprintList}
-          columns={columns as any}
+          columns={columns}
           loading={loading}
           scroll={{ x: 'max-content' }}
           pagination={{

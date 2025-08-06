@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 
 import { DownOutlined } from '@ant-design/icons';
 import { Form, Input, Button, Tree, Modal, Spin, Dropdown, Card, MenuProps, Popconfirm, message, Radio } from 'antd';
+import type { DataNode } from 'antd/es/tree';
 
 import { Cate } from '@/types/app/cate';
 import { addCateDataAPI, delCateDataAPI, editCateDataAPI, getCateDataAPI, getCateListAPI } from '@/api/Cate';
@@ -122,7 +123,7 @@ export default () => {
   };
 
   // 将数据转换为树形结构
-  const treeData = (data: Cate[]): any[] =>
+  const treeData = (data: Cate[]): DataNode[] =>
     data.map((item) => {
       const items: MenuProps['items'] = [
         {
@@ -157,7 +158,7 @@ export default () => {
             </Dropdown>
           </div>
         ),
-        key: item.id,
+        key: item.id || 0,
         children: item.children ? treeData(item.children) : [],
       };
     });

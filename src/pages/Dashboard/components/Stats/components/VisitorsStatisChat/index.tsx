@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState, useMemo } from 'react';
 import { Spin } from 'antd';
 import { ApexOptions } from 'apexcharts';

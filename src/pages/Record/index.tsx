@@ -8,6 +8,7 @@ import { titleSty } from '@/styles/sty';
 import Title from '@/components/Title';
 import { delRecordDataAPI, getRecordListAPI } from '@/api/Record';
 import type { Record } from '@/types/app/record';
+import { ColumnsType } from 'antd/es/table';
 
 export interface FilterForm {
   content: string;
@@ -56,7 +57,7 @@ export default () => {
     }
   };
 
-  const columns = [
+  const columns: ColumnsType<Record> = [
     {
       title: 'ID',
       dataIndex: 'id',
@@ -165,7 +166,7 @@ export default () => {
         <Table
           rowKey="id"
           dataSource={recordList}
-          columns={columns as any}
+          columns={columns}
           loading={loading}
           scroll={{ x: 'max-content' }}
           pagination={{

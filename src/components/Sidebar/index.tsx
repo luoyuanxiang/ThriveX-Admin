@@ -46,8 +46,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const { pathname } = location;
 
   // 创建 ref 用于触发器和侧边栏元素
-  const trigger = useRef<any>(null);
-  const sidebar = useRef<any>(null);
+  const trigger = useRef<HTMLButtonElement>(null);
+  const sidebar = useRef<HTMLDivElement>(null);
 
   // 从 localStorage 获取侧边栏展开状态
   const storedSidebarExpanded = localStorage.getItem('sidebar-expanded');
@@ -59,7 +59,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   useEffect(() => {
     const clickHandler = ({ target }: MouseEvent) => {
       if (!sidebar.current || !trigger.current) return;
-      if (!sidebarOpen || sidebar.current.contains(target) || trigger.current.contains(target)) return;
+      if (!sidebarOpen || sidebar.current.contains(target as Node) || trigger.current.contains(target as Node)) return;
       setSidebarOpen(false);
     };
     document.addEventListener('click', clickHandler);
@@ -86,8 +86,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
     }
   }, [sidebarExpanded]);
 
-  const isSideBarTheme: any = useState<'dark' | 'light'>('light');
-  // const [isSideBarTheme, setIsSideBarTheme] = useState<"dark" | "light">("dark")
+  const [isSideBarTheme] = useState<'dark' | 'light'>('dark')
 
   // 定义导航项的样式类
   const sidebarItemStyDark =

@@ -38,6 +38,14 @@ interface FieldType {
   };
 }
 
+interface AssistantResponse {
+  choices?: Array<{
+    message?: {
+      content?: string;
+    };
+  }>;
+}
+
 const PublishForm = ({ data, closeModel }: Props) => {
   const [params] = useSearchParams();
   const id = +params.get('id')!;
@@ -141,12 +149,13 @@ const PublishForm = ({ data, closeModel }: Props) => {
           ...values,
           content: data.content,
           tagIds,
+          createTime: values.createTime.toString(),
           config: {
             isDraft: 0,
             isDel: 0,
             ...values.config,
           },
-        } as any);
+        } as Article);
         message.success('🎉 编辑成功');
       } else {
         if (!isDraftParams) {
@@ -175,11 +184,13 @@ const PublishForm = ({ data, closeModel }: Props) => {
             ...values,
             content: data.content,
             tagIds,
+            createTime: values.createTime.toString(),
             config: {
               isDraft: isDraft ? 1 : 0,
+              isDel: 0,
               ...values.config,
             },
-          } as any);
+          } as Article);
         }
       }
 
@@ -249,7 +260,7 @@ ${content}
       );
 
       if (response) {
-        const result = response.choices[0]?.message?.content?.trim();
+        const result = (response as AssistantResponse).choices?.[0]?.message?.content?.trim();
         if (result) {
           try {
             let jsonStr = result;

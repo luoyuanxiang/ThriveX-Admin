@@ -46,6 +46,7 @@ export default () => {
     getLayoutData();
   }, []);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const editThemeData = async (values: any) => {
     try {
       setLoading(true);

@@ -6,6 +6,10 @@ import { getCommentListAPI } from '@/api/Comment';
 import { getLinkListAPI } from '@/api/Web';
 import { getWallListAPI } from '@/api/Wall';
 
+import { Wall } from '@/types/app/wall';
+import { Web } from '@/types/app/web';
+import { Comment as CommentType } from '@/types/app/comment';
+
 import Empty from '@/components/Empty';
 import Title from '@/components/Title';
 import List from './components/List';
@@ -21,9 +25,9 @@ export default () => {
 
   const activeSty = 'bg-[#f9f9ff] dark:bg-[#3c5370] text-primary';
   const [active, setActive] = useState<Menu>('comment');
-  const [commentList, setCommentList] = useState<any[]>([]);
-  const [linkList, setLinkList] = useState<any[]>([]);
-  const [wallList, setWallList] = useState<any[]>([]);
+  const [commentList, setCommentList] = useState<CommentType[]>([]);
+  const [linkList, setLinkList] = useState<Web[]>([]);
+  const [wallList, setWallList] = useState<Wall[]>([]);
 
   // 重新获取最新数据
   const fetchData = async (type: Menu) => {
@@ -52,7 +56,7 @@ export default () => {
     fetchData(active);
   }, [active]);
 
-  const renderList = (list: any[], type: Menu) => {
+  const renderList = (list: CommentType[] | Web[] | Wall[], type: Menu) => {
     if (list.length === 0) {
       return <Empty />;
     }

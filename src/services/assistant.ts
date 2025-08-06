@@ -132,8 +132,8 @@ export const testAssistantConnection = async (assistant: Assistant): Promise<boo
       message.error(`测试连接失败：${errMsg}`);
       return false;
     }
-  } catch (err: any) {
-    message.error(`测试连接异常：${err.message}`);
+  } catch (error) {
+    console.error(`测试连接异常：${error}`);
     return false;
   }
 };
@@ -149,7 +149,7 @@ export const callAssistantAPI = async (
     temperature?: number;
     max_tokens?: number;
   } = {},
-): Promise<any> => {
+): Promise<string> => {
   try {
     const baseUrl = assistant.url || 'https://api.deepseek.com/v1';
     const apiKey = assistant.key.trim();
@@ -181,8 +181,8 @@ export const callAssistantAPI = async (
     }
 
     return await response.json();
-  } catch (error: any) {
-    message.error(error.message || '调用助手API失败');
+  } catch (error) {
+    console.error(error);
     throw error;
   }
 };

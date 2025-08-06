@@ -36,6 +36,7 @@ export default () => {
             setLoading(true)
 
             const { data } = await getStatisAPI('overview', date, date);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const { result } = data as any;
 
             let pv = 0;

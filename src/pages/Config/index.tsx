@@ -68,7 +68,7 @@ export default () => {
   const [jsonError, setJsonError] = useState<string | null>(null);
   const [jsonValue, setJsonValue] = useState('');
   const [btnLoading, setBtnLoading] = useState(false);
-  const formRef = useRef<any>({ env: Form.useForm(), page: Form.useForm() });
+  const formRef = useRef<{ [key: string]: FormInstance[] }>({ env: Form.useForm(), page: Form.useForm() });
 
   // 获取配置列表
   const fetchList = async (type: 'env' | 'page') => {
@@ -128,9 +128,8 @@ export default () => {
     formRef.current[activeTab][0].setFieldsValue({ value });
     try {
       JSON.parse(value);
-      setJsonError(null);
-    } catch (err: any) {
-      setJsonError(err.message);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -141,9 +140,8 @@ export default () => {
       setJsonValue(formatted);
       formRef.current[activeTab][0].setFieldsValue({ value: formatted });
       setJsonError(null);
-    } catch (err: any) {
-      setJsonError(err.message);
-      message.error('格式化失败：' + err.message);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -161,7 +159,7 @@ export default () => {
       title: '操作',
       key: 'action',
       align: 'center' as const,
-      render: (_: any, record: Config) => <Button icon={<FormOutlined />} onClick={() => handleEdit(record)} />,
+      render: (_: unknown, record: Config) => <Button icon={<FormOutlined />} onClick={() => handleEdit(record)} />,
     },
   ];
 

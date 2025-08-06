@@ -15,6 +15,7 @@ import TextArea from 'antd/es/input/TextArea';
 type Menu = 'comment' | 'link' | 'wall';
 
 interface ListItemProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   item: any;
   type: Menu;
   fetchData: (type: Menu) => void;

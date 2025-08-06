@@ -23,7 +23,7 @@ const EditorMD = ({ value, onChange }: Props) => {
   const store = useUserStore();
   const [loading, setLoading] = useState(false);
   const [isMaterialModalOpen, setIsMaterialModalOpen] = useState(false);
-  const [currentCtx, setCurrentCtx] = useState<any>(null);
+  const [currentCtx, setCurrentCtx] = useState<{ appendBlock: (block: string) => void }>();
 
   useEffect(() => {
     const handleOpenMaterialModal = (event: CustomEvent) => {

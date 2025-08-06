@@ -10,6 +10,7 @@ import { useWebStore } from '@/stores';
 import type { Tag as ArticleTag } from '@/types/app/tag';
 import type { Cate } from '@/types/app/cate';
 import type { Article } from '@/types/app/article';
+import { ColumnsType } from 'antd/es/table';
 
 export default () => {
     const [loading, setLoading] = useState<boolean>(false);
@@ -57,7 +58,7 @@ export default () => {
     // 标签颜色
     const colors = ['', '#2db7f5', '#87d068', '#f50', '#108ee9'];
 
-    const columns = [
+    const columns: ColumnsType<Article> = [
         {
             title: 'ID',
             dataIndex: 'id',
@@ -122,7 +123,7 @@ export default () => {
                 <Table
                     rowKey="id"
                     dataSource={articleList}
-                    columns={columns as any}
+                    columns={columns}
                     loading={loading}
                     scroll={{ x: 'max-content' }}
                     pagination={{

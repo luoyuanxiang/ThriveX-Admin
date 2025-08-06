@@ -93,7 +93,7 @@ instance.interceptors.response.use(
 );
 
 const Request = <T>(method: string, url: string, reqParams?: object) => {
-    return instance.request<any, Response<T>>({
+    return instance.request<Response<T>, Response<T>>({
         method,
         url,
         ...reqParams,
