@@ -86,7 +86,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
     }
   }, [sidebarExpanded]);
 
-  const [isSideBarTheme] = useState<'dark' | 'light'>('dark')
+  const [isSideBarTheme] = useState<'dark' | 'light'>('light')
 
   // 定义导航项的样式类
   const sidebarItemStyDark =
