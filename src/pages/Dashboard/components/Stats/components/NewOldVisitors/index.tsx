@@ -67,6 +67,7 @@ export default () => {
 
     try {
       const { data } = await getStatisAPI('new-visitor', date, date);
+      if (!data) return setLoading(false);
       const { result } = data as StatisResponse;
 
       const newVisitors = result.items[1][0][1] !== '--' ? Number(Number(result.items[1][0][1]).toFixed(2)) : 0;

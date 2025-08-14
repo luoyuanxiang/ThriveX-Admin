@@ -41,6 +41,7 @@ export default () => {
       setLoading(true);
 
       const { data } = await getStatisAPI('overview', date, date);
+      if (!data) return setLoading(false);
       const { result } = data as StatisResponse;
 
       let pv = 0;
