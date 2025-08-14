@@ -88,6 +88,7 @@ export default () => {
 
       const { data } = await getOssListAPI();
       setOssList(data);
+      setLoading(false);
     } catch (error) {
       console.error(error);
       setLoading(false);
