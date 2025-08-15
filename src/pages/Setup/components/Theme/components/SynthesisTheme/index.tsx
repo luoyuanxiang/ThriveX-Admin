@@ -149,6 +149,7 @@ export default () => {
               <Checkbox value="randomArticle">随机推荐模块</Checkbox>
               <Checkbox value="newComments">最新评论模块</Checkbox>
               <Checkbox value="hotArticle">作者推荐模块</Checkbox>
+              <Checkbox value="study">装饰模块</Checkbox>
             </div>
           </Checkbox.Group>
 

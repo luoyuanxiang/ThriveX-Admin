@@ -78,7 +78,7 @@ export default () => {
             </Form.Item>
 
             <Form.Item className="mb-6">
-              <Button type="primary" htmlType="submit" loading={loading} className="w-full h-12 mt-4 rounded-xl shadow-lg hover:shadow-xl font-medium text-base hover:scale-105 transition-transform" block>
+              <Button type="primary" htmlType="submit" loading={loading} className="w-full h-12 mt-4 rounded-xl shadow-lg hover:shadow-xl font-medium text-base" block>
                 {loading ? '登录中...' : '登录'}
               </Button>
             </Form.Item>
