@@ -80,6 +80,10 @@ export default () => {
           <Input placeholder="记录前端、Python、Java点点滴滴" />
         </Form.Item>
 
+        <Form.Item label="百度统计 Token" name="baidu_token">
+          <Input placeholder="e5bf799a3e49312141c8b677b7bec1c2" />
+        </Form.Item>
+
         <Form.Item label="ICP 备案号" name="icp">
           <Input placeholder="豫ICP备2020031040号-1" />
         </Form.Item>
