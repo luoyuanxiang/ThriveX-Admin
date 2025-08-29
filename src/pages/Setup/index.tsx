@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import { Card } from 'antd';
+import { AiOutlineSetting } from 'react-icons/ai';
 import { BiGlobe, BiLayout, BiShieldQuarter, BiUser } from 'react-icons/bi';
 
 import Title from '@/components/Title';
@@ -8,6 +9,7 @@ import My from './components/My';
 import System from './components/System';
 import Theme from './components/Theme';
 import Web from './components/Web';
+import Other from './components/Other';
 
 interface Setup {
   title: string;
@@ -46,12 +48,12 @@ export default () => {
       icon: <BiUser className={iconSty} />,
       key: 'my',
     },
-    // {
-    //     title: "其他设置",
-    //     description: "杂七八乱的各种配置",
-    //     icon: <AiOutlineSetting className={iconSty} />,
-    //     key: "other"
-    // }
+    {
+        title: '其他设置',
+        description: '杂七八乱的各种配置',
+        icon: <AiOutlineSetting className={iconSty} />,
+        key: 'other'
+    }
   ];
 
   return (
@@ -77,7 +79,7 @@ export default () => {
             {active === 'web' && <Web />}
             {active === 'theme' && <Theme />}
             {active === 'my' && <My />}
-            {/* {active === "other" && <Other />} */}
+            {active === 'other' && <Other />}
           </div>
         </div>
       </Card>
