@@ -8,4 +8,6 @@ export interface Cate {
     order: number,
     type: string,
     children?: Cate[]
+
+    parent_id?: number[]
 }

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 import { DownOutlined } from '@ant-design/icons';
-import { Form, Input, Button, Tree, Modal, Spin, Dropdown, Card, MenuProps, Popconfirm, message, Radio } from 'antd';
+import { Form, Input, Button, Tree, Modal, Spin, Dropdown, Card, MenuProps, Popconfirm, message, Radio, Select } from 'antd';
 import type { DataNode } from 'antd/es/tree';
 
 import { Cate } from '@/types/app/cate';
@@ -123,7 +123,7 @@ export default () => {
   };
 
   // 将数据转换为树形结构
-  const treeData = (data: Cate[]): DataNode[] =>
+  const toTreeData = (data: Cate[]): DataNode[] =>
     data.map((item) => {
       const items: MenuProps['items'] = [
         {
@@ -159,9 +159,19 @@ export default () => {
           </div>
         ),
         key: item.id || 0,
-        children: item.children ? treeData(item.children) : [],
+        children: item.children ? toTreeData(item.children) : [],
       };
     });
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const toCascaderOptions: any = (data: Cate[], isRoot: boolean = true) => [
+    ...(isRoot ? [{ value: 0, label: '一级分类' }] : []),
+    ...data.map((item) => ({
+      value: item.id!,
+      label: item.name,
+      children: item.children ? toCascaderOptions(item.children, false) : undefined,
+    })),
+  ];
 
   return (
     <div>
@@ -173,7 +183,7 @@ export default () => {
 
       <Card className={`CatePage [&>.ant-card-body]:!p-[30px_20px] [&>.ant-card-body]:!pb-6 mt-2 min-h-[calc(100vh-160px)]`}>
         <Spin spinning={loading}>
-          <Tree defaultExpandAll={true} treeData={treeData(list)} />
+          <Tree defaultExpandAll={true} treeData={toTreeData(list)} />
         </Spin>
 
         <Modal loading={editLoading} title={isMethod === 'edit' ? '编辑分类' : '新增分类'} open={isModelOpen} onCancel={closeModel} destroyOnClose footer={null}>
@@ -198,6 +208,10 @@ export default () => {
 
             <Form.Item label="顺序" name="order">
               <Input placeholder="请输入分类顺序（值越小越靠前）" />
+            </Form.Item>
+
+            <Form.Item label="级别" name="level">
+              <Select options={toCascaderOptions(list)} placeholder="请选择分类级别" />
             </Form.Item>
 
             <Form.Item label="模式" name="type">
