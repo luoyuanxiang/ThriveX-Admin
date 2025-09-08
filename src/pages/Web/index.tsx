@@ -3,13 +3,15 @@ import { useEffect, useState } from 'react';
 import { Button, Card, Empty, Form, Input, Popconfirm, Select, Spin, Tabs, message } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 
-import { getLinkListAPI, addLinkDataAPI, editLinkDataAPI, delLinkDataAPI, getWebTypeListAPI } from '@/api/Web';
+import { getLinkListAPI, addLinkDataAPI, editLinkDataAPI, delLinkDataAPI, getWebTypeListAPI, getWebsiteInfoAPI } from '@/api/Web';
 import Title from '@/components/Title';
 import { WebType, Web } from '@/types/app/web';
 import { RuleObject } from 'antd/es/form';
 
 import group from './assets/svg/group.svg';
 import './index.scss';
+import Search from 'antd/es/input/Search';
+import { SearchProps } from 'antd/lib/input';
 
 export default () => {
   const [loading, setLoading] = useState(false);
@@ -166,6 +168,13 @@ export default () => {
     window.open(url, '_blank');
   };
 
+  // 获取网站信息
+  const onSearch: SearchProps['onSearch'] = async (value: string) => {
+    if (!value) return
+    const {data} = await getWebsiteInfoAPI(value)
+    form.setFieldsValue(data)
+  }
+
   const tabItems = [
     {
       label: '网站列表',
@@ -233,6 +242,11 @@ export default () => {
           <Spin spinning={editLoading}>
             <div className="w-full md:w-[500px] mx-auto">
               <Form form={form} layout="vertical" size="large" initialValues={link} onFinish={onSubmit}>
+
+                <Form.Item label="网站链接" name="url" rules={[{ required: true, message: '网站链接不能为空' }, { validator: validateURL }]}>
+                  <Search placeholder="https://liuyuyang.net/" allowClear onSearch={onSearch} />
+                </Form.Item>
+
                 <Form.Item label="网站标题" name="title" rules={[{ required: true, message: '网站标题不能为空' }]}>
                   <Input placeholder="ThriveX" />
                 </Form.Item>
@@ -247,10 +261,6 @@ export default () => {
 
                 <Form.Item label="网站图标" name="image" rules={[{ required: true, message: '网站图标不能为空' }]}>
                   <Input placeholder="https://liuyuyang.net/logo.png" />
-                </Form.Item>
-
-                <Form.Item label="网站链接" name="url" rules={[{ required: true, message: '网站链接不能为空' }, { validator: validateURL }]}>
-                  <Input placeholder="https://liuyuyang.net/" />
                 </Form.Item>
 
                 <Form.Item label="订阅地址" name="rss" rules={[{ validator: validateURL }]}>

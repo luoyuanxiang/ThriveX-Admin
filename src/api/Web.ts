@@ -18,6 +18,9 @@ export const getLinkListAPI = (data?: QueryData) => Request<Web[]>('POST', `/lin
     data: { ...data?.query },
 })
 
+// 获取网站信息
+export const getWebsiteInfoAPI = (url: string) => Request<Web>('GET', `/link/website-info?url=${url}`)
+
 // 分页获取评论列表
 export const getLinkPagingAPI = (data?: QueryData) => Request<Paginate<Web[]>>('POST', `/link/paging`, {
     data: { ...data?.query },
