@@ -214,7 +214,6 @@ export default () => {
     },
   ];
 
-  // @ts-ignore
   return (
     <div>
       <Title value="创作">
