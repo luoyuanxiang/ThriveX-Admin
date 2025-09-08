@@ -12,6 +12,7 @@ import { titleSty } from '@/styles/sty';
 
 import Editor from './components/Editor';
 import PublishForm from './components/PublishForm';
+import { Assistant } from '@/types/app/assistant';
 
 export default () => {
   const [loading, setLoading] = useState(false);
@@ -213,6 +214,7 @@ export default () => {
     },
   ];
 
+  // @ts-ignore
   return (
     <div>
       <Title value="创作">
@@ -226,7 +228,7 @@ export default () => {
             }}
           >
             <AiOutlineEdit className="text-base" />
-            {assistant ? list.find((a: { id: string | null }) => a.id === assistant)?.name || '选择助手' : '选择助手'}
+            {assistant ? list.find((a: Assistant) => a.id === Number(assistant))?.name || '选择助手' : '选择助手'}
           </Dropdown.Button>
 
           <Button className="w-full flex justify-between" onClick={saveBtn}>
