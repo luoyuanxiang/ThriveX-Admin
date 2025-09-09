@@ -57,7 +57,6 @@ export default () => {
       title: '内容',
       dataIndex: 'content',
       key: 'content',
-      width: 400,
       render: (text: string, record: Comment) => (
         <span
           className="hover:text-primary cursor-pointer line-clamp-2"
@@ -69,6 +68,31 @@ export default () => {
           {text}
         </span>
       ),
+    },
+    {
+      title: '省份',
+      dataIndex: 'province',
+      key: 'province'
+    },
+    {
+      title: '城市',
+      dataIndex: 'city',
+      key: 'city'
+    },
+    {
+      title: 'IP',
+      dataIndex: 'ip',
+      key: 'ip'
+    },
+    {
+      title: '浏览器',
+      dataIndex: 'browser',
+      key: 'browser'
+    },
+    {
+      title: '操作系统',
+      dataIndex: 'os',
+      key: 'os'
     },
     {
       title: '邮箱',
