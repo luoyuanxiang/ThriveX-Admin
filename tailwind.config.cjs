@@ -1,4 +1,4 @@
- 
+
 /* eslint-disable no-undef */
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -18,6 +18,9 @@ module.exports = {
         boxdark: '#334459',
         'boxdark-2': '#263444',
         strokedark: '#475f7d',
+      },
+      boxShadow: {
+        default: '0px 8px 13px -3px rgba(0, 0, 0, 0.07)',
       },
       backgroundImage: {
         'light-gradient': `
