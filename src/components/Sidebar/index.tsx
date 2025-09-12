@@ -90,7 +90,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
   // 定义导航项的样式类
   const sidebarItemStyDark =
-    'group relative flex items-center gap-2.5 py-2 px-4 text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 rounded-sm font-medium';
+    'group relative flex items-center gap-2.5 py-2 px-4 text-[#DEE4EE] duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 rounded-sm font-medium';
   const sidebarItemStyLight =
     'group relative flex items-center gap-2.5 py-2 px-4 text-[#444] dark:text-slate-200 duration-300 ease-in-out hover:bg-[rgba(241,241,244,0.9)] dark:hover:bg-meta-4 rounded-[10px] hover:backdrop-blur-[15px]';
   const sidebarItemActiveSty = `${isSideBarTheme === 'dark' ? 'bg-graydark dark:bg-meta-4' : '!text-primary'}`;
@@ -401,7 +401,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                   <NavLink
                                     to={subItem.to}
                                     className={({ isActive }) =>
-                                      `group relative flex items-center gap-2.5 rounded-md px-4 duration-300 ease-in-out ${isSideBarTheme === 'dark' ? 'hover:text-white text-bodydark2 font-medium' : 'hover:!text-primary text-[#666] dark:text-slate-400'} ` +
+                                      `group relative flex items-center gap-2.5 rounded-md px-4 duration-300 ease-in-out ${isSideBarTheme === 'dark' ? 'hover:text-white text-[#8A99AF] font-medium' : 'hover:!text-primary text-[#666] dark:text-slate-400'} ` +
                                       (isActive && '!text-primary')
                                     }
                                   >

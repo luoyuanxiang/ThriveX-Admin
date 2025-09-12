@@ -4,7 +4,7 @@ import Loader from './components/Loader';
 import useAuthRedirect from '@/hooks/useAuthRedirect';
 import { ConfigProvider, theme } from 'antd';
 import RouteList from './components/RouteList';
-import '@/styles/customAntd.scss';
+import '@/styles/antd.scss';
 
 import { getWebConfigDataAPI } from '@/api/Config';
 import { useWebStore, useUserStore } from './stores';

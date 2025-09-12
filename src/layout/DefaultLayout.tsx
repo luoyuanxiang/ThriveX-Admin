@@ -18,7 +18,7 @@ const DefaultLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
   }, [version]);
 
   return (
-    <div className="dark:bg-[#1A222C] dark:text-bodydark">
+    <div className="dark:bg-[#1A222C] dark:text-[#AEB7C0]">
       <div className="flex h-screen overflow-hidden">
         <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 

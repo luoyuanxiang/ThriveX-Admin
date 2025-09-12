@@ -14,7 +14,7 @@
      h4,
      h5,
      h6 {
-         @apply text-black dark:text-gray transition-colors;
+         @apply text-black dark:text-[#EFF4FB] transition-colors;
      }
 
      h1 {
@@ -81,7 +81,7 @@
      ol>li:not([id^="user-content-"]) {
 
          &::before {
-             @apply inline-block w-4 h-4 mt-1 mr-1 leading-none rounded-full text-center text-sm border border-[#11181C]   dark:border-gray;
+             @apply inline-block w-4 h-4 mt-1 mr-1 leading-none rounded-full text-center text-sm border border-[#11181C] dark:border-[#EFF4FB];
 
              counter-increment: counter;
              content: counter(counter);
@@ -104,7 +104,7 @@
          @apply text-[#EAB308] w-full overflow-visible my-10 before:content-[''];
 
          &::before {
-             @apply block w-full h-[1px] bg-gray mb-2;
+             @apply block w-full h-[1px] bg-[#EFF4FB] mb-2;
          }
      }
 
