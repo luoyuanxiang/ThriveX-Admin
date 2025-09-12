@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import Loader from './common/Loader';
+import Loader from './components/Loader';
 import useAuthRedirect from '@/hooks/useAuthRedirect';
 import { ConfigProvider, theme } from 'antd';
 import RouteList from './components/RouteList';

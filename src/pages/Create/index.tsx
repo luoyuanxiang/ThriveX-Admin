@@ -226,7 +226,7 @@ export default () => {
             }}
           >
             <AiOutlineEdit className="text-base" />
-            {assistant ? list.find((a: { id: string | null }) => a.id === assistant)?.name || '选择助手' : '选择助手'}
+            {assistant ? list.find((a) => a.id === Number(assistant))?.name || '选择助手' : '选择助手'}
           </Dropdown.Button>
 
           <Button className="w-full flex justify-between" onClick={saveBtn}>
