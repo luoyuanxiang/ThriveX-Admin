@@ -9,7 +9,7 @@ const DefaultLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
   const version = useVersionData();
 
   useEffect(() => {
-    if (version.tag_name &&version.tag_name !== import.meta.env.VITE_VERSION) {
+    if (version.tag_name && version.tag_name !== import.meta.env.VITE_VERSION) {
       notification.success({
         message: '系统升级',
         description: `请更新到 ${version.tag_name} 版本，以获得最佳体验`,
@@ -26,9 +26,7 @@ const DefaultLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
           <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
           <main>
-            <div className="mx-auto p-4">
-              {children}
-            </div>
+            <div className="mx-auto p-4">{children}</div>
           </main>
         </div>
       </div>

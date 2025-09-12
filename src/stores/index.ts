@@ -1,4 +1,4 @@
-import useWebStore from './modules/web'
-import useUserStore from './modules/user'
+import useWebStore from './modules/web';
+import useUserStore from './modules/user';
 
-export { useUserStore, useWebStore }
+export { useUserStore, useWebStore };

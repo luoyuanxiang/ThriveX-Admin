@@ -2,10 +2,7 @@ import { useEffect, useState } from 'react';
 
 type SetValue<T> = T | ((val: T) => T);
 
-function useLocalStorage<T>(
-  key: string,
-  initialValue: T
-): [T, (value: SetValue<T>) => void] {
+function useLocalStorage<T>(key: string, initialValue: T): [T, (value: SetValue<T>) => void] {
   // 存储值的状态
   // 将初始状态函数传递给useState，因此逻辑只执行一次
   const [storedValue, setStoredValue] = useState(() => {
@@ -25,10 +22,7 @@ function useLocalStorage<T>(
   useEffect(() => {
     try {
       // 允许值为函数，因此我们有与useState相同的API
-      const valueToStore =
-        typeof storedValue === 'function'
-          ? storedValue(storedValue)
-          : storedValue;
+      const valueToStore = typeof storedValue === 'function' ? storedValue(storedValue) : storedValue;
       // 保存状态
       window.localStorage.setItem(key, JSON.stringify(valueToStore));
     } catch (error) {

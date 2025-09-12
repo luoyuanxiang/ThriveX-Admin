@@ -2,13 +2,7 @@ import { useState, useEffect } from 'react';
 import { message } from 'antd';
 import { testAssistantConnection, callAssistantAPI } from '@/services/assistant';
 import { Assistant } from '@/types/app/assistant';
-import {
-  delAssistantDataAPI,
-  getAssistantListAPI,
-  addAssistantDataAPI,
-  editAssistantDataAPI,
-  setDefaultAssistantAPI
-} from '@/api/Assistant'
+import { delAssistantDataAPI, getAssistantListAPI, addAssistantDataAPI, editAssistantDataAPI, setDefaultAssistantAPI } from '@/api/Assistant';
 
 export default function useAssistant() {
   const [loading, setLoading] = useState(false);
@@ -23,13 +17,13 @@ export default function useAssistant() {
     setList(data);
 
     // 设置默认助手
-    const defaultAssistant = data.find(a => a.isDefault);
+    const defaultAssistant = data.find((a) => a.isDefault);
     if (defaultAssistant) setAssistant(String(defaultAssistant.id));
-  }
+  };
 
   // 初始化加载助手列表
   useEffect(() => {
-    getAssistantList()
+    getAssistantList();
   }, []);
 
   // 添加或更新助手
@@ -59,26 +53,26 @@ export default function useAssistant() {
 
   // 删除助手
   const delAssistantData = async (id: number) => {
-    await delAssistantDataAPI(id)
-    getAssistantList()
+    await delAssistantDataAPI(id);
+    getAssistantList();
     message.success('助手已删除');
   };
 
   // 设置默认助手
   const setDefaultAssistant = async (id: number) => {
-    await setDefaultAssistantAPI(id)
-    getAssistantList()
+    await setDefaultAssistantAPI(id);
+    getAssistantList();
     message.success('默认助手已更新');
   };
 
   // 测试助手连接
   const testConnection = async (assistant: Assistant) => {
-    setTestingMap(prev => ({ ...prev, [assistant.id]: true }));
+    setTestingMap((prev) => ({ ...prev, [assistant.id]: true }));
     try {
       const result = await testAssistantConnection(assistant);
       return result;
     } finally {
-      setTestingMap(prev => ({ ...prev, [assistant.id]: false }));
+      setTestingMap((prev) => ({ ...prev, [assistant.id]: false }));
     }
   };
 
@@ -89,14 +83,14 @@ export default function useAssistant() {
       stream?: boolean;
       temperature?: number;
       max_tokens?: number;
-    }
+    },
   ) => {
     if (!assistant) {
       message.error('请先选择助手');
       return null;
     }
 
-    const data = list.find(a => a.id === Number(assistant));
+    const data = list.find((a) => a.id === Number(assistant));
     if (!data) {
       message.error('助手不存在');
       return null;
@@ -115,6 +109,6 @@ export default function useAssistant() {
     delAssistantData,
     setDefaultAssistant,
     testConnection,
-    callAssistant
+    callAssistant,
   };
 }
