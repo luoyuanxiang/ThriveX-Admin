@@ -252,16 +252,16 @@ export default () => {
       <div className="flex w-full justify-between items-center mb-2">
         <h3 className="text-xl font-bold text-slate-800 dark:text-white">访客统计</h3>
 
-        <div className="inline-flex items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 space-x-1">
-          <button className={`rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:bg-meta-4 dark:text-white dark:hover:bg-boxdark ${scope === 'day' ? 'bg-white dark:!bg-[#4e5969] shadow-card' : ''}`} onClick={() => handleScopeChange('day')}>
+        <div className="inline-flex items-center rounded-md bg-whiter p-1.5 space-x-1">
+          <button className={`rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:text-white dark:hover:bg-boxdark ${scope === 'day' ? 'bg-white dark:!bg-[#4e5969] shadow-card' : ''}`} onClick={() => handleScopeChange('day')}>
             天
           </button>
 
-          <button className={`rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:bg-meta-4 dark:text-white dark:hover:bg-boxdark ${scope === 'month' ? 'bg-white dark:!bg-[#4e5969] shadow-card' : ''}`} onClick={() => handleScopeChange('month')}>
+          <button className={`rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:text-white dark:hover:bg-boxdark ${scope === 'month' ? 'bg-white dark:!bg-[#4e5969] shadow-card' : ''}`} onClick={() => handleScopeChange('month')}>
             月
           </button>
 
-          <button className={`rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:bg-meta-4 dark:text-white dark:hover:bg-boxdark ${scope === 'year' ? 'bg-white dark:!bg-[#4e5969] shadow-card' : ''}`} onClick={() => handleScopeChange('year')}>
+          <button className={`rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:text-white dark:hover:bg-boxdark ${scope === 'year' ? 'bg-white dark:!bg-[#4e5969] shadow-card' : ''}`} onClick={() => handleScopeChange('year')}>
             年
           </button>
         </div>
