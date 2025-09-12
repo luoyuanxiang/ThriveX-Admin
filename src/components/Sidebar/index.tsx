@@ -334,7 +334,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   return (
     <aside
       ref={sidebar}
-      className={`absolute left-0 top-0 z-99 flex h-screen w-64 flex-col overflow-y-hidden duration-300 ease-linear lg:static lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} ${isSideBarTheme === 'dark' ? 'bg-black dark:bg-boxdark' : 'bg-light-gradient dark:bg-dark-gradient border-r border-stroke dark:border-strokedark transition-all'}`}
+      className={`absolute left-0 top-0 z-[99] flex h-screen w-64 flex-col overflow-y-hidden duration-300 ease-linear lg:static lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} ${isSideBarTheme === 'dark' ? 'bg-black dark:bg-boxdark' : 'bg-light-gradient dark:bg-dark-gradient border-r border-stroke dark:border-strokedark transition-all'}`}
     >
       {/* Logo 和标题区域 */}
       <div className="flex justify-center items-center gap-2 px-6 py-5.5 pb-0 lg:pt-6">
