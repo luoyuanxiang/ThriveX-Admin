@@ -128,7 +128,7 @@ export default () => {
           const decoder = new TextDecoder();
 
           while (true) {
-            const { done, value } = await reader.read();
+            const { done, value } = await (reader as ReadableStreamDefaultReader<Uint8Array>).read();
             if (done) break;
 
             const chunk = decoder.decode(value);
@@ -183,7 +183,7 @@ export default () => {
           const decoder = new TextDecoder();
 
           while (true) {
-            const { done, value } = await reader.read();
+            const { done, value } = await (reader as ReadableStreamDefaultReader<Uint8Array>).read();
             if (done) break;
 
             const chunk = decoder.decode(value);
