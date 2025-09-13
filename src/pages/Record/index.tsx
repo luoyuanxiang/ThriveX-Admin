@@ -109,11 +109,11 @@ export default () => {
       render: (_: string, record: Record) => (
         <div className="flex justify-center space-x-2">
           <Link to={`/create_record?id=${record.id}`}>
-            <Button icon={<FormOutlined />} />
+            <Button type="text" icon={<FormOutlined className="text-primary" />} />
           </Link>
 
           <Popconfirm title="警告" description="你确定要删除吗" okText="确定" cancelText="取消" onConfirm={() => delRecordData(record.id!)}>
-            <Button type="primary" danger loading={btnLoading} icon={<DeleteOutlined />} />
+            <Button type="text" danger loading={btnLoading} icon={<DeleteOutlined />} />
           </Popconfirm>
         </div>
       ),

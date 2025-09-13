@@ -23,12 +23,12 @@ export default () => {
       title: '操作',
       key: 'action',
       render: (_: string, record: Tag) => (
-        <>
-          <Button onClick={() => editTagData(record)} icon={<FormOutlined />} />
+        <div className="space-x-2">
+          <Button type="text" onClick={() => editTagData(record)} icon={<FormOutlined className="text-primary" />} />
           <Popconfirm title="警告" description="你确定要删除吗" okText="确定" cancelText="取消" onConfirm={() => delTagData(record.id!)}>
-            <Button type="primary" danger className="ml-2" icon={<DeleteOutlined />} />
+            <Button type="text" danger icon={<DeleteOutlined />} />
           </Popconfirm>
-        </>
+        </div>
       ),
     },
   ];

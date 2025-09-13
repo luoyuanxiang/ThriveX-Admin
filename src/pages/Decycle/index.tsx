@@ -153,10 +153,10 @@ export default () => {
             align: 'center',
             render: (_: string, record: Article) => (
                 <div className="flex justify-center space-x-2">
-                    <Button onClick={() => reductionArticleData(record.id!)}>还原</Button>
+                    <Button type="text" onClick={() => reductionArticleData(record.id!)}>还原</Button>
 
                     <Popconfirm title="警告" description="此操作会彻底文章且无法恢复" okText="确定" cancelText="取消" onConfirm={() => delArticleData(record.id!)}>
-                        <Button type="primary" danger icon={<DeleteOutlined />} />
+                        <Button type="text" danger icon={<DeleteOutlined />} />
                     </Popconfirm>
                 </div>
             ),

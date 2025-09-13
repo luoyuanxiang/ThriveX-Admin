@@ -81,11 +81,12 @@ export default () => {
       key: 'action',
       fixed: 'right',
       align: 'center',
+      width: 120,
       render: (_: string, record: Footprint) => (
-        <div className="flex space-x-2">
-          <Button onClick={() => editFootprintData(record.id!)} icon={<FormOutlined />} />
+        <div className="flex justify-center space-x-2">
+          <Button type="text" onClick={() => editFootprintData(record.id!)} icon={<FormOutlined className="text-primary" />} />
           <Popconfirm title="警告" description="你确定要删除吗" okText="确定" cancelText="取消" onConfirm={() => delFootprintData(record.id!)}>
-            <Button type="primary" danger icon={<DeleteOutlined />} />
+            <Button type="text" danger icon={<DeleteOutlined />} />
           </Popconfirm>
         </div>
       ),

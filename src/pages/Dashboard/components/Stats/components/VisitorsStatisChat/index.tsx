@@ -251,7 +251,7 @@ export default () => {
   };
 
   return (
-    <div className="col-span-12 rounded-2xl border border-stroke px-5 pt-7 pb-5 shadow-default dark:border-transparent bg-light-gradient dark:bg-dark-gradient sm:px-7 xl:col-span-8">
+    <div className="col-span-12 rounded-md border border-stroke px-5 pt-7 pb-5 shadow-default dark:border-transparent bg-light-gradient dark:bg-dark-gradient sm:px-7 xl:col-span-8">
       <div className="flex w-full justify-between items-center mb-2">
         <h3 className="text-xl font-bold text-slate-800 dark:text-white">访客统计</h3>
 
@@ -329,7 +329,7 @@ export default () => {
                 axisTick: { show: false }, // 隐藏x轴刻度线
                 axisLabel: {
                   fontSize: 12,
-                  color: colorMode === 'dark' ? '#e0e0e0' : '#1a2757',
+                  color: colorMode === 'dark' ? '#475f7d' : '#1a2757',
                 },
               },
               yAxis: {
@@ -339,7 +339,7 @@ export default () => {
                 axisLine: { show: false },
                 axisLabel: {
                   fontSize: 12,
-                  color: colorMode === 'dark' ? '#e0e0e0' : '#1a2757',
+                  color: colorMode === 'dark' ? '#475f7d' : '#1a2757',
                 },
                 splitLine: {
                   lineStyle: {

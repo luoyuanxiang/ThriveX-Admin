@@ -51,15 +51,15 @@ export default () => {
       key: 'action',
       fixed: 'right',
       align: 'center',
-      width: 280,
+      width: 200,
       render: (_, record: Oss) => (
-        <div className="space-x-2">
-          {record.isEnable ? <Button type="primary" disabled onClick={() => disableOssData(record.id!)} icon={<StarOutlined />} /> : <Button type="primary" onClick={() => enableOssData(record.id!)} icon={<PoweroffOutlined />} />}
+        <div className="flex justify-center space-x-2">
+          {record.isEnable ? <Button type="text" disabled onClick={() => disableOssData(record.id!)} icon={<StarOutlined />} /> : <Button type="text" onClick={() => enableOssData(record.id!)} icon={<PoweroffOutlined />} />}
 
-          <Button onClick={() => editOssData(record)} icon={<FormOutlined />} />
+          <Button type="text" onClick={() => editOssData(record)} icon={<FormOutlined className="text-primary" />} />
 
           <Popconfirm title="警告" description="你确定要删除吗" okText="确定" cancelText="取消" onConfirm={() => delOssData(record.id!)}>
-            <Button type="primary" danger icon={<DeleteOutlined />} />
+            <Button type="text" danger icon={<DeleteOutlined />} />
           </Popconfirm>
         </div>
       ),

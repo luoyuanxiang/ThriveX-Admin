@@ -159,7 +159,7 @@ export default () => {
       title: '操作',
       key: 'action',
       align: 'center' as const,
-      render: (_: unknown, record: Config) => <Button icon={<FormOutlined />} onClick={() => handleEdit(record)} />,
+      render: (_: unknown, record: Config) => <Button type="text" icon={<FormOutlined className="text-primary" />} onClick={() => handleEdit(record)} />,
     },
   ];
 

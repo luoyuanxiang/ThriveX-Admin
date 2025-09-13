@@ -57,7 +57,7 @@ export default () => {
 
       <div className="relative w-full max-w-md">
         {/* 主登录卡片 */}
-        <div className="bg-[rgba(255,255,255,0.5)] backdrop-blur-sm rounded-2xl shadow-2xl p-8 border border-white/20">
+        <div className="bg-[rgba(255,255,255,0.5)] backdrop-blur-sm rounded-md shadow-2xl p-8 border border-white/20">
           {/* 头部区域 */}
           <div className="flex justify-center space-x-4 mb-8">
             <img src="/logo.png" alt="" className="w-12 h-12" />

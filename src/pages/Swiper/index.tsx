@@ -35,13 +35,13 @@ export default () => {
       key: 'action',
       align: 'center',
       render: (_: string, record: Swiper) => (
-        <>
-          <Button onClick={() => editSwiperData(record)} icon={<FormOutlined />} />
+        <div className="space-x-2">
+          <Button type="text" onClick={() => editSwiperData(record)} icon={<FormOutlined className="text-primary" />} />
 
           <Popconfirm title="警告" description="你确定要删除吗" okText="确定" cancelText="取消" onConfirm={() => delSwiperData(record.id!)}>
-            <Button type="primary" danger className="ml-2" icon={<DeleteOutlined />} />
+            <Button type="text" danger icon={<DeleteOutlined />} />
           </Popconfirm>
-        </>
+        </div>
       ),
     },
   ];

@@ -127,7 +127,7 @@ export default () => {
       render: (_: string, record: Wall) => (
         <div className="flex justify-center space-x-2">
           <Button
-            type={record.isChoice === 1 ? 'primary' : 'default'}
+            type="text"
             onClick={async () => {
               try {
                 setLoading(true);
@@ -140,19 +140,20 @@ export default () => {
                 setLoading(false);
               }
             }}
-            icon={record.isChoice === 1 ? <StarFilled /> : <StarOutlined />}
+            icon={record.isChoice === 1 ? <StarFilled className="text-yellow-400" /> : <StarOutlined />}
           />
 
           <Button
+            type="text"
             onClick={() => {
               setWall(record);
               setIsReplyModalOpen(true);
             }}
-            icon={<SendOutlined />}
+            icon={<SendOutlined className="text-primary" />}
           />
 
           <Popconfirm title="警告" description="你确定要删除吗" okText="确定" cancelText="取消" onConfirm={() => delWallData(record.id)}>
-            <Button type="primary" danger icon={<DeleteOutlined />} />
+            <Button type="text" danger icon={<DeleteOutlined />} />
           </Popconfirm>
         </div>
       ),

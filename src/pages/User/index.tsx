@@ -99,12 +99,13 @@ export default () => {
       key: 'action',
       fixed: 'right',
       align: 'center',
+      width: 120,
       render: (_: string, record: User) => (
-        <div className="flex space-x-2">
-          <Button onClick={() => editUserData(record.id!)} icon={<FormOutlined />} />
+        <div className="flex justify-center space-x-2">
+          <Button type="text" onClick={() => editUserData(record.id!)} icon={<FormOutlined className="text-primary" />} />
 
           <Popconfirm title="警告" description="你确定要删除吗" okText="确定" cancelText="取消" onConfirm={() => delUserData(record.id!)}>
-            <Button type="primary" danger disabled={record.id === store.user.id} icon={<DeleteOutlined />} />
+            <Button type="text" danger disabled={record.id === store.user.id} icon={<DeleteOutlined />} />
           </Popconfirm>
         </div>
       ),

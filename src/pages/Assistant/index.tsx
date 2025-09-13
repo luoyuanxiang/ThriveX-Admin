@@ -104,18 +104,19 @@ export default () => {
                   </Button>,
                   <Button
                     key="edit"
+                    type="text"
                     onClick={() => {
                       form.setFieldsValue(item);
                       setInputModelValue(item.model);
                       setAssistant(item);
                       setIsModalOpen(true);
                     }}
-                    icon={<FormOutlined />}
+                    icon={<FormOutlined className="text-primary" />}
                   />,
                   <Popconfirm key="del" title="您确定要删除这个助手吗？" onConfirm={() => delAssistantData(+item.id)} okText="确定" cancelText="取消">
-                    <Button danger icon={<DeleteOutlined />} />
+                    <Button type="text" danger icon={<DeleteOutlined />} />
                   </Popconfirm>,
-                  <Button key="default" type={item.isDefault ? 'primary' : 'default'} onClick={() => setDefaultAssistant(+item.id)}>
+                  <Button key="default" type="text" onClick={() => setDefaultAssistant(+item.id)}>
                     {item.isDefault ? '默认助手' : '设为默认'}
                   </Button>,
                 ]}
