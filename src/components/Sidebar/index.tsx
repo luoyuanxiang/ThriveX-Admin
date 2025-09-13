@@ -90,9 +90,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
   // 定义导航项的样式类
   const sidebarItemStyDark =
-    'group relative flex items-center gap-2.5 py-2 px-4 text-[#DEE4EE] duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 rounded-sm font-medium';
+    'group relative flex items-center gap-2.5 py-2 px-4 text-[#DEE4EE] duration-300 ease-in-out hover:bg-graydark dark:hover:bg-[#313D4A] rounded-sm font-medium';
   const sidebarItemStyLight =
-    'group relative flex items-center gap-2.5 py-2 px-4 text-[#444] dark:text-slate-200 duration-300 ease-in-out hover:bg-[rgba(241,241,244,0.9)] dark:hover:bg-meta-4 rounded-[10px] hover:backdrop-blur-[15px]';
+    'group relative flex items-center gap-2.5 py-2 px-4 text-[#444] dark:text-slate-200 duration-300 ease-in-out hover:bg-[rgba(241,241,244,0.9)] dark:hover:bg-[#313D4A] rounded-[10px] hover:backdrop-blur-[15px]';
   const sidebarItemActiveSty = `${isSideBarTheme === 'dark' ? 'bg-graydark' : '!text-primary'}`;
 
   // 箭头图标组件：用于显示子菜单的展开/收起状态

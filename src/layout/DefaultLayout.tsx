@@ -3,10 +3,12 @@ import { notification } from 'antd';
 import Header from '../components/Header/index';
 import Sidebar from '../components/Sidebar/index';
 import useVersionData from '@/hooks/useVersionData';
+import { useConfigStore } from '@/stores';
 
 const DefaultLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const version = useVersionData();
+  const colorMode = useConfigStore((state) => state.colorMode);
 
   useEffect(() => {
     if (version.tag_name && version.tag_name !== import.meta.env.VITE_VERSION) {
@@ -16,6 +18,17 @@ const DefaultLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
       });
     }
   }, [version]);
+
+  useEffect(() => {
+    const className = 'dark';
+    const bodyClass = window.document.body.classList;
+
+    if (colorMode === 'dark') {
+      bodyClass.add(className);
+    } else {
+      bodyClass.remove(className);
+    }
+  }, [colorMode]);
 
   return (
     <div className="dark:bg-[#1A222C] dark:text-[#AEB7C0]">

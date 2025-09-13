@@ -244,7 +244,7 @@ export default () => {
                                 : dirList.map((item, index) => (
                                     <div
                                         key={index}
-                                        className="group w-25 flex flex-col items-center cursor-pointer mx-4 my-2"
+                                        className="group w-20 flex flex-col items-center cursor-pointer mx-4 my-2"
                                         onClick={() => openDir(item.name)}>
                                         <img src={fileSvg} alt="" />
                                         <p className="group-hover:text-primary transition-colors">{item.name}</p>
