@@ -60,15 +60,16 @@ function App() {
   ) : (
     // 根据主题切换配置主题
     <ConfigProvider
-      locale={zhCN}
       theme={{
         token: {
           colorPrimary: '#60a5fa',
+          borderRadius: 4,
           colorBgBase: isDarkTheme ? '#24303F' : '#ffffff',
           colorTextBase: isDarkTheme ? '#e0e0e0' : '#000000',
         },
         algorithm: isDarkTheme ? theme.darkAlgorithm : theme.defaultAlgorithm,
       }}
+      locale={zhCN}
     >
       <RouteList />
     </ConfigProvider>

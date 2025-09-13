@@ -1,3 +1,35 @@
+/* ------------------ 自定义表单样式开始 ------------------ */
+.ant-input-outlined,
+.ant-input-number,
+.ant-select-selector,
+.ant-picker {
+    border-width: 1.5px !important;
+}
+
+/* 表单获取焦点时的阴影效果 */
+.ant-input:focus,
+.ant-input-focused,
+.ant-input-number:focus,
+.ant-input-number-focused,
+.ant-select-focused .ant-select-selector,
+.ant-picker-focused,
+.ant-textarea:focus,
+.ant-input-affix-wrapper-focused {
+    box-shadow: 0 0 0 4px rgba(5, 72, 255, 0.06) !important;
+}
+
+/* 表单校验失败时的阴影效果 */
+.ant-input-status-error:focus,
+.ant-input-status-error.ant-input-focused,
+.ant-input-number-status-error:focus,
+.ant-input-number-status-error.ant-input-number-focused,
+.ant-select-status-error.ant-select-focused .ant-select-selector,
+.ant-picker-status-error.ant-picker-focused,
+.ant-textarea-status-error:focus,
+.ant-input-affix-wrapper-status-error.ant-input-affix-wrapper-focused {
+    box-shadow: 0 0 0 4px rgba(255, 77, 79, 0.1) !important;
+}
+
 // 自定义input后置按钮样式
 .customizeAntdInputAddonAfter {
     .ant-input-group-addon {
@@ -8,6 +40,7 @@
         }
     }
 }
+/* ------------------ 自定义表单样式结束 ------------------ */
 
 // ------------------> Antd组件库暗色适配 开始 <------------------
 .ant-card {
