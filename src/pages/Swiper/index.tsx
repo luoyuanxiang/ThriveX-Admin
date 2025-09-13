@@ -188,7 +188,7 @@ export default () => {
     <div>
       <Title value="轮播图管理" />
 
-      <Card className="[&>.ant-card-body]:!pt-0 mt-2 min-h-[calc(100vh-160px)]">
+      <Card className="border-stroke [&>.ant-card-body]:!pt-0 mt-2 min-h-[calc(100vh-160px)]">
         <Tabs activeKey={tab} onChange={handleTabChange} items={tabItems} />
       </Card>
 

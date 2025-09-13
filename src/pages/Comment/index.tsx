@@ -205,7 +205,7 @@ export default () => {
     <div>
       <Title value="评论管理" />
 
-      <Card className="my-2 overflow-scroll">
+      <Card className="border-stroke my-2 overflow-scroll">
         <Form layout="inline" onFinish={onSubmit} autoComplete="off" className="flex-nowrap">
           <Form.Item label="标题" name="title" className="min-w-[200px]">
             <Input placeholder="请输入标题关键词" />

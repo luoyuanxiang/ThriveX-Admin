@@ -259,7 +259,7 @@ export default () => {
         </Button>
       </Title>
 
-      <Card className="my-2 overflow-scroll">
+      <Card className="border-stroke my-2 overflow-scroll">
         <div className="flex">
           <Form layout="inline" onFinish={onFilterSubmit} autoComplete="off" className="flex-nowrap w-full">
             <Form.Item label="地址" name="address" className="min-w-[200px]">

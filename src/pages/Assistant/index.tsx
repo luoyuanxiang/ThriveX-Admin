@@ -91,7 +91,7 @@ export default () => {
         </Button>
       </Title>
 
-      <Card>
+      <Card className="border-stroke">
         <List
           dataSource={list}
           renderItem={(item) => {

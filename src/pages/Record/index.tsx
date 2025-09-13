@@ -144,7 +144,7 @@ export default () => {
     <div>
       <Title value="说说管理" />
 
-      <Card className="my-2 overflow-scroll">
+      <Card className="border-stroke my-2 overflow-scroll">
         <Form form={form} layout="inline" onFinish={onFilterSubmit} autoComplete="off" className="flex-nowrap">
           <Form.Item label="内容" name="content" className="min-w-[200px]">
             <Input placeholder="请输入关键词" />

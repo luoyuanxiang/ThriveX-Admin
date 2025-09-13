@@ -288,7 +288,7 @@ export default () => {
     <div>
       <Title value="网站管理" />
 
-      <Card className="WebPage mt-2 min-h-[calc(100vh-160px)]">
+      <Card className="WebPage border-stroke mt-2 min-h-[calc(100vh-160px)]">
         <Tabs activeKey={tab} tabPosition="top" onChange={handleTabChange} items={tabItems} />
       </Card>
     </div>
