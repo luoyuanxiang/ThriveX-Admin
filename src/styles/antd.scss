@@ -4,7 +4,6 @@
 .ant-select-selector,
 .ant-picker {
     border-width: 1.5px !important;
-    // border: 1.5px solid #eee !important;
 }
 
 /* 表单获取焦点时的阴影效果 */
@@ -84,18 +83,18 @@
 // ------------------> Antd组件库暗色适配 结束 <------------------
 
 #root {
-    .ant-table,
-    .ant-form,
-    .ant-card,
-    .ant-modal,
-    .ant-drawer,
-    .ant-notification,
-    .ant-message,
-    .ant-tooltip {
-        transition-duration: 0s !important;
+    // .ant-table,
+    // .ant-form,
+    // .ant-card,
+    // .ant-modal,
+    // .ant-drawer,
+    // .ant-notification,
+    // .ant-message,
+    // .ant-tooltip {
+    //     transition-duration: 0s !important;
 
-        * {
-            transition-duration: 0s !important;
-        }
-    }
+    //     * {
+    //         transition-duration: 0s !important;
+    //     }
+    // }
 }
