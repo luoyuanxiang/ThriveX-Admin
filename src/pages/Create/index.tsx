@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Button, Card, Drawer, Dropdown, MenuProps, message, Spin } from 'antd';
+import { Button, Card, Dropdown, MenuProps, message, Spin } from 'antd';
 import { BiSave } from 'react-icons/bi';
 import { AiOutlineEdit, AiOutlineSend } from 'react-icons/ai';
 
 import Title from '@/components/Title';
+import Drawer from '@/components/Drawer';
 import useAssistant from '@/hooks/useAssistant';
 import { Article } from '@/types/app/article';
 import { getArticleDataAPI } from '@/api/Article';
@@ -243,8 +244,10 @@ export default () => {
         <Card className={`${titleSty} overflow-hidden rounded-xl min-h-[calc(100vh-160px)]`}>
           <Editor value={content} onChange={(value) => setContent(value)} />
 
-          <Drawer title={id && !isDraftParams ? '编辑文章' : '发布文章'} placement="right" size="large" onClose={() => setPublishOpen(false)} open={publishOpen}>
-            <PublishForm data={data} closeModel={() => setPublishOpen(false)} />
+          <Drawer title={id && !isDraftParams ? '编辑文章' : '发布文章'} open={publishOpen} onClose={() => setPublishOpen(false)}>
+            <div className="max-w-5xl mx-auto">
+              <PublishForm data={data} closeModel={() => setPublishOpen(false)} />
+            </div>
           </Drawer>
         </Card>
       </Spin>
