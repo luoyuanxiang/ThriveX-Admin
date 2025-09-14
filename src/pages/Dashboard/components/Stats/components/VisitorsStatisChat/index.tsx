@@ -5,8 +5,11 @@ import dayjs from 'dayjs';
 import { getStatisAPI } from '@/api/Statis';
 import ReactECharts from 'echarts-for-react';
 import { EChartsParams, Result, StatisResponse } from './type';
+import { useConfigStore } from '@/stores';
 
 export default () => {
+  const colorMode = useConfigStore((state) => state.colorMode);
+
   const [loading, setLoading] = useState<boolean>(false);
 
   const [result, setResult] = useState<Result | null>(null);
@@ -248,20 +251,20 @@ export default () => {
   };
 
   return (
-    <div className="col-span-12 rounded-2xl border border-stroke px-5 pt-7.5 pb-5 shadow-default dark:border-transparent bg-light-gradient dark:bg-dark-gradient sm:px-7.5 xl:col-span-8">
+    <div className="col-span-12 rounded-md border border-stroke px-5 pt-7 pb-5 shadow-default dark:border-transparent bg-light-gradient dark:bg-dark-gradient sm:px-7 xl:col-span-8">
       <div className="flex w-full justify-between items-center mb-2">
         <h3 className="text-xl font-bold text-slate-800 dark:text-white">访客统计</h3>
 
-        <div className="inline-flex items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 space-x-1">
-          <button className={`rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:bg-meta-4 dark:text-white dark:hover:bg-boxdark ${scope === 'day' ? 'bg-white dark:!bg-[#4e5969] shadow-card' : ''}`} onClick={() => handleScopeChange('day')}>
+        <div className="inline-flex items-center rounded-md bg-whiter p-1.5 space-x-1">
+          <button className={`rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:text-white dark:hover:bg-boxdark ${scope === 'day' ? 'bg-white dark:!bg-[#4e5969] shadow-card' : ''}`} onClick={() => handleScopeChange('day')}>
             天
           </button>
 
-          <button className={`rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:bg-meta-4 dark:text-white dark:hover:bg-boxdark ${scope === 'month' ? 'bg-white dark:!bg-[#4e5969] shadow-card' : ''}`} onClick={() => handleScopeChange('month')}>
+          <button className={`rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:text-white dark:hover:bg-boxdark ${scope === 'month' ? 'bg-white dark:!bg-[#4e5969] shadow-card' : ''}`} onClick={() => handleScopeChange('month')}>
             月
           </button>
 
-          <button className={`rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:bg-meta-4 dark:text-white dark:hover:bg-boxdark ${scope === 'year' ? 'bg-white dark:!bg-[#4e5969] shadow-card' : ''}`} onClick={() => handleScopeChange('year')}>
+          <button className={`rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:text-white dark:hover:bg-boxdark ${scope === 'year' ? 'bg-white dark:!bg-[#4e5969] shadow-card' : ''}`} onClick={() => handleScopeChange('year')}>
             年
           </button>
         </div>
@@ -273,15 +276,15 @@ export default () => {
             option={{
               tooltip: {
                 trigger: 'axis',
-                backgroundColor: '#fff',
-                borderColor: '#e5eaf3',
+                backgroundColor: colorMode === 'dark' ? '#334459' : '#fff',
+                borderColor: colorMode === 'dark' ? '#475f7d' : '#e5eaf3',
                 borderWidth: 1,
                 textStyle: {
-                  color: '#1a2757',
+                  color: colorMode === 'dark' ? '#e0e0e0' : '#1a2757',
                   fontSize: 14,
                 },
                 padding: 16,
-                extraCssText: 'box-shadow: 0 4px 24px rgba(0,0,0,0.08); border-radius: 10px;',
+                extraCssText: colorMode === 'dark' ? 'box-shadow: 0 4px 24px rgba(0,0,0,0.3); border-radius: 10px;' : 'box-shadow: 0 4px 24px rgba(0,0,0,0.08); border-radius: 10px;',
                 formatter: function (params: EChartsParams[]) {
                   let str = `<div style="font-weight:700;margin-bottom:8px;">${params[0].axisValue}${scope === 'month' ? '月' : scope === 'year' ? '年' : ''}</div>`;
                   params.forEach((item: EChartsParams) => {
@@ -308,7 +311,7 @@ export default () => {
                 itemGap: 32,
                 textStyle: {
                   fontSize: 14,
-                  color: '#1a2757',
+                  color: colorMode === 'dark' ? '#e0e0e0' : '#1a2757',
                   margin: 30,
                 },
               },
@@ -324,15 +327,26 @@ export default () => {
                 data: scopeData.categories,
                 axisLine: { show: false }, // 隐藏x轴轴线
                 axisTick: { show: false }, // 隐藏x轴刻度线
-                axisLabel: { fontSize: 12 },
+                axisLabel: {
+                  fontSize: 12,
+                  color: colorMode === 'dark' ? '#475f7d' : '#1a2757',
+                },
               },
               yAxis: {
                 type: 'value',
                 min: 0,
                 splitNumber: 5,
                 axisLine: { show: false },
-                axisLabel: { fontSize: 12 },
-                splitLine: { lineStyle: { type: 'dashed', color: '#f0f4fa' } },
+                axisLabel: {
+                  fontSize: 12,
+                  color: colorMode === 'dark' ? '#475f7d' : '#1a2757',
+                },
+                splitLine: {
+                  lineStyle: {
+                    type: 'dashed',
+                    color: colorMode === 'dark' ? '#475f7d' : '#f0f4fa',
+                  },
+                },
               },
               series: [
                 {

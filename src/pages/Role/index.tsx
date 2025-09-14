@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Table, Button, Form, Input, Popconfirm, message, Card, Modal, Transfer, Checkbox } from 'antd';
+import { Table, Button, Form, Input, Popconfirm, message, Card, Modal, Transfer, Checkbox, Tooltip } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
-import { DeleteOutlined, FormOutlined } from '@ant-design/icons';
+import { AppstoreOutlined, DeleteOutlined, FormOutlined } from '@ant-design/icons';
 
 import Title from '@/components/Title';
 import { useUserStore } from '@/stores';
@@ -51,17 +51,19 @@ export default () => {
       key: 'action',
       render: (_: string, record: Role) => (
         <div className="space-x-2">
-          {record.mark !== 'admin' && (
-            <Button type="primary" onClick={() => bindingRoute(record)}>
-              权限
-            </Button>
-          )}
+          <Tooltip title="编辑角色">
+            <Button type="text" onClick={() => editRoleData(record)} icon={<FormOutlined className="text-primary" />} />
+          </Tooltip>
 
-          <Button onClick={() => editRoleData(record)} icon={<FormOutlined />} />
+          <Tooltip title="删除角色">
+            <Popconfirm title="警告" description="你确定要删除吗" okText="确定" cancelText="取消" onConfirm={() => delRoleData(record.id!)}>
+              <Button type="text" danger icon={<DeleteOutlined />} />
+            </Popconfirm>
+          </Tooltip>
 
-          <Popconfirm title="警告" description="你确定要删除吗" okText="确定" cancelText="取消" onConfirm={() => delRoleData(record.id!)}>
-            <Button type="primary" danger icon={<DeleteOutlined />} />
-          </Popconfirm>
+          <Tooltip title="赋予权限">
+            <Button type="text" onClick={() => bindingRoute(record)} icon={<AppstoreOutlined />} />
+          </Tooltip>
         </div>
       ),
     },

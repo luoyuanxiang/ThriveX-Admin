@@ -283,7 +283,7 @@ export default () => {
     <div>
       <Title value="相册管理" />
 
-      <Card className="AlbumPage mt-2 min-h-[calc(100vh-160px)]">
+      <Card className="AlbumPage border-stroke mt-2 min-h-[calc(100vh-160px)]">
         <div className="flex justify-between mb-4 px-4">
           {!imageList.length && !currentAlbum.id ? (
             <PiKeyReturnFill className="text-4xl text-[#E0DFDF] cursor-pointer" />

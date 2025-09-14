@@ -181,7 +181,7 @@ export default () => {
         </Button>
       </Title>
 
-      <Card className={`CatePage [&>.ant-card-body]:!p-[30px_20px] [&>.ant-card-body]:!pb-6 mt-2 min-h-[calc(100vh-160px)]`}>
+      <Card className={`border-stroke [&>.ant-card-body]:!p-[30px_20px] [&>.ant-card-body]:!pb-6 mt-2 min-h-[calc(100vh-160px)]`}>
         <Spin spinning={loading}>
           <Tree defaultExpandAll={true} treeData={toTreeData(list)} />
         </Spin>

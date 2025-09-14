@@ -92,7 +92,7 @@ instance.interceptors.response.use(
     }
 );
 
-const Request = <T>(method: string, url: string, reqParams?: object) => {
+const request = <T>(method: string, url: string, reqParams?: object) => {
     return instance.request<Response<T>, Response<T>>({
         method,
         url,
@@ -101,4 +101,4 @@ const Request = <T>(method: string, url: string, reqParams?: object) => {
     });
 };
 
-export default Request;
+export default request;

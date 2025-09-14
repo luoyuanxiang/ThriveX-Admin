@@ -8,7 +8,7 @@ import Title from '@/components/Title';
 import { WebType, Web } from '@/types/app/web';
 import { RuleObject } from 'antd/es/form';
 
-import group from './assets/svg/group.svg';
+import GroupSvg from './assets/svg/group.svg';
 import './index.scss';
 import Search from 'antd/es/input/Search';
 import { SearchProps } from 'antd/lib/input';
@@ -190,7 +190,7 @@ export default () => {
               {Object.keys(list).map((key, index1) => (
                 <div key={index1}>
                   <Card className="[&>.ant-card-body]:flex [&>.ant-card-body]:py-2 [&>.ant-card-body]:px-4 my-2 ml-1.5 text-base bg-[#f5f6ff] dark:bg-boxdark transition-colors">
-                    <img src={group} alt="分组图标" className="w-6 h-6 mr-2" />
+                    <img src={GroupSvg} alt="分组图标" className="w-6 h-6 mr-2" />
                     <span>{key}</span>
                   </Card>
 
@@ -298,7 +298,7 @@ export default () => {
     <div>
       <Title value="网站管理" />
 
-      <Card className="WebPage mt-2 min-h-[calc(100vh-160px)]">
+      <Card className="WebPage border-stroke mt-2 min-h-[calc(100vh-160px)]">
         <Tabs activeKey={tab} tabPosition="top" onChange={handleTabChange} items={tabItems} />
       </Card>
     </div>

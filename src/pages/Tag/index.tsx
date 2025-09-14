@@ -23,12 +23,12 @@ export default () => {
       title: '操作',
       key: 'action',
       render: (_: string, record: Tag) => (
-        <>
-          <Button onClick={() => editTagData(record)} icon={<FormOutlined />} />
+        <div className="space-x-2">
+          <Button type="text" onClick={() => editTagData(record)} icon={<FormOutlined className="text-primary" />} />
           <Popconfirm title="警告" description="你确定要删除吗" okText="确定" cancelText="取消" onConfirm={() => delTagData(record.id!)}>
-            <Button type="primary" danger className="ml-2" icon={<DeleteOutlined />} />
+            <Button type="text" danger icon={<DeleteOutlined />} />
           </Popconfirm>
-        </>
+        </div>
       ),
     },
   ];
@@ -115,8 +115,7 @@ export default () => {
       <div className="flex md:justify-between flex-col md:flex-row mx-auto mt-2 h-[calc(100vh-180px)]">
         <div className="w-full md:w-[40%]">
           <Spin spinning={editLoading}>
-            {/* <Card className="w-full md:w-[40%] h-46"> */}
-            <Card className="w-full h-46">
+            <Card className="border-stroke w-full h-46">
               <Form form={form} layout="vertical" initialValues={tag} onFinish={onSubmit} size="large">
                 <Form.Item label="标签名称" name="name" rules={[{ required: true, message: '标签名称不能为空' }]}>
                   <Input placeholder="请输入标签名称" />
@@ -132,7 +131,7 @@ export default () => {
           </Spin>
         </div>
 
-        <Card className="w-full md:w-[59%] [&>.ant-card-body]:!p-0 mt-2 md:mt-0">
+        <Card className="border-stroke w-full md:w-[59%] [&>.ant-card-body]:!p-0 mt-2 md:mt-0">
           <Table
             rowKey="id"
             dataSource={list}

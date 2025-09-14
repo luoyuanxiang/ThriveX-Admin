@@ -90,10 +90,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
   // 定义导航项的样式类
   const sidebarItemStyDark =
-    'group relative flex items-center gap-2.5 py-2 px-4 text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 rounded-sm font-medium';
+    'group relative flex items-center gap-2.5 py-2 px-4 text-[#DEE4EE] duration-300 ease-in-out hover:bg-graydark dark:hover:bg-[#313D4A] rounded-sm font-medium';
   const sidebarItemStyLight =
-    'group relative flex items-center gap-2.5 py-2 px-4 text-[#444] dark:text-slate-200 duration-300 ease-in-out hover:bg-[rgba(241,241,244,0.9)] dark:hover:bg-meta-4 rounded-[10px] hover:backdrop-blur-[15px]';
-  const sidebarItemActiveSty = `${isSideBarTheme === 'dark' ? 'bg-graydark dark:bg-meta-4' : '!text-primary'}`;
+    'group relative flex items-center gap-2.5 py-2 px-4 text-[#444] dark:text-slate-200 duration-300 ease-in-out hover:bg-[rgba(241,241,244,0.9)] dark:hover:bg-[#313D4A] rounded-md hover:backdrop-blur-[15px]';
+  const sidebarItemActiveSty = `${isSideBarTheme === 'dark' ? 'bg-graydark' : '!text-primary'}`;
 
   // 箭头图标组件：用于显示子菜单的展开/收起状态
   const Arrow = ({ open }: { open: boolean }) => {
@@ -334,7 +334,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   return (
     <aside
       ref={sidebar}
-      className={`absolute left-0 top-0 z-99 flex h-screen w-64 flex-col overflow-y-hidden duration-300 ease-linear lg:static lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} ${isSideBarTheme === 'dark' ? 'bg-black dark:bg-boxdark' : 'bg-light-gradient dark:bg-dark-gradient border-r border-stroke dark:border-strokedark transition-all'}`}
+      className={`absolute left-0 top-0 z-[99] flex h-screen w-64 flex-col overflow-y-hidden duration-300 ease-linear lg:static lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} ${isSideBarTheme === 'dark' ? 'bg-black dark:bg-boxdark' : 'bg-light-gradient dark:bg-dark-gradient border-r border-stroke dark:border-strokedark transition-all'}`}
     >
       {/* Logo 和标题区域 */}
       <div className="flex justify-center items-center gap-2 px-6 py-5.5 pb-0 lg:pt-6">
@@ -401,7 +401,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                   <NavLink
                                     to={subItem.to}
                                     className={({ isActive }) =>
-                                      `group relative flex items-center gap-2.5 rounded-md px-4 duration-300 ease-in-out ${isSideBarTheme === 'dark' ? 'hover:text-white text-bodydark2 font-medium' : 'hover:!text-primary text-[#666] dark:text-slate-400'} ` +
+                                      `group relative flex items-center gap-2.5 rounded-md px-4 duration-300 ease-in-out ${isSideBarTheme === 'dark' ? 'hover:text-white text-[#8A99AF] font-medium' : 'hover:!text-primary text-[#666] dark:text-slate-400'} ` +
                                       (isActive && '!text-primary')
                                     }
                                   >

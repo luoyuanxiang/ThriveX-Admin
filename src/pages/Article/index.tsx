@@ -178,16 +178,16 @@ export default () => {
       align: 'center',
       render: (_: string, record: Article) => (
         <div className="flex justify-center space-x-2">
-          <Popconfirm title="提醒" description="你确定要导出吗" okText="确定" cancelText="取消" onConfirm={() => exportArticle(record.id!)}>
-            <Button type="primary" icon={<DownloadOutlined />} />
-          </Popconfirm>
-
           <Link to={`/create?id=${record.id}`}>
-            <Button icon={<FormOutlined />} />
+            <Button type="text" icon={<FormOutlined className="text-primary" />} />
           </Link>
 
           <Popconfirm title="警告" description="你确定要删除吗" okText="确定" cancelText="取消" onConfirm={() => delArticleData(record.id!)}>
-            <Button type="primary" danger icon={<DeleteOutlined />} />
+            <Button type="text" danger icon={<DeleteOutlined />} />
+          </Popconfirm>
+
+          <Popconfirm title="提醒" description="你确定要导出吗" okText="确定" cancelText="取消" onConfirm={() => exportArticle(record.id!)}>
+            <Button type="text" icon={<DownloadOutlined />} />
           </Popconfirm>
         </div>
       ),
@@ -635,7 +635,7 @@ export default () => {
     <div>
       <Title value="文章管理" />
 
-      <Card className="my-2 overflow-scroll">
+      <Card className="border-stroke my-2 overflow-scroll">
         <div className="w-full flex justify-between">
           <Form form={form} layout="inline" onFinish={onFilterSubmit} autoComplete="off" className="flex-nowrap">
             <Form.Item label="标题" name="title" className="min-w-[200px]">

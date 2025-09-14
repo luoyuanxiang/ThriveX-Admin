@@ -142,15 +142,16 @@ export default () => {
       render: (_: string, record: Comment) => (
         <div className="flex justify-center space-x-2">
           <Button
+            type="text"
             onClick={() => {
               setComment(record);
               setIsReplyModalOpen(true);
             }}
-            icon={<SendOutlined />}
+            icon={<SendOutlined className="text-primary" />}
           />
 
           <Popconfirm title="警告" description="你确定要删除吗" okText="确定" cancelText="取消" onConfirm={() => delCommentData(record.id!)}>
-            <Button type="primary" danger icon={<DeleteOutlined />} />
+            <Button type="text" danger icon={<DeleteOutlined />} />
           </Popconfirm>
         </div>
       ),
@@ -228,7 +229,7 @@ export default () => {
     <div>
       <Title value="评论管理" />
 
-      <Card className="my-2 overflow-scroll">
+      <Card className="border-stroke my-2 overflow-scroll">
         <Form layout="inline" onFinish={onSubmit} autoComplete="off" className="flex-nowrap">
           <Form.Item label="标题" name="title" className="min-w-[200px]">
             <Input placeholder="请输入标题关键词" />

@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import Loader from './common/Loader';
+import Loader from './components/Loader';
 import useAuthRedirect from '@/hooks/useAuthRedirect';
 import { ConfigProvider, theme } from 'antd';
 import RouteList from './components/RouteList';
-import '@/styles/customAntd.scss';
+import '@/styles/antd.scss';
 
 import { getWebConfigDataAPI } from '@/api/Config';
 import { useWebStore, useUserStore } from './stores';
@@ -60,15 +60,16 @@ function App() {
   ) : (
     // 根据主题切换配置主题
     <ConfigProvider
-      locale={zhCN}
       theme={{
         token: {
           colorPrimary: '#60a5fa',
+          borderRadius: 4,
           colorBgBase: isDarkTheme ? '#24303F' : '#ffffff',
           colorTextBase: isDarkTheme ? '#e0e0e0' : '#000000',
         },
         algorithm: isDarkTheme ? theme.darkAlgorithm : theme.defaultAlgorithm,
       }}
+      locale={zhCN}
     >
       <RouteList />
     </ConfigProvider>

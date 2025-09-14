@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Button, Card, Drawer, Dropdown, MenuProps, message, Spin } from 'antd';
+import { Button, Card, Dropdown, MenuProps, message, Spin } from 'antd';
 import { BiSave } from 'react-icons/bi';
 import { AiOutlineEdit, AiOutlineSend } from 'react-icons/ai';
 
 import Title from '@/components/Title';
+import Drawer from '@/components/Drawer';
 import useAssistant from '@/hooks/useAssistant';
 import { Article } from '@/types/app/article';
 import { getArticleDataAPI } from '@/api/Article';
@@ -12,7 +13,6 @@ import { titleSty } from '@/styles/sty';
 
 import Editor from './components/Editor';
 import PublishForm from './components/PublishForm';
-import { Assistant } from '@/types/app/assistant';
 
 export default () => {
   const [loading, setLoading] = useState(false);
@@ -128,7 +128,7 @@ export default () => {
           const decoder = new TextDecoder();
 
           while (true) {
-            const { done, value } = await reader.read();
+            const { done, value } = await (reader as unknown as ReadableStreamDefaultReader<Uint8Array>).read();
             if (done) break;
 
             const chunk = decoder.decode(value);
@@ -183,7 +183,7 @@ export default () => {
           const decoder = new TextDecoder();
 
           while (true) {
-            const { done, value } = await reader.read();
+            const { done, value } = await (reader as unknown as ReadableStreamDefaultReader<Uint8Array>).read();
             if (done) break;
 
             const chunk = decoder.decode(value);
@@ -217,7 +217,7 @@ export default () => {
   return (
     <div>
       <Title value="创作">
-        <div className="flex items-center space-x-4 w-[390px]">
+        <div className="flex items-center space-x-4 w-[370px]">
           <Dropdown.Button
             menu={{ items }}
             onClick={() => {
@@ -227,7 +227,7 @@ export default () => {
             }}
           >
             <AiOutlineEdit className="text-base" />
-            {assistant ? list.find((a: Assistant) => a.id === Number(assistant))?.name || '选择助手' : '选择助手'}
+            {assistant ? list.find((a) => a.id === Number(assistant))?.name || '选择助手' : '选择助手'}
           </Dropdown.Button>
 
           <Button className="w-full flex justify-between" onClick={saveBtn}>
@@ -241,11 +241,13 @@ export default () => {
       </Title>
 
       <Spin spinning={loading}>
-        <Card className={`${titleSty} overflow-hidden rounded-xl min-h-[calc(100vh-160px)]`}>
+        <Card className={`${titleSty} overflow-hidden rounded-md min-h-[calc(100vh-160px)]`}>
           <Editor value={content} onChange={(value) => setContent(value)} />
 
-          <Drawer title={id && !isDraftParams ? '编辑文章' : '发布文章'} placement="right" size="large" onClose={() => setPublishOpen(false)} open={publishOpen}>
-            <PublishForm data={data} closeModel={() => setPublishOpen(false)} />
+          <Drawer title={id && !isDraftParams ? '编辑文章' : '发布文章'} open={publishOpen} onClose={() => setPublishOpen(false)}>
+            <div className="max-w-5xl mx-auto">
+              <PublishForm data={data} closeModel={() => setPublishOpen(false)} />
+            </div>
           </Drawer>
         </Card>
       </Spin>

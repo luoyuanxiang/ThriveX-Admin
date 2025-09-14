@@ -159,13 +159,15 @@ export default () => {
       title: '操作',
       key: 'action',
       align: 'center' as const,
-      render: (_: unknown, record: Config) => <Button icon={<FormOutlined />} onClick={() => handleEdit(record)} />,
+      render: (_: unknown, record: Config) => <Button type="text" icon={<FormOutlined className="text-primary" />} onClick={() => handleEdit(record)} />,
     },
   ];
 
   return (
     <div>
       <Title value="项目配置" />
+
+      {/* <Alert type="warning" message="必看教程：https://docs.liuyuyang.net/docs/项目部署/API/人机验证.html" showIcon closable className="mb-2" /> */}
 
       <Card className={`${titleSty} min-h-[calc(100vh-200px)]`}>
         <Tabs

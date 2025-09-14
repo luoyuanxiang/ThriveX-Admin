@@ -192,7 +192,7 @@ export default () => {
         <div>
             <Title value="文件管理" />
 
-            <Card className="FilePage mt-2 min-h-[calc(100vh-160px)]">
+            <Card className="FilePage border-stroke mt-2 min-h-[calc(100vh-160px)]">
                 <div className="flex justify-between mb-4 px-4">
                     {
                         !fileList.length && !dirName
@@ -244,7 +244,7 @@ export default () => {
                                 : dirList.map((item, index) => (
                                     <div
                                         key={index}
-                                        className="group w-25 flex flex-col items-center cursor-pointer mx-4 my-2"
+                                        className="group w-20 flex flex-col items-center cursor-pointer mx-4 my-2"
                                         onClick={() => openDir(item.name)}>
                                         <img src={fileSvg} alt="" />
                                         <p className="group-hover:text-primary transition-colors">{item.name}</p>

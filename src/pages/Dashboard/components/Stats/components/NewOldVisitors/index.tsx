@@ -88,7 +88,7 @@ export default () => {
   }, []);
 
   return (
-    <div className="sm:px-7.5 col-span-12 rounded-2xl border border-stroke bg-light-gradient dark:bg-dark-gradient px-5 pb-5 pt-7.5 shadow-default dark:border-transparent xl:col-span-4">
+    <div className="sm:px-7 col-span-12 rounded-md border border-stroke bg-light-gradient dark:bg-dark-gradient px-5 pb-4 pt-7 shadow-default dark:border-transparent xl:col-span-4">
       <Spin spinning={loading}>
         <div className="mb-3 justify-between gap-4 sm:flex">
           <div>
@@ -107,7 +107,7 @@ export default () => {
             <div className="flex w-full items-center">
               <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#91C8EA]"></span>
               <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
-                <span> 新访客 </span>
+                <span className="text-black dark:text-[#475f7d]"> 新访客 </span>
                 <span> {result.newVisitors.toFixed(2)}% </span>
               </p>
             </div>
@@ -117,7 +117,7 @@ export default () => {
             <div className="flex w-full items-center">
               <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#60a5fa]"></span>
               <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
-                <span> 老访客 </span>
+                <span className="text-black dark:text-[#475f7d]"> 老访客 </span>
                 <span> {result.oldVisitors.toFixed(2)}% </span>
               </p>
             </div>

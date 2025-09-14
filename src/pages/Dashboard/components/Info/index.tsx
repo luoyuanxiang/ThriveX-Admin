@@ -26,7 +26,7 @@ export default function InfoCard() {
   }, []);
 
   return (
-    <div className="bg-primary rounded-2xl p-6 sm:p-10 flex flex-col justify-center h-[170px] relative overflow-hidden mb-4">
+    <div className="bg-primary rounded-md p-6 sm:p-10 flex flex-col justify-center h-[170px] relative overflow-hidden mb-4">
       {/* 右侧弧形背景装饰 */}
       <div
         className="absolute right-[-60px] top-[-40px] w-[300px] h-[300px] bg-blue-300 opacity-40 z-0"
