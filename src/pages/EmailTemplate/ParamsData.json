@@ -1,0 +1,139 @@
+{
+  "留言板收到新评论": [
+    {
+      "fieldName": "commenter",
+      "fieldType": "string",
+      "description": "评论作者"
+    },
+    {
+      "fieldName": "content",
+      "fieldType": "string",
+      "description": "评论内容"
+    },
+    {
+      "fieldName": "momentUrl",
+      "fieldType": "string",
+      "description": "留言板地址"
+    }
+  ],
+  "友链自助提交审核通知": [
+    {
+      "fieldName": "displayName",
+      "fieldType": "string",
+      "description": "博客名称"
+    }
+  ],
+  "友链自助提交成功通知": [
+    {
+      "fieldName": "displayName",
+      "fieldType": "string",
+      "description": "博客名称"
+    },
+    {
+      "fieldName": "review",
+      "fieldType": "boolean",
+      "description": "是否审核通过"
+    },
+    {
+      "fieldName": "reviewReason",
+      "fieldType": "string",
+      "description": "审核不通过原因"
+    }
+  ],
+  "友链自助提交通知管理员": [
+    {
+      "fieldName": "displayName",
+      "fieldType": "string",
+      "description": "博客名称"
+    },
+    {
+      "fieldName": "url",
+      "fieldType": "string",
+      "description": "博客链接"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "string",
+      "description": "博客描述"
+    },
+    {
+      "fieldName": "logo",
+      "fieldType": "string",
+      "description": "Logo URL"
+    },
+    {
+      "fieldName": "email",
+      "fieldType": "string",
+      "description": "联系邮箱"
+    },
+    {
+      "fieldName": "reviewUrl",
+      "fieldType": "string",
+      "description": "审核地址"
+    }
+  ],
+  "有人回复了我": [
+    {
+      "fieldName": "replier",
+      "fieldType": "string",
+      "description": "评论作者"
+    },
+    {
+      "fieldName": "commentSubjectUrl",
+      "fieldType": "string",
+      "description": "评论内容地址"
+    },
+    {
+      "fieldName": "commentSubjectTitle",
+      "fieldType": "string",
+      "description": "文章标题"
+    },
+    {
+      "fieldName": "isQuoteReply",
+      "fieldType": "boolean",
+      "description": "是否回复"
+    },
+    {
+      "fieldName": "quoteContent",
+      "fieldType": "string",
+      "description": "回复内容"
+    },
+    {
+      "fieldName": "commentContent",
+      "fieldType": "string",
+      "description": "评论内容"
+    },
+    {
+      "fieldName": "content",
+      "fieldType": "string",
+      "description": "原始评论内容"
+    }
+  ],
+  "我的文章收到新评论": [
+    {
+      "fieldName": "postTitle",
+      "fieldType": "string",
+      "description": "文章标题"
+    },
+    {
+      "fieldName": "commenter",
+      "fieldType": "string",
+      "description": "评论作者"
+    },
+    {
+      "fieldName": "postOwner",
+      "fieldType": "string",
+      "description": "作者"
+    },
+    {
+      "fieldName": "postUrl",
+      "fieldType": "string",
+      "description": "文章地址"
+    },
+    {
+      "fieldName": "content",
+      "fieldType": "string",
+      "description": "评论内容"
+    }
+  ]
+}

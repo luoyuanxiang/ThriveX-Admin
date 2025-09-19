@@ -4,7 +4,7 @@ import { useForm } from 'antd/es/form/Form';
 import { Button, Form, Input, notification } from 'antd';
 import { UserOutlined, LockOutlined, EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 
-import { loginDataAPI } from '@/api/User';
+import { loginDataAPI } from '@/api/Login.ts';
 import { useUserStore } from '@/stores';
 import { getRolePermissionListAPI } from '@/api/Role';
 
@@ -26,8 +26,8 @@ export default () => {
 
       const values = await form.validateFields();
       const { data } = await loginDataAPI(values);
-      const { data: permission } = await getRolePermissionListAPI(data.role.id as number);
 
+      const { data: permission } = await getRolePermissionListAPI(data.role.id as number);
       // 将用户信息和token保存起来
       store.setToken(data.token);
       store.setUser(data.user);

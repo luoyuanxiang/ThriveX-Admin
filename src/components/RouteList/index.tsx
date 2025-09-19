@@ -28,12 +28,15 @@ import Oss from '@/pages/Oss';
 import Album from '@/pages/Album';
 import Assistant from '@/pages/Assistant';
 import Config from '@/pages/Config';
+import EmailServerConfig from '@/pages/EmailServerConfig';
+import EmailTemplate from '@/pages/EmailTemplate';
+import EmailLogs from '@/pages/EmailLogs';
 
 import PageTitle from '../PageTitle';
 
 import { useUserStore } from '@/stores';
 import { getRoleRouteListAPI } from '@/api/Role';
-import { checkTokenAPI } from '@/api/User'
+import { checkTokenAPI } from '@/api/Login.ts'
 import { Route as RouteType } from '@/types/app/route';
 import NotFound from '../NotFound';
 
@@ -69,6 +72,9 @@ export default () => {
         { path: '/work', title: '工作台', component: <Work /> },
         { path: '/assistant', title: '助手管理', component: <Assistant /> },
         { path: '/config', title: '项目配置', component: <Config /> },
+        { path: '/emailServerConfig', title: '邮件服务管理', component: <EmailServerConfig /> },
+        { path: '/emailTemplate', title: '邮件模板管理', component: <EmailTemplate /> },
+        { path: '/emailLogs', title: '邮件模板管理', component: <EmailLogs /> },
     ];
 
     const [routes, setRoutes] = useState<typeof routesAll | null>(null);

@@ -1,9 +1,9 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import { Table, Button, Tag, notification, Card, Popconfirm, Form, Input, Select, DatePicker, Modal, message, Pagination, Dropdown } from 'antd';
-import { DeleteOutlined, FormOutlined, InboxOutlined, DownloadOutlined } from '@ant-design/icons';
-import type { UploadFile, UploadFileStatus, RcFile } from 'antd/es/upload/interface';
+import { Button, Card, Dropdown, Form, Image, Input, message, Modal, notification, Pagination, Popconfirm, Select, Table, Tag } from 'antd';
+import { DeleteOutlined, DownloadOutlined, FormOutlined, InboxOutlined } from '@ant-design/icons';
+import type { RcFile, UploadFile, UploadFileStatus } from 'antd/es/upload/interface';
 import { ColumnType } from 'antd/es/table';
 import { TableRowSelection } from 'antd/es/table/interface';
 import JSZip from 'jszip';
@@ -15,7 +15,7 @@ import Title from '@/components/Title';
 
 import { getCateListAPI } from '@/api/Cate';
 import { getTagListAPI } from '@/api/Tag';
-import { delArticleDataAPI, getArticlePagingAPI, addArticleDataAPI, getArticleListAPI, delBatchArticleDataAPI } from '@/api/Article';
+import { addArticleDataAPI, delArticleDataAPI, delBatchArticleDataAPI, getArticleListAPI, getArticlePagingAPI } from '@/api/Article';
 
 import type { Tag as ArticleTag } from '@/types/app/tag';
 import type { Cate } from '@/types/app/cate';
@@ -34,7 +34,6 @@ export default () => {
   const [form] = Form.useForm();
   const web = useWebStore((state) => state.web);
   const [articleList, setArticleList] = useState<Article[]>([]);
-  const { RangePicker } = DatePicker;
 
   const [total, setTotal] = useState<number>(0);
   const [paging, setPaging] = useState<Page>({
@@ -94,6 +93,14 @@ export default () => {
       key: 'id',
       align: 'center',
       width: 100,
+    },
+    {
+      title: '封面',
+      dataIndex: 'cover',
+      key: 'cover',
+      align: 'center',
+      width: 100,
+      render: (cover: string) => <Image height={100} width={200} src={cover} fallback="https://picsum.photos/300/200?error" />,
     },
     {
       title: '标题',
@@ -205,8 +212,6 @@ export default () => {
         key: values.title,
         cateId: values.cateId,
         tagId: values.tagId,
-        startDate: values.createTime && values.createTime[0].valueOf() + '',
-        endDate: values.createTime && values.createTime[1].valueOf() + '',
       });
     } catch (error) {
       console.error(error);
@@ -255,7 +260,7 @@ export default () => {
 
       if (articles.length === 0) return notification.error({ message: '解析失败，未提取出有效文章数据' });
 
-      articles.forEach(async (article: Article) => {
+      for (const article of articles) {
         try {
           const { code } = await addArticleDataAPI(article);
           if (code === 200) {
@@ -265,7 +270,7 @@ export default () => {
           console.error(error);
           message.error(`${article.title}--导入失败~`);
         }
-      });
+      }
 
       await getArticleList();
 
@@ -388,9 +393,8 @@ export default () => {
     const keywords = [...tags, ...categories].join(' ');
 
     // 构建 Markdown 字符串
-    const markdown = `---\ntitle: ${title}\ntags: ${tags.map((tag) => `${tag}`).join(' ')}\ncategories: ${categories.map((c) => `${c}`).join(' ')}\ncover: ${cover}\ndate: ${formatDate(createTime || new Date().getTime() + '')}\nkeywords: ${keywords}\ndescription: ${description}\n---\n\n ${content.trim()}`;
 
-    return markdown;
+    return `---\ntitle: ${title}\ntags: ${tags.map((tag) => `${tag}`).join(' ')}\ncategories: ${categories.map((c) => `${c}`).join(' ')}\ncover: ${cover}\ndate: ${formatDate(createTime || new Date().getTime() + '')}\nkeywords: ${keywords}\ndescription: ${description}\n---\n\n ${content.trim()}`;
   };
   /**
    * 根据 tag 名称列表获取对应的 ID 列表
@@ -443,7 +447,7 @@ export default () => {
     const cateNames = meta.categories?.split(/\s+/).filter(Boolean) || [];
     const cateIds = getTagIdsByNames(cateNames, cateList);
 
-    const article: Article = {
+    return {
       title: meta.title || '未命名文章',
       description: meta.description || '',
       content,
@@ -459,8 +463,6 @@ export default () => {
         isDel: 0,
       },
     };
-
-    return article;
   };
 
   // 解析 JSON 内容为文章数据列表
@@ -661,18 +663,12 @@ export default () => {
                 }}
               />
             </Form.Item>
-
-            <Form.Item label="时间范围" name="createTime" className="min-w-[250px]">
-              <RangePicker placeholder={['选择起始时间', '选择结束时间']} />
-            </Form.Item>
-
             <Form.Item className="pr-6">
               <Button type="primary" htmlType="submit">
                 筛选
               </Button>
             </Form.Item>
           </Form>
-
           <div className="flex space-x-3 pl-32 pr-10">
             <Dropdown.Button
               menu={{

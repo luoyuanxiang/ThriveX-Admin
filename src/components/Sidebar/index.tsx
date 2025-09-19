@@ -18,6 +18,7 @@ import { getRoleRouteListAPI } from '@/api/Role';
 import { Route } from '@/types/app/route';
 import logo from '/logo.png';
 import useVersionData from '@/hooks/useVersionData';
+import { MailOutlined } from '@ant-design/icons';
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -232,6 +233,29 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               name: '项目配置',
             },
           ],
+        },
+        {
+          to: '#',
+          path: 'rights',
+          name: '邮件配置',
+          icon: <MailOutlined />,
+          subMenu: [
+            {
+              to: '/emailServerConfig',
+              path: 'emailServerConfig',
+              name: '邮件服务管理',
+            },
+            {
+              to: '/emailTemplate',
+              path: 'emailTemplate',
+              name: '邮件模板管理',
+            },
+            {
+              to: '/emailLogs',
+              path: 'emailLogs',
+              name: '邮件日志管理',
+            },
+          ]
         },
         {
           to: '#',
