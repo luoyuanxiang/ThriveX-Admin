@@ -183,7 +183,7 @@ export default ({ item, type, fetchData, setLoading }: ListItemProps) => {
 
       <div className="flex justify-between md:p-7 !pt-3 rounded-md transition-colors">
         <div className="flex">
-          {item.avatar || item.image ? <img src={item.avatar || item.image} alt="" className="w-13 h-13 border border-stroke rounded-full" /> : <RandomAvatar className="w-13 h-13 border border-stroke rounded-full" />}
+          {item.avatar || item.image ? <img src={item.avatar || item.image} style={{ width: '100px', height: '100px', borderRadius: '50%' }} alt="" className="w-13 h-13 border border-stroke rounded-full" /> : <RandomAvatar className="w-13 h-13 border border-stroke rounded-full" />}
 
           <div className="flex flex-col justify-center ml-4 px-4 py-2 min-w-[210px] text-xs md:text-sm bg-[#F9F9FD] dark:bg-[#4e5969] rounded-md">
             {type === 'link' ? (
