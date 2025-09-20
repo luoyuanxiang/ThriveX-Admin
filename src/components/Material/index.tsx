@@ -1,9 +1,8 @@
-import { useEffect, useState, useRef } from 'react';
-import { Image, Spin, message, Button } from 'antd';
+import { useEffect, useRef, useState } from 'react';
+import { Button, Image, message, Modal, Spin } from 'antd';
 import { CheckOutlined } from '@ant-design/icons';
-import { Modal } from 'antd';
 import Masonry from 'react-masonry-css';
-import { getFileListAPI, getDirListAPI } from '@/api/File';
+import { getDirListAPI, getFileListAPI } from '@/api/File';
 import { File, FileDir } from '@/types/app/file';
 import errorImg from '@/pages/File/image/error.png';
 import fileSvg from '@/pages/File/image/file.svg';
@@ -78,7 +77,7 @@ export default ({ multiple, open, onClose, onSelect, maxCount }: Props) => {
   const getFileList = async (dir: string, isLoadMore = false) => {
     // 防止重复加载
     if (loadingRef.current) return;
-    
+
     try {
       loadingRef.current = true;
       setLoading(true);

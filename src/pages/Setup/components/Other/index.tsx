@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Form, Input, Button, message } from 'antd';
+import { Button, Form, Input, message } from 'antd';
 import { editWebConfigDataAPI, getWebConfigDataAPI } from '@/api/Config';
 import { Other, Web } from '@/types/app/config';
 import dayjs from 'dayjs';
@@ -56,7 +56,9 @@ export default () => {
     return (
       <div className="w-full flex items-center justify-between">
         <span>{title}</span>
-        <a href={url} target="_blank" rel="noreferrer" className="hover:text-primary text-xs text-gray-400">配置教程</a>
+        <a href={url} target="_blank" rel="noreferrer" className="hover:text-primary text-xs text-gray-400">
+          配置教程
+        </a>
       </div>
     );
   };

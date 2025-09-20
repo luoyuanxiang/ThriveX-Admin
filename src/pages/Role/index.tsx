@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Table, Button, Form, Input, Popconfirm, message, Card, Modal, Transfer, Checkbox, Tooltip } from 'antd';
+import { useEffect, useState } from 'react';
+import { Button, Card, Checkbox, Form, Input, message, Modal, Popconfirm, Table, Tooltip, Transfer } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { AppstoreOutlined, DeleteOutlined, FormOutlined } from '@ant-design/icons';
@@ -8,7 +8,7 @@ import Title from '@/components/Title';
 import { useUserStore } from '@/stores';
 import { getRouteListAPI } from '@/api/Route';
 import { getPermissionListAPI } from '@/api/Permission';
-import { getRoleListAPI, addRoleDataAPI, editRoleDataAPI, delRoleDataAPI, getRoleRouteListAPI, bindingRouteAPI, getRoleDataAPI, getRolePermissionListAPI } from '@/api/Role';
+import { addRoleDataAPI, bindingRouteAPI, delRoleDataAPI, editRoleDataAPI, getRoleDataAPI, getRoleListAPI, getRolePermissionListAPI, getRoleRouteListAPI } from '@/api/Role';
 import { Role } from '@/types/app/role';
 import { Permission } from '@/types/app/permission';
 import './index.scss';

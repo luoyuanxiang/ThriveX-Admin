@@ -217,7 +217,7 @@ export default () => {
   return (
     <div>
       <Title value="创作">
-        <div className="flex items-center space-x-4 w-[370px]">
+        <div className="flex items-center space-x-4">
           <Dropdown.Button
             menu={{ items }}
             onClick={() => {
@@ -234,7 +234,7 @@ export default () => {
             <BiSave className="text-base" /> 保存
           </Button>
 
-          <Button size="large" type="primary" className="w-full flex justify-between" onClick={nextBtn}>
+          <Button type="primary" className="w-full flex justify-between" onClick={nextBtn}>
             <AiOutlineSend className="text-2xl" /> 发布
           </Button>
         </div>

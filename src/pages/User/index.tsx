@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-import { Table, Button, Tag, notification, Card, Popconfirm, Form, Input, Select, Avatar, Drawer, DatePicker } from 'antd';
+import { useEffect, useState } from 'react';
+import { Avatar, Button, Card, DatePicker, Drawer, Form, Input, notification, Popconfirm, Select, Table, Tag } from 'antd';
 
-import { getUserDataAPI, getUserListAPI, delUserDataAPI, addUserDataAPI, editUserDataAPI } from '@/api/User';
+import { addUserDataAPI, delUserDataAPI, editUserDataAPI, getUserDataAPI, getUserListAPI } from '@/api/User';
 import { getRoleListAPI } from '@/api/Role';
 
 import type { FilterForm, FilterUser, User } from '@/types/app/user';

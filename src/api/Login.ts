@@ -1,5 +1,5 @@
 import Request from '@/utils/request';
-import { LoginReturn, Login } from '@/types/app/user';
+import { Login, LoginReturn } from '@/types/app/user';
 
 // 登录
 export const loginDataAPI = (data: Login) => Request<LoginReturn>('POST', '/login', { data });

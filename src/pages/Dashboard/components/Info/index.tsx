@@ -6,7 +6,7 @@ import { getWallListAPI } from '@/api/Wall';
 import { getLinkListAPI } from '@/api/Web';
 
 export default function InfoCard() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [commentCount, setCommentCount] = useState<number>(0);
   const [linkCount, setLinkCount] = useState<number>(0);
   const [wallCount, setWallCount] = useState<number>(0);
@@ -36,9 +36,7 @@ export default function InfoCard() {
       />
 
       <div className="relative z-10">
-        <h1 className="text-white text-xl font-bold sm:text-2xl">
-          欢迎使用 ThriveX 现代化博客管理系统
-        </h1>
+        <h1 className="text-white text-xl font-bold sm:text-2xl">欢迎使用 ThriveX 现代化博客管理系统</h1>
 
         <p className="text-white text-sm mt-2 mb-3">
           当前有 <span className="text-white text-2xl font-bold">{commentCount}</span> 条评论，<span className="text-white text-2xl font-bold">{linkCount}</span> 条友链，<span className="text-white text-2xl font-bold">{wallCount}</span> 条留言。

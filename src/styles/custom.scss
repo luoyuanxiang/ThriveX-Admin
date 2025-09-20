@@ -1,53 +1,53 @@
 // 编辑器样式
 .vditor .vditor-reset {
-    @apply dark:text-white;
+  @apply dark:text-white;
 }
 
 /* 文本渐变 */
 .text-gradient {
-    display: inline-block;
-    color: #8f75da;
-    background-image: -webkit-gradient(linear, 0 0, 0 bottom, from(#177df8), to(#60a5fa));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+  display: inline-block;
+  color: #8f75da;
+  background-image: -webkit-gradient(linear, 0 0, 0 bottom, from(#177df8), to(#60a5fa));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 // 头像动画
 .avatar-animation {
-    animation: 5s linear infinite miniShape;
+  animation: 5s linear infinite miniShape;
 }
 
 @keyframes miniShape {
-    0%,
-    to {
-        border-radius: 42% 58% 70% 30%/45% 45% 55% 55%;
-        transform: translateZ(0) rotate(.01deg)
-    }
+  0%,
+  to {
+    border-radius: 42% 58% 70% 30%/45% 45% 55% 55%;
+    transform: translateZ(0) rotate(.01deg)
+  }
 
-    34% {
-        border-radius: 70% 30% 46% 54%/30% 29% 71% 70%;
-        transform: translate3d(0, 5px, 0) rotate(.01deg)
-    }
+  34% {
+    border-radius: 70% 30% 46% 54%/30% 29% 71% 70%;
+    transform: translate3d(0, 5px, 0) rotate(.01deg)
+  }
 
-    50% {
-        transform: translateZ(0) rotate(.01deg)
-    }
+  50% {
+    transform: translateZ(0) rotate(.01deg)
+  }
 
-    67% {
-        border-radius: 100% 60% 60% 100%/100% 100% 60% 60%;
-        transform: translate3d(0, -3px, 0) rotate(.01deg)
-    }
+  67% {
+    border-radius: 100% 60% 60% 100%/100% 100% 60% 60%;
+    transform: translate3d(0, -3px, 0) rotate(.01deg)
+  }
 }
 
 // 瀑布流布局
 .masonry-grid {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    width: auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: auto;
 }
 
 .masonry-grid_column {
-    padding-left: 10px;
-    background-clip: padding-box;
+  padding-left: 10px;
+  background-clip: padding-box;
 }

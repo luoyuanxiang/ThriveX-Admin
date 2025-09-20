@@ -49,11 +49,11 @@ export default () => {
       key: 'my',
     },
     {
-        title: '其他设置',
-        description: '杂七八乱的各种配置',
-        icon: <AiOutlineSetting className={iconSty} />,
-        key: 'other'
-    }
+      title: '其他设置',
+      description: '杂七八乱的各种配置',
+      icon: <AiOutlineSetting className={iconSty} />,
+      key: 'other',
+    },
   ];
 
   return (

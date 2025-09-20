@@ -1,12 +1,12 @@
-import { useState, useEffect } from 'react';
-import { Table, Button, Form, Input, Popconfirm, message, Card, Modal, Select } from 'antd';
+import { useEffect, useState } from 'react';
+import { Button, Card, Form, Input, message, Modal, Popconfirm, Select, Table } from 'antd';
 import { DeleteOutlined, FormOutlined, PoweroffOutlined, StarOutlined } from '@ant-design/icons';
 
 import Title from '@/components/Title';
 import { titleSty } from '@/styles/sty';
 import type { Oss } from '@/types/app/oss';
 import type { ColumnsType } from 'antd/es/table';
-import { addOssDataAPI, delOssDataAPI, editOssDataAPI, getOssListAPI, enableOssDataAPI, disableOssDataAPI, getOssDataAPI, getOssPlatformListAPI } from '@/api/Oss';
+import { addOssDataAPI, delOssDataAPI, disableOssDataAPI, editOssDataAPI, enableOssDataAPI, getOssDataAPI, getOssListAPI, getOssPlatformListAPI } from '@/api/Oss';
 
 export default () => {
   const [loading, setLoading] = useState<boolean>(false);

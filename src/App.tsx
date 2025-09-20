@@ -7,7 +7,7 @@ import RouteList from './components/RouteList';
 import '@/styles/antd.scss';
 
 import { getWebConfigDataAPI } from '@/api/Config';
-import { useWebStore, useUserStore } from './stores';
+import { useUserStore, useWebStore } from './stores';
 import { Web } from './types/app/config';
 
 import zhCN from 'antd/locale/zh_CN';

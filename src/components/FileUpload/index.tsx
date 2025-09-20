@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { InboxOutlined } from '@ant-design/icons';
 import { message, Modal, Radio, Select, Spin } from 'antd';
 import { useUserStore } from '@/stores';
@@ -148,11 +148,7 @@ export default ({ multiple, dir, open, onCancel, onSuccess }: Props) => {
       <Modal title="文件上传" open={open} onCancel={onCloseModel} footer={null}>
         <Spin spinning={isLoading}>
           <div className="my-4">
-            <Radio.Group
-              defaultValue={0}
-              value={isCompressionUpload ? 1 : 0}
-              onChange={(e) => setIsCompressionUpload(e.target.value ? true : false)}
-            >
+            <Radio.Group defaultValue={0} value={isCompressionUpload ? 1 : 0} onChange={(e) => setIsCompressionUpload(e.target.value ? true : false)}>
               <Radio value={0}>无损上传</Radio>
               <Radio value={1}>压缩上传</Radio>
             </Radio.Group>
@@ -180,16 +176,7 @@ export default ({ multiple, dir, open, onCancel, onSuccess }: Props) => {
             )}
           </div>
 
-          <div
-            onClick={() => fileInputRef?.current?.click()}
-            onDragOver={handleDragOver}
-            onDragEnter={handleDragEnter}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-            className={`w-full h-40 p-4 border border-dashed rounded-lg transition-all duration-300 ${
-              isDragging ? 'border-primary bg-primary/5' : 'border-[#D7D7D7] hover:border-primary bg-[#FAFAFA]'
-            } space-y-2 cursor-pointer`}
-          >
+          <div onClick={() => fileInputRef?.current?.click()} onDragOver={handleDragOver} onDragEnter={handleDragEnter} onDragLeave={handleDragLeave} onDrop={handleDrop} className={`w-full h-40 p-4 border border-dashed rounded-lg transition-all duration-300 ${isDragging ? 'border-primary bg-primary/5' : 'border-[#D7D7D7] hover:border-primary bg-[#FAFAFA]'} space-y-2 cursor-pointer`}>
             <div className="flex justify-center">
               <InboxOutlined className="text-5xl text-primary" />
             </div>

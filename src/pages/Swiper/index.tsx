@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { Table, Button, Image, Form, Input, Tabs, Card, Popconfirm, message, Spin } from 'antd';
-import { getSwiperListAPI, addSwiperDataAPI, editSwiperDataAPI, delSwiperDataAPI, getSwiperDataAPI } from '@/api/Swiper';
+import { useEffect, useState } from 'react';
+import { Button, Card, Form, Image, Input, message, Popconfirm, Spin, Table, Tabs } from 'antd';
+import { addSwiperDataAPI, delSwiperDataAPI, editSwiperDataAPI, getSwiperDataAPI, getSwiperListAPI } from '@/api/Swiper';
 import { Swiper } from '@/types/app/swiper';
 import Title from '@/components/Title';
 import { ColumnsType } from 'antd/es/table';

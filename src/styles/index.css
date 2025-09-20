@@ -1,18 +1,19 @@
 @import url("./custom.scss");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body {
-  position: relative;
-  z-index: 10;
-  font-weight: 400;
-  font-size: 16px;
-  color: #64748b;
-  background-color: #f1f5f9;
+    position: relative;
+    z-index: 10;
+    font-weight: 400;
+    font-size: 16px;
+    color: #64748b;
+    background-color: #f1f5f9;
 }
 
 ::-webkit-scrollbar {
-  width: 0;
-  height: 0;
+    width: 0;
+    height: 0;
 }

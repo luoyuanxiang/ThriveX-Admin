@@ -1,6 +1,4 @@
-
 export interface EmailLogs {
-
   id?: number;
   /**
    * 内容

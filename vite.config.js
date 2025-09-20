@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vite';
 import sassDts from 'vite-plugin-sass-dts';
-import react from '@vitejs/plugin-react'
+import react from '@vitejs/plugin-react';
 import path from 'path';
 
 // https://vitejs.dev/config/
@@ -11,18 +11,18 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
-      '~': path.resolve(__dirname, 'src')
+      '~': path.resolve(__dirname, 'src'),
     },
   },
   // 配置scss样式自动引入
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: `@use "./src/styles/var.scss";`
-      }
-    }
+        additionalData: `@use "./src/styles/var.scss";`,
+      },
+    },
   },
   server: {
     port: 9100,
   },
-})
+});

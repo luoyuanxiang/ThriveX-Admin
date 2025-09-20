@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { message } from 'antd';
-import { testAssistantConnection, callAssistantAPI } from '@/services/assistant';
+import { callAssistantAPI, testAssistantConnection } from '@/services/assistant';
 import { Assistant } from '@/types/app/assistant';
-import { delAssistantDataAPI, getAssistantListAPI, addAssistantDataAPI, editAssistantDataAPI, setDefaultAssistantAPI } from '@/api/Assistant';
+import { addAssistantDataAPI, delAssistantDataAPI, editAssistantDataAPI, getAssistantListAPI, setDefaultAssistantAPI } from '@/api/Assistant';
 
 export default function useAssistant() {
   const [loading, setLoading] = useState(false);

@@ -111,7 +111,7 @@ export default () => {
   const setEmailServer = async (id: number) => {
     try {
       await setEmailServerConfigDefaultAPI(id);
-      await getFootprintList()
+      await getFootprintList();
       notification.success({ message: '🎉 启用邮件服务成功' });
     } catch (error) {
       console.error(error);
@@ -170,7 +170,7 @@ export default () => {
       setIsModelOpen(true);
 
       const { data } = await getEmailServerConfigDataAPI(id);
-      const extObj = typeof data.ext === 'string' && data.ext ? JSON.parse(data.ext) : (typeof data.ext === 'object' ? data.ext : {});
+      const extObj = typeof data.ext === 'string' && data.ext ? JSON.parse(data.ext) : typeof data.ext === 'object' ? data.ext : {};
       data.extStr = JSON.stringify(extObj, null, 2);
       setValue(data.extStr);
       setEmailServerConfig(data);

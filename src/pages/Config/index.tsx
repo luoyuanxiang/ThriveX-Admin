@@ -1,5 +1,5 @@
-import { useEffect, useState, useRef } from 'react';
-import { Table, Button, Modal, Form, message, Card, Tabs } from 'antd';
+import { useEffect, useRef, useState } from 'react';
+import { Button, Card, Form, message, Modal, Table, Tabs } from 'antd';
 import { FormOutlined } from '@ant-design/icons';
 import type { FormInstance } from 'antd/es/form';
 
@@ -7,7 +7,7 @@ import CodeMirror from '@uiw/react-codemirror';
 import { json } from '@codemirror/lang-json';
 
 import Title from '@/components/Title';
-import { getEnvConfigListAPI, updateEnvConfigDataAPI, getPageConfigListAPI, updatePageConfigDataAPI } from '@/api/Config';
+import { getEnvConfigListAPI, getPageConfigListAPI, updateEnvConfigDataAPI, updatePageConfigDataAPI } from '@/api/Config';
 import { Config } from '@/types/app/config';
 import { titleSty } from '@/styles/sty';
 

@@ -1,16 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 
-import { Card, message, Table, Popconfirm, Button, Modal, Form, Input, DatePicker } from 'antd';
+import { Button, Card, DatePicker, Form, Input, message, Modal, Popconfirm, Table } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import { ColumnsType } from 'antd/es/table';
 import { DeleteOutlined, SendOutlined } from '@ant-design/icons';
 
-import { addCommentDataAPI, getCommentListAPI, delCommentDataAPI } from '@/api/Comment';
+import { addCommentDataAPI, delCommentDataAPI, getCommentListAPI } from '@/api/Comment';
 import { titleSty } from '@/styles/sty';
 import Title from '@/components/Title';
 import { Comment, FilterForm } from '@/types/app/comment';
-import { useWebStore, useUserStore } from '@/stores';
+import { useUserStore, useWebStore } from '@/stores';
 
 export default () => {
   const [loading, setLoading] = useState(false);
@@ -72,27 +72,27 @@ export default () => {
     {
       title: '省份',
       dataIndex: 'province',
-      key: 'province'
+      key: 'province',
     },
     {
       title: '城市',
       dataIndex: 'city',
-      key: 'city'
+      key: 'city',
     },
     {
       title: 'IP',
       dataIndex: 'ip',
-      key: 'ip'
+      key: 'ip',
     },
     {
       title: '浏览器',
       dataIndex: 'browser',
-      key: 'browser'
+      key: 'browser',
     },
     {
       title: '操作系统',
       dataIndex: 'os',
-      key: 'os'
+      key: 'os',
     },
     {
       title: '邮箱',

@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 
-import { Button, Card, Empty, Form, Input, Popconfirm, Select, Spin, Tabs, message } from 'antd';
+import { Button, Card, Empty, Form, Input, message, Popconfirm, Select, Spin, Tabs } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 
-import { getLinkListAPI, addLinkDataAPI, editLinkDataAPI, delLinkDataAPI, getWebTypeListAPI, getWebsiteInfoAPI } from '@/api/Web';
+import { addLinkDataAPI, delLinkDataAPI, editLinkDataAPI, getLinkListAPI, getWebsiteInfoAPI, getWebTypeListAPI } from '@/api/Web';
 import Title from '@/components/Title';
-import { WebType, Web } from '@/types/app/web';
+import { Web, WebType } from '@/types/app/web';
 import { RuleObject } from 'antd/es/form';
 
 import GroupSvg from './assets/svg/group.svg';
@@ -170,10 +170,10 @@ export default () => {
 
   // 获取网站信息
   const onSearch: SearchProps['onSearch'] = async (value: string) => {
-    if (!value) return
-    const {data} = await getWebsiteInfoAPI(value)
-    form.setFieldsValue(data)
-  }
+    if (!value) return;
+    const { data } = await getWebsiteInfoAPI(value);
+    form.setFieldsValue(data);
+  };
 
   const tabItems = [
     {
@@ -242,7 +242,6 @@ export default () => {
           <Spin spinning={editLoading}>
             <div className="w-full md:w-[500px] mx-auto">
               <Form form={form} layout="vertical" size="large" initialValues={link} onFinish={onSubmit}>
-
                 <Form.Item label="网站链接" name="url" rules={[{ required: true, message: '网站链接不能为空' }, { validator: validateURL }]}>
                   <Search placeholder="https://liuyuyang.net/" allowClear onSearch={onSearch} />
                 </Form.Item>

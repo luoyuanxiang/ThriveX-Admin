@@ -16,10 +16,7 @@ export default ({ title, children, open, onClose, loading, className }: Props) =
       <div className="flex justify-between items-center">
         <div></div>
         <div className="ml-6">{title}</div>
-        <div
-          onClick={() => onClose?.(false)}
-          className="group p-3 px-6 hover:bg-red-500 hover:text-white transition-colors cursor-pointer"
-        >
+        <div onClick={() => onClose?.(false)} className="group p-3 px-6 hover:bg-red-500 hover:text-white transition-colors cursor-pointer">
           <CloseOutlined className="group-hover:scale-150 transition-transform" />
         </div>
       </div>
@@ -27,16 +24,7 @@ export default ({ title, children, open, onClose, loading, className }: Props) =
   };
 
   return (
-    <Drawer
-      loading={loading}
-      title={<Title />}
-      open={open}
-      onClose={() => onClose?.(false)}
-      height="100vh"
-      placement="bottom"
-      closeIcon={null}
-      className={`[&>.ant-drawer-header]:!p-0 ${className}`}
-    >
+    <Drawer loading={loading} title={<Title />} open={open} onClose={() => onClose?.(false)} height="100vh" placement="bottom" closeIcon={null} className={`[&>.ant-drawer-header]:!p-0 ${className}`}>
       {children}
     </Drawer>
   );

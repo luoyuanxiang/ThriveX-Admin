@@ -1,18 +1,19 @@
-import { Layout, Menu, Button, Card, Form, Input, message, Modal, Table, Select } from 'antd';
+import type { MenuProps } from 'antd';
+import { Button, Card, Form, Input, Layout, Menu, message, Modal, Select, Table } from 'antd';
 import Title from '@/components/Title';
 import CodeMirror from '@uiw/react-codemirror';
 import { html } from '@codemirror/lang-html';
 import { editEmailTemplateDataAPI, getEmailTemplateListAPI, sendEmailTemplateAPI } from '@/api/EmailTemplate.ts';
-import { EmailTemplate, ParamsColumns, CheckParamsFormValues } from '@/types/app/emailTemplate';
+import { CheckParamsFormValues, EmailTemplate, ParamsColumns } from '@/types/app/emailTemplate';
 import { useEffect, useState } from 'react';
 import { CheckCircleOutlined, EyeOutlined, SaveOutlined, SettingOutlined } from '@ant-design/icons';
-import type { MenuProps } from 'antd';
 import { ColumnType } from 'antd/es/table';
-type MenuItem = Required<MenuProps>['items'][number];
-const { Sider, Content } = Layout;
 import paramsData from './ParamsData.json';
 import { EmailServerConfig } from '@/types/app/emailServerConfig';
 import { getEmailServerConfigListAPI } from '@/api/EmailServerConfig.ts';
+
+type MenuItem = Required<MenuProps>['items'][number];
+const { Sider, Content } = Layout;
 type ParamsDataType = {
   [key: string]: ParamsColumns[];
 };
@@ -88,16 +89,16 @@ export default () => {
   };
 
   const onCheckParams = async (params: CheckParamsFormValues) => {
-    setButLoading(true)
+    setButLoading(true);
     params.templateName = emailTemplate?.name;
     const { code, message: msg } = await sendEmailTemplateAPI(params);
     if (code === 200) {
       message.success('🎉 邮件发送成功');
       setCheckParamsModal(false);
-      setButLoading(true)
+      setButLoading(true);
     } else {
       message.error('邮件发送失败: ' + msg);
-      setButLoading(false)
+      setButLoading(false);
     }
   };
 
@@ -129,10 +130,12 @@ export default () => {
       case 'number':
         return <Input type="number" placeholder={`请输入${placeholder}`} />;
       case 'boolean':
-        return <Select placeholder={`请选择${placeholder}`}>
-          <Select.Option value={true}>是</Select.Option>
-          <Select.Option value={false}>否</Select.Option>
-        </Select>;
+        return (
+          <Select placeholder={`请选择${placeholder}`}>
+            <Select.Option value={true}>是</Select.Option>
+            <Select.Option value={false}>否</Select.Option>
+          </Select>
+        );
       default:
         return <Input placeholder={`请输入${placeholder}`} />;
     }

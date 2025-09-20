@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Button, Card, Form, Input, List, Modal, Popconfirm, Select, Tooltip, Space } from 'antd';
-import { DeleteOutlined, FormOutlined, PlusOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { Button, Card, Form, Input, List, Modal, Popconfirm, Select, Space, Tooltip } from 'antd';
+import { DeleteOutlined, FormOutlined, InfoCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
 import Title from '@/components/Title';
 import useAssistant from '@/hooks/useAssistant';

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { Button, Card, Form,message, notification, Pagination, Popconfirm, Table } from 'antd';
+import { Button, Card, Form, message, notification, Pagination, Popconfirm, Table } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import { ColumnType } from 'antd/es/table';
 import { TableRowSelection } from 'antd/es/table/interface';
@@ -8,7 +8,7 @@ import { TableRowSelection } from 'antd/es/table/interface';
 import { titleSty } from '@/styles/sty';
 import Title from '@/components/Title';
 
-import { getEmailLogsPagingAPI, delBatchEmailLogsDataAPI } from '@/api/EmailLogs.ts';
+import { delBatchEmailLogsDataAPI, getEmailLogsPagingAPI } from '@/api/EmailLogs.ts';
 
 import { EmailLogs } from '@/types/app/emailLogs';
 
@@ -29,7 +29,7 @@ export default () => {
     try {
       setLoading(true);
       const { data } = await getEmailLogsPagingAPI({
-        pagination: paging
+        pagination: paging,
       });
       setTotal(data.total);
       setArticleList(data.result);
@@ -146,7 +146,6 @@ export default () => {
     onChange: onSelectChange,
     fixed: 'left',
   };
-
 
   useEffect(() => {
     getArticleList();

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useUserStore } from '@/stores';
 
 // 如果即将去往的是 /login 页面并且有 token 情况就自动重定向到 /，否则就跳转

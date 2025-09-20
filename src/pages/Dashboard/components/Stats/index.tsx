@@ -4,7 +4,7 @@ import VisitorsStatisChat from './components/VisitorsStatisChat';
 import NewOldVisitors from './components/NewOldVisitors';
 import CardDataStats from '@/components/CardDataStats';
 
-import { AiOutlineEye, AiOutlineMeh, AiOutlineStock, AiOutlineFieldTime } from 'react-icons/ai';
+import { AiOutlineEye, AiOutlineFieldTime, AiOutlineMeh, AiOutlineStock } from 'react-icons/ai';
 import dayjs from 'dayjs';
 import { getStatisAPI } from '@/api/Statis';
 import { StatisResponse } from './components/VisitorsStatisChat/type';

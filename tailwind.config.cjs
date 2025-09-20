@@ -1,12 +1,7 @@
-
 /* eslint-disable no-undef */
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    './index.html',
-    './src/**/*.{js,ts,jsx,tsx}',
-    './src/styles/custom.scss'
-  ],
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}', './src/styles/custom.scss'],
   darkMode: 'class',
   theme: {
     extend: {
@@ -36,4 +31,4 @@ module.exports = {
     },
   },
   plugins: [],
-}
+};

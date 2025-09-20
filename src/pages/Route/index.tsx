@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
-import { Table, Button, Form, Input, Popconfirm, message, Card } from 'antd';
+import { useEffect, useState } from 'react';
+import { Button, Card, Form, Input, message, Popconfirm, Table } from 'antd';
 import { DeleteOutlined, FormOutlined } from '@ant-design/icons';
 
 import Title from '@/components/Title';
-import { getRouteListAPI, addRouteDataAPI, editRouteDataAPI, delRouteDataAPI, getRouteDataAPI } from '@/api/Route';
+import { addRouteDataAPI, delRouteDataAPI, editRouteDataAPI, getRouteDataAPI, getRouteListAPI } from '@/api/Route';
 import { Route } from '@/types/app/route';
 import { ColumnsType } from 'antd/es/table';
 

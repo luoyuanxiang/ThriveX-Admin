@@ -11,7 +11,7 @@ import { remarkMark } from 'remark-mark-highlight';
 import type { Plugin } from 'unified';
 import { visit } from 'unist-util-visit';
 import type { Element, Root } from 'hast';
-import { Modal, Input, message } from 'antd';
+import { Input, message, Modal } from 'antd';
 
 import videoSvg from './icon/video.svg?raw';
 import markerSvg from './icon/marker.svg?raw';
@@ -28,12 +28,7 @@ const rehypeDouyinVideo: Plugin<[], Root> = () => {
     visit(tree, 'element', (node: Element) => {
       if (node.tagName === 'p') {
         const link = node.children[0];
-        if (
-          link.type === 'element' &&
-          link.tagName === 'a' &&
-          link.properties?.href &&
-          typeof link.properties.href === 'string'
-        ) {
+        if (link.type === 'element' && link.tagName === 'a' && link.properties?.href && typeof link.properties.href === 'string') {
           const match = /(?:ixigua\.com|douyin\.com)\/(\d+)/.exec(link.properties.href);
           if (match) {
             const videoId = match[1];
@@ -41,21 +36,23 @@ const rehypeDouyinVideo: Plugin<[], Root> = () => {
               type: 'element',
               tagName: 'div',
               properties: {
-                className: 'flex justify-center'
+                className: 'flex justify-center',
               },
-              children: [{
-                type: 'element',
-                tagName: 'iframe',
-                properties: {
-                  src: `https://open.douyin.com/player/video?vid=${videoId}&autoplay=0`,
-                  referrerPolicy: 'unsafe-url',
-                  allowFullScreen: true,
-                  className: 'douyin'
+              children: [
+                {
+                  type: 'element',
+                  tagName: 'iframe',
+                  properties: {
+                    src: `https://open.douyin.com/player/video?vid=${videoId}&autoplay=0`,
+                    referrerPolicy: 'unsafe-url',
+                    allowFullScreen: true,
+                    className: 'douyin',
+                  },
+                  children: [],
                 },
-                children: []
-              }]
+              ],
             };
-            
+
             Object.assign(node, wrapperDiv);
           }
         }
@@ -81,7 +78,7 @@ const videos = (): BytemdPlugin => {
               content: (
                 <div>
                   <div className="mb-2 text-xs">目前仅支持插入抖音视频</div>
-                  <Input placeholder="请输入抖音视频ID" onChange={(e) => videoId = e.target.value.trim()} />
+                  <Input placeholder="请输入抖音视频ID" onChange={(e) => (videoId = e.target.value.trim())} />
                 </div>
               ),
               cancelText: '取消',
@@ -95,14 +92,14 @@ const videos = (): BytemdPlugin => {
                 ctx.appendBlock(`[douyin-video](${videoId})`);
               },
               maskClosable: true,
-              keyboard: true
+              keyboard: true,
             });
-          }
-        }
-      }
-    ]
-  }
-}
+          },
+        },
+      },
+    ],
+  };
+};
 
 const markers = (): BytemdPlugin => {
   return {
@@ -115,12 +112,12 @@ const markers = (): BytemdPlugin => {
           type: 'action',
           click: (ctx) => {
             ctx.wrapText('==', '==');
-          }
-        }
-      }
-    ]
-  }
-}
+          },
+        },
+      },
+    ],
+  };
+};
 
 const callouts = (): BytemdPlugin => {
   const calloutTypes = [
@@ -128,7 +125,7 @@ const callouts = (): BytemdPlugin => {
     { title: 'Tip', icon: tipSvg, blockType: '[!TIP]' },
     { title: 'Warning', icon: warningSvg, blockType: '[!WARNING]' },
     { title: 'Check', icon: checkSvg, blockType: '[!CHECK]' },
-    { title: 'Danger', icon: dangerSvg, blockType: '[!DANGER]' }
+    { title: 'Danger', icon: dangerSvg, blockType: '[!DANGER]' },
   ];
 
   return {
@@ -145,14 +142,14 @@ const callouts = (): BytemdPlugin => {
               type: 'action',
               click: (ctx) => {
                 ctx.appendBlock(`> ${blockType} ${title}\n> `);
-              }
-            }
-          }))
-        }
-      }
-    ]
-  }
-}
+              },
+            },
+          })),
+        },
+      },
+    ],
+  };
+};
 
 const material = (): BytemdPlugin => {
   return {
@@ -165,23 +162,14 @@ const material = (): BytemdPlugin => {
           click: (ctx) => {
             // 触发图片选择弹窗
             const event = new CustomEvent('openMaterialModal', {
-              detail: { ctx }
+              detail: { ctx },
             });
             window.dispatchEvent(event);
-          }
-        }
-      }
-    ]
-  }
-}
+          },
+        },
+      },
+    ],
+  };
+};
 
-export default [
-  videos(),
-  gfm({ singleTilde: false }),
-  markers(),
-  gemoji(),
-  math(),
-  highlight(),
-  callouts(),
-  material()
-];
+export default [videos(), gfm({ singleTilde: false }), markers(), gemoji(), math(), highlight(), callouts(), material()];

@@ -3,7 +3,7 @@
 .ant-input-number,
 .ant-select-selector,
 .ant-picker {
-    border-width: 1.5px !important;
+  border-width: 1.5px !important;
 }
 
 /* 表单获取焦点时的阴影效果 */
@@ -15,7 +15,7 @@
 .ant-picker-focused,
 .ant-textarea:focus,
 .ant-input-affix-wrapper-focused {
-    box-shadow: 0 0 0 4px rgba(5, 72, 255, 0.06) !important;
+  box-shadow: 0 0 0 4px rgba(5, 72, 255, 0.06) !important;
 }
 
 /* 表单校验失败时的阴影效果 */
@@ -27,24 +27,25 @@
 .ant-picker-status-error.ant-picker-focused,
 .ant-textarea-status-error:focus,
 .ant-input-affix-wrapper-status-error.ant-input-affix-wrapper-focused {
-    box-shadow: 0 0 0 4px rgba(255, 77, 79, 0.1) !important;
+  box-shadow: 0 0 0 4px rgba(255, 77, 79, 0.1) !important;
 }
 
 // 自定义input后置按钮样式
 .customizeAntdInputAddonAfter {
-    .ant-input-group-addon {
-        padding: 0;
+  .ant-input-group-addon {
+    padding: 0;
 
-        > span {
-            padding: 8px 10px;
-        }
+    > span {
+      padding: 8px 10px;
     }
+  }
 }
+
 /* ------------------ 自定义表单样式结束 ------------------ */
 
 // ------------------> Antd组件库暗色适配 开始 <------------------
 .ant-card {
-    @apply overflow-hidden;
+  @apply overflow-hidden;
 }
 
 .ant-card-body,
@@ -52,14 +53,14 @@
 .ant-drawer-header,
 .ant-drawer-body,
 .ant-table-cell::before {
-    @apply dark:bg-boxdark;
+  @apply dark:bg-boxdark;
 }
 
 .ant-pagination-item:hover,
 .ant-table-cell,
 .ant-table-row:hover .ant-table-cell,
 .ant-card {
-    @apply dark:!bg-boxdark dark:!border-strokedark;
+  @apply dark:!bg-boxdark dark:!border-strokedark;
 }
 
 .ant-input,
@@ -70,31 +71,32 @@
 .ant-select,
 .ant-select-selector,
 .ant-modal-content {
-    @apply dark:!bg-boxdark-2 dark:!border-strokedark;
+  @apply dark:!bg-boxdark-2 dark:!border-strokedark;
 }
 
 .ant-modal-header {
-    @apply dark:bg-transparent;
+  @apply dark:bg-transparent;
 }
 
 .ant-transfer-list {
-    @apply dark:border-strokedark;
+  @apply dark:border-strokedark;
 }
+
 // ------------------> Antd组件库暗色适配 结束 <------------------
 
 #root {
-    // .ant-table,
-    // .ant-form,
-    // .ant-card,
-    // .ant-modal,
-    // .ant-drawer,
-    // .ant-notification,
-    // .ant-message,
-    // .ant-tooltip {
-    //     transition-duration: 0s !important;
+  // .ant-table,
+  // .ant-form,
+  // .ant-card,
+  // .ant-modal,
+  // .ant-drawer,
+  // .ant-notification,
+  // .ant-message,
+  // .ant-tooltip {
+  //     transition-duration: 0s !important;
 
-    //     * {
-    //         transition-duration: 0s !important;
-    //     }
-    // }
+  //     * {
+  //         transition-duration: 0s !important;
+  //     }
+  // }
 }

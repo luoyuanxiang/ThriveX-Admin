@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Form, notification, Input, Button } from 'antd';
+import { Button, Form, Input, notification } from 'antd';
 
 import { Theme } from '@/types/app/config';
 import { editWebConfigDataAPI, getWebConfigDataAPI } from '@/api/Config';

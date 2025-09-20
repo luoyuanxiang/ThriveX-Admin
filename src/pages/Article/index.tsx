@@ -524,12 +524,12 @@ export default () => {
   };
 
   // 导出选中
-  const exportSelected = () => {
+  const exportSelected = async () => {
     const selectedArticles = articleList.filter((item: Article) => selectedRowKeys.includes(item.id as number));
 
     if (!selectedArticles.length) return message.warning('请选择要导出的文章');
 
-    downloadMarkdownZip(selectedArticles);
+    await downloadMarkdownZip(selectedArticles);
   };
 
   // 删除选中

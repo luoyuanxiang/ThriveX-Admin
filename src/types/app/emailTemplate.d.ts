@@ -23,15 +23,15 @@ export interface ParamsColumns {
   /**
    * 字段名称
    */
-  fieldName?: string,
+  fieldName?: string;
   /**
    * 字段类型
    */
-  fieldType?: string,
+  fieldType?: string;
   /**
    * 字段描述
    */
-  description?: string
+  description?: string;
 }
 
 // 在文件顶部附近添加类型定义

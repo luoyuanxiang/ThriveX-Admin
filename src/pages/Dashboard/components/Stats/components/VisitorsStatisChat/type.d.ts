@@ -1,12 +1,7 @@
 export interface StatisResult {
   timeSpan: string[];
   fields: string[];
-  items: [
-      string[][],
-      (string | number)[][],
-      unknown[],
-      unknown[]
-  ];
+  items: [string[][], (string | number)[][], unknown[], unknown[]];
 }
 
 export interface StatisResponse {
@@ -22,10 +17,5 @@ export interface EChartsParams {
 export interface Result {
   timeSpan: string[];
   fields: string[];
-  items: [
-      string[][],
-      (string | number)[][],
-      unknown[],
-      unknown[]
-  ];
+  items: [string[][], (string | number)[][], unknown[], unknown[]];
 }
