@@ -68,6 +68,13 @@ instance.interceptors.response.use(
 
         return Promise.reject(res?.data);
       }
+      if (res.data?.code === 403) {
+        notification.error({
+          message: '无访问权限',
+          description: '无访问权限！',
+        });
+        return Promise.reject(res.data);
+      }
       notification.error({
         message: '响应异常',
         description: res.data?.message || '未知错误',
