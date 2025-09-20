@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button, Form, Input, message } from 'antd';
+import { Button, Form, Input, message, Switch } from 'antd';
 import { editWebConfigDataAPI, getWebConfigDataAPI } from '@/api/Config';
 import { Other, Web } from '@/types/app/config';
 import dayjs from 'dayjs';
@@ -72,8 +72,26 @@ export default () => {
           <Input placeholder="e5bf799a3e49312141c8b677b7bec1c2" />
         </Form.Item>
 
-        <Form.Item label={<Label title="HCaptcha Key" url="https://docs.liuyuyang.net/docs/项目部署/API/人机验证.html" />} name="hcaptcha_key" rules={[{ required: true, message: 'HCaptcha Key 不能为空' }]} className="[&_label]:w-full">
-          <Input placeholder="bfb82d04-e46a-4da0-9b6e-9adc052672c8" />
+        <Form.Item label="是否开启人机验证" name="isHcaptcha" className="[&_label]:w-full">
+          <Switch />
+        </Form.Item>
+
+        <Form.Item 
+          noStyle
+          shouldUpdate={(prevValues, currentValues) => prevValues.isHcaptcha !== currentValues.isHcaptcha}
+        >
+          {({ getFieldValue }) => 
+            getFieldValue('isHcaptcha') ? (
+              <Form.Item 
+                label={<Label title="HCaptcha Key" url="https://docs.liuyuyang.net/docs/项目部署/API/人机验证.html" />} 
+                name="hcaptcha_key" 
+                rules={[{ required: true, message: 'HCaptcha Key 不能为空' }]} 
+                className="[&_label]:w-full"
+              >
+                <Input placeholder="bfb82d04-e46a-4da0-9b6e-9adc052672c8" />
+              </Form.Item>
+            ) : null
+          }
         </Form.Item>
 
         <Form.Item>
