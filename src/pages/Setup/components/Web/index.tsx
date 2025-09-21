@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, DatePicker, Form, Input, message } from 'antd';
+import { Button, DatePicker, Form, Input, message, Switch } from 'antd';
 import { editWebConfigDataAPI } from '@/api/Config';
 import { Web } from '@/types/app/config';
 import { useWebStore } from '@/stores';
@@ -87,6 +87,50 @@ export default () => {
         <Form.Item label="网站创建时间" name="create_time">
           <DatePicker className="w-full" />
         </Form.Item>
+
+        <Form.Item label="是否开启灯笼" name="lantern">
+          <Switch />
+        </Form.Item>
+
+        <Form.Item label="动态标题" name="dynamicTitle">
+          <Switch />
+        </Form.Item>
+
+        <Form.Item
+          noStyle
+          shouldUpdate={(prevValues, currentValues) => prevValues.dynamicTitle !== currentValues.dynamicTitle}
+        >
+          {({ getFieldValue }) =>
+            getFieldValue('dynamicTitle') ? (
+              <Form.Item
+                label="离开"
+                name="leaveTitle"
+                rules={[{ required: true, message: '离开标题不能为空' }]}
+                className="[&_label]:w-full"
+              >
+                <Input placeholder="w(ﾟДﾟ)w 不要走！再看看嘛！" />
+              </Form.Item>
+            ) : null
+          }
+        </Form.Item>
+
+        {/*<Form.Item*/}
+        {/*  noStyle*/}
+        {/*  shouldUpdate={(prevValues, currentValues) => prevValues.dynamicTitle !== currentValues.dynamicTitle}*/}
+        {/*>*/}
+        {/*  {({ getFieldValue }) =>*/}
+        {/*    getFieldValue('dynamicTitle') ? (*/}
+        {/*      <Form.Item*/}
+        {/*        label="回到"*/}
+        {/*        name="backTitle"*/}
+        {/*        rules={[{ required: true, message: '回到标题不能为空' }]}*/}
+        {/*        className="[&_label]:w-full"*/}
+        {/*      >*/}
+        {/*        <Input placeholder="♪(^∇^*)欢迎肥来！" />*/}
+        {/*      </Form.Item>*/}
+        {/*    ) : null*/}
+        {/*  }*/}
+        {/*</Form.Item>*/}
 
         <Form.Item>
           <Button type="primary" htmlType="submit" loading={loading} block>

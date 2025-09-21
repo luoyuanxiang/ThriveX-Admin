@@ -23,6 +23,10 @@ export interface Web {
   footer: string;
   icp?: string;
   create_time?: number;
+  lantern: boolean;
+  dynamicTitle: boolean;
+  leaveTitle: string;
+  backTitle: string;
 }
 
 export type ArticleLayout = 'classics' | 'card' | 'waterfall' | '';
