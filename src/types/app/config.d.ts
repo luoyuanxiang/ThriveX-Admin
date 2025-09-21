@@ -27,6 +27,7 @@ export interface Web {
   dynamicTitle: boolean;
   leaveTitle: string;
   backTitle: string;
+  grayscaleDates: string[];
 }
 
 export type ArticleLayout = 'classics' | 'card' | 'waterfall' | '';
