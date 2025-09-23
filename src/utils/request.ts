@@ -42,9 +42,67 @@ instance.interceptors.request.use(
   },
 );
 
+/**
+ * 处理 Blob 字节流，触发浏览器下载
+ * @param {AxiosResponse} response - Axios 响应对象（response.data 为 Blob）
+ */
+const handleBlobDownload = (response: AxiosResponse) => {
+  // 1. 获取 Blob 数据和文件名
+  const blob = response.data;
+  const fileName = getFileNameFromResponse(response);
+
+  // 2. 创建临时 URL（指向 Blob 数据）
+  const blobUrl = URL.createObjectURL(blob);
+
+  // 3. 动态创建 <a> 标签，模拟点击下载
+  const aElement = document.createElement('a');
+  aElement.href = blobUrl; // 绑定临时 URL
+  aElement.download = fileName; // 设置下载文件名（浏览器会忽略 URL 中的文件名）
+  aElement.style.display = 'none'; // 隐藏标签
+
+  // 4. 插入文档并触发点击
+  document.body.appendChild(aElement);
+  aElement.click();
+
+  // 5. 清理资源（避免内存泄漏）
+  document.body.removeChild(aElement);
+  URL.revokeObjectURL(blobUrl); // 释放临时 URL
+};
+
+/**
+ * 从响应头 Content-Disposition 中提取文件名
+ * @param {AxiosResponse} response - Axios 响应对象
+ * @returns {string} 文件名（默认：export.md）
+ */
+const getFileNameFromResponse = (response: AxiosResponse): string => {
+  // 1. 获取 Content-Disposition 响应头
+  const disposition = response.headers['content-disposition'];
+  if (!disposition) return 'export.md'; // 默认文件名
+
+  // 2. 匹配文件名（处理两种格式：filename=xxx 或 filename*=UTF-8''xxx）
+  const filenameMatch = disposition.match(/filename="?([^";]+)"?/); // 匹配 filename="xxx.md"
+  const filenameStarMatch = disposition.match(/filename\*=UTF-8''([^;]+)/); // 匹配 filename*=UTF-8''xxx.md（处理中文）
+
+  // 3. 优先处理 filename*（支持中文），其次处理 filename
+  if (filenameStarMatch && filenameStarMatch[1]) {
+    // 解码 UTF-8 编码的文件名（解决中文乱码）
+    return decodeURIComponent(filenameStarMatch[1]);
+  } else if (filenameMatch && filenameMatch[1]) {
+    return filenameMatch[1];
+  }
+
+  return 'export.md';
+};
+
 // 响应拦截
 instance.interceptors.response.use(
   (res: AxiosResponse) => {
+    if (res.headers['content-disposition']?.includes('attachment')) {
+      console.log('是下载流，开始处理下载');
+      // 调用之前的 handleBlobDownload 函数触发下载
+      handleBlobDownload(res);
+      return res.data;
+    }
     if (res.data?.code === 600) return res.data;
 
     // 只要code不等于200, 就相当于响应失败

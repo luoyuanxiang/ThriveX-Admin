@@ -48,3 +48,9 @@ export const importArticleDataAPI = (list: File[]) => {
     },
   });
 };
+
+export const exportArticleDataAPI = (ids?: number[]) =>
+  Request('POST', '/article/export', {
+    data: ids,
+    responseType: 'blob',
+  });

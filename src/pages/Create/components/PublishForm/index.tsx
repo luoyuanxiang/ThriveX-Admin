@@ -30,12 +30,10 @@ interface FieldType {
   tagIds: (number | string)[];
   cover: string;
   description: string;
-  config: {
-    top: boolean;
-    status: Status;
-    password: string;
-    isEncrypt: number;
-  };
+  isTop: boolean;
+  status: Status;
+  password: string;
+  isEncrypt: number;
 }
 
 interface AssistantResponse {
@@ -78,9 +76,9 @@ const PublishForm = ({ data, closeModel }: Props) => {
 
     const formValues = {
       ...data,
-      status: data.config.status,
-      password: data.config.password,
-      isEncrypt: !!data.config.isEncrypt,
+      status: data.status,
+      password: data.password,
+      isEncrypt: !!data.isEncrypt,
       cateIds,
       tagIds,
       createTime: dayjs(+data.createTime!),
@@ -88,7 +86,7 @@ const PublishForm = ({ data, closeModel }: Props) => {
 
     form.setFieldsValue(formValues);
     // 设置初始的加密状态
-    setIsEncryptEnabled(!!formValues.isEncrypt);
+    setIsEncryptEnabled(formValues.isEncrypt);
   }, [data, id]);
 
   const getCateList = async () => {
@@ -114,7 +112,7 @@ const PublishForm = ({ data, closeModel }: Props) => {
   const onSubmit = async (values: FieldType, isDraft?: boolean) => {
     setBtnLoading(true);
 
-    values.config.isEncrypt = values.config.isEncrypt ? 1 : 0;
+    values.isEncrypt = values.isEncrypt ? 1 : 0;
 
     try {
       // 如果是文章标签，则先判断是否存在，如果不存在则添加
@@ -149,27 +147,21 @@ const PublishForm = ({ data, closeModel }: Props) => {
           ...values,
           content: data.content,
           tagIds,
+          isDel: 0,
+          isDraft: 0,
           createTime: values.createTime.toString(),
-          config: {
-            isDraft: 0,
-            isDel: 0,
-            ...values.config,
-          },
         } as Article);
         message.success('🎉 编辑成功');
       } else {
         if (!isDraftParams) {
           await addArticleDataAPI({
+            isDel: 0,
+            isDraft: 0,
             id,
             ...values,
             content: data.content,
             tagIds,
-            config: {
-              isDraft: isDraft ? 1 : 0,
-              isDel: 0,
-              ...values.config,
-            },
-            createTime: values.createTime.toString(),
+            createTime: values.createTime.toString()
           });
 
           if (isDraft) {
@@ -181,15 +173,12 @@ const PublishForm = ({ data, closeModel }: Props) => {
           // 修改草稿状态为发布文章
           await editArticleDataAPI({
             id,
+            isDel: 0,
+            isDraft: 0,
             ...values,
             content: data.content,
             tagIds,
             createTime: values.createTime.toString(),
-            config: {
-              isDraft: isDraft ? 1 : 0,
-              isDel: 0,
-              ...values.config,
-            },
           } as Article);
         }
       }
@@ -329,11 +318,11 @@ ${content}
           <DatePicker showTime placeholder="选择文章发布时间" className="w-full" />
         </Form.Item>
 
-        {/* <Form.Item label="是否置顶" name={["config", "top"]} valuePropName="checked">
+        <Form.Item label="是否置顶" name="isTop" valuePropName="checked">
           <Switch />
-        </Form.Item> */}
+        </Form.Item>
 
-        <Form.Item label="状态" name={['config', 'status']}>
+        <Form.Item label="状态" name="status">
           <Radio.Group>
             <Radio value="default">正常</Radio>
             <Radio value="no_home">不在首页显示</Radio>
@@ -341,12 +330,12 @@ ${content}
           </Radio.Group>
         </Form.Item>
 
-        <Form.Item label="是否加密" name={['config', 'isEncrypt']} valuePropName="checked">
+        <Form.Item label="是否加密" name="isEncrypt" valuePropName="checked">
           <Switch onChange={(checked: boolean) => setIsEncryptEnabled(checked)} />
         </Form.Item>
 
         {isEncryptEnabled && (
-          <Form.Item label="访问密码" name={['config', 'password']} rules={[{ required: isEncryptEnabled, message: '请输入访问密码' }]}>
+          <Form.Item label="访问密码" name="password" rules={[{ required: isEncryptEnabled, message: '请输入访问密码' }]}>
             <Input.Password placeholder="请输入访问密码" />
           </Form.Item>
         )}

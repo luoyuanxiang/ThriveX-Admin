@@ -3,16 +3,6 @@ import { Tag } from './tag';
 
 export type Status = 'default' | 'no_home' | 'hide';
 
-export interface Config {
-  id?: number;
-  articleId?: number;
-  status: Status;
-  password: string;
-  isEncrypt: number;
-  isDraft: number;
-  isDel: number;
-}
-
 export interface Article {
   id?: number;
   title: string;
@@ -25,8 +15,12 @@ export interface Article {
   tagList?: Tag[];
   view?: number;
   comment?: number;
-  config: Config;
   createTime?: string;
+  status: Status;
+  password: string;
+  isEncrypt: number;
+  isDraft: number;
+  isDel: number;
 }
 
 export interface FilterForm {

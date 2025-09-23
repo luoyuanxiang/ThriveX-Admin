@@ -6,8 +6,6 @@ import { DeleteOutlined, DownloadOutlined, FormOutlined, InboxOutlined } from '@
 import type { RcFile, UploadFile, UploadFileStatus } from 'antd/es/upload/interface';
 import { ColumnType } from 'antd/es/table';
 import { TableRowSelection } from 'antd/es/table/interface';
-import JSZip from 'jszip';
-import { saveAs } from 'file-saver';
 import dayjs from 'dayjs';
 
 import { titleSty } from '@/styles/sty';
@@ -15,11 +13,11 @@ import Title from '@/components/Title';
 
 import { getCateListAPI } from '@/api/Cate';
 import { getTagListAPI } from '@/api/Tag';
-import { addArticleDataAPI, delArticleDataAPI, delBatchArticleDataAPI, getArticleListAPI, getArticlePagingAPI } from '@/api/Article';
+import { delArticleDataAPI, delBatchArticleDataAPI, exportArticleDataAPI, getArticlePagingAPI, importArticleDataAPI } from '@/api/Article';
 
 import type { Tag as ArticleTag } from '@/types/app/tag';
 import type { Cate } from '@/types/app/cate';
-import type { Article, Config, FilterArticle, FilterForm } from '@/types/app/article';
+import type { Article, FilterArticle, FilterForm } from '@/types/app/article';
 
 import { useWebStore } from '@/stores';
 
@@ -38,7 +36,7 @@ export default () => {
   const [total, setTotal] = useState<number>(0);
   const [paging, setPaging] = useState<Page>({
     page: 1,
-    size: 8,
+    size: 4,
   });
   const [query, setQuery] = useState<FilterArticle>({
     key: undefined,
@@ -163,10 +161,10 @@ export default () => {
     },
     {
       title: '状态',
-      dataIndex: 'config',
-      key: 'config',
+      dataIndex: 'status',
+      key: 'status',
       align: 'center',
-      render: (config: Config) => (config.status === 'default' && <span>正常</span>) || (config.status === 'no_home' && <span>不在首页显示</span>) || (config.status === 'hide' && <span>隐藏</span>) || (config.password.trim().length && <span>文章加密</span>),
+      render: (status: string, record: Article) => (record.status === 'default' && <span>正常</span>) || (status === 'no_home' && <span>不在首页显示</span>) || (status === 'hide' && <span>隐藏</span>) || (record.password && <span>文章加密</span>),
     },
     {
       title: '发布时间',
@@ -241,36 +239,13 @@ export default () => {
     try {
       setLoading(true);
       setImportLoading(true);
-
-      const articles: Article[] = [];
-
+      const files = [];
       for (const fileItem of fileList) {
         const file = fileItem.originFileObj as File;
-        const text = await file.text();
-
-        if (file.name.endsWith('.md')) {
-          const article = await parseMarkdownToArticle(text);
-          articles.push(article);
-        } else if (file.name.endsWith('.json')) {
-          const json = JSON.parse(text);
-          const article = parseJsonToArticles(json); // 可能需要适配结构
-          articles.concat(article);
-        }
+        files.push(file);
       }
 
-      if (articles.length === 0) return notification.error({ message: '解析失败，未提取出有效文章数据' });
-
-      for (const article of articles) {
-        try {
-          const { code } = await addArticleDataAPI(article);
-          if (code === 200) {
-            message.success(`${article.title}--导入成功~`);
-          }
-        } catch (error) {
-          console.error(error);
-          message.error(`${article.title}--导入失败~`);
-        }
-      }
+      await importArticleDataAPI(files);
 
       await getArticleList();
 
@@ -278,7 +253,7 @@ export default () => {
       setIsModalOpen(false);
 
       notification.success({
-        message: `🎉 成功导入 ${articles.length} 篇文章`,
+        message: `🎉 成功导入 ${files.length} 篇文章`,
       });
     } catch (err) {
       console.error(err);
@@ -376,160 +351,16 @@ export default () => {
     e.target.value = '';
   };
 
-  // 导出为markdown文件
-  const generateMarkdown = (article: Article) => {
-    const { title, description, content, cover, createTime, cateList, tagList } = article;
-
-    // 格式化时间为 `YYYY-MM-DD HH:mm:ss`
-    const formatDate = (timestamp: string) => {
-      const date = new Date(Number(timestamp));
-      const pad = (n: number) => String(n).padStart(2, '0');
-      return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
-    };
-
-    // 处理标签、分类
-    const tags = (tagList || []).map((tag) => tag.name);
-    const categories = (cateList || []).map((cate) => cate.name);
-    const keywords = [...tags, ...categories].join(' ');
-
-    // 构建 Markdown 字符串
-
-    return `---\ntitle: ${title}\ntags: ${tags.map((tag) => `${tag}`).join(' ')}\ncategories: ${categories.map((c) => `${c}`).join(' ')}\ncover: ${cover}\ndate: ${formatDate(createTime || new Date().getTime() + '')}\nkeywords: ${keywords}\ndescription: ${description}\n---\n\n ${content.trim()}`;
-  };
-  /**
-   * 根据 tag 名称列表获取对应的 ID 列表
-   * @param names - Markdown 里解析出的标签 ["模块", "爬虫"]
-   * @param allTags - 全部可用 tag 列表
-   * @returns 标签 ID 数组，如 [82, 87]
-   */
-  const getTagIdsByNames = (names: string[], allTags: { id?: number; name: string }[]) => {
-    const lowerCaseMap = new Map<string, number>();
-
-    // 可选：忽略大小写（如果不需要，请移除 toLowerCase）
-    for (const tag of allTags) {
-      lowerCaseMap.set(tag.name.toLowerCase(), tag.id as number);
-    }
-
-    return (
-      names
-        .map((name) => lowerCaseMap.get(name.toLowerCase()))
-        // 去除未匹配项
-        .filter((id): id is number => id !== undefined)
-    );
-  };
-
-  // 从 markdown 字符串解析为 Article JSON
-  const parseMarkdownToArticle = (mdText: string): Article => {
-    // 提取 frontmatter 块
-    const frontmatterMatch = mdText.match(/^---\n([\s\S]*?)\n---/);
-    if (!frontmatterMatch) throw new Error('Markdown 文件格式错误，缺少 frontmatter');
-
-    const frontmatterText = frontmatterMatch[1];
-    // 去除 frontmatter 后的正文
-    const content = mdText.replace(frontmatterMatch[0], '').trim();
-
-    const meta: Record<string, string> = {};
-
-    // 解析 frontmatter 每一行 key: value
-    frontmatterText.split('\n').forEach((line) => {
-      const [key, ...rest] = line.split(':');
-      meta[key.trim()] = rest.join(':').trim();
-    });
-
-    // 时间戳（从 YYYY-MM-DD HH:mm:ss 转为 timestamp）
-    const parseDateToTimestamp = (str: string): string => {
-      const d = new Date(str);
-      if (isNaN(d.getTime())) return Date.now().toString();
-      return d.getTime().toString();
-    };
-    const tagNames = meta.tags?.split(/\s+/).filter(Boolean) || [];
-    const tagIds = getTagIdsByNames(tagNames, tagList);
-    const cateNames = meta.categories?.split(/\s+/).filter(Boolean) || [];
-    const cateIds = getTagIdsByNames(cateNames, cateList);
-
-    return {
-      title: meta.title || '未命名文章',
-      description: meta.description || '',
-      content,
-      cover: meta.cover || '',
-      createTime: parseDateToTimestamp(meta.date || ''),
-      cateIds,
-      tagIds,
-      config: {
-        status: 'default',
-        password: '',
-        isDraft: 0,
-        isEncrypt: 0,
-        isDel: 0,
-      },
-    };
-  };
-
-  // 解析 JSON 内容为文章数据列表
-  const parseJsonToArticles = (raw: Article | Article[]): Article[] => {
-    const parseSingle = (item: Article): Article => ({
-      title: item.title || '未命名文章',
-      description: item.description || '',
-      content: item.content || '',
-      cover: item.cover || '',
-      createTime: item.createTime,
-      cateIds: (item.cateList || []).map((cate) => cate.id).filter((id): id is number => id !== undefined),
-      tagIds: (item.tagList || []).map((tag) => tag.id).filter((id): id is number => id !== undefined),
-      config: {
-        status: item.config?.status || 'default',
-        password: item.config?.password || '',
-        isDraft: item.config?.isDraft || 0,
-        isEncrypt: item.config?.isEncrypt || 0,
-        isDel: item.config?.isDel || 0,
-      },
-    });
-
-    // 如果是数组则批量解析，否则解析单个
-    return Array.isArray(raw) ? raw.map(parseSingle) : [parseSingle(raw)];
-  };
-
-  // 下载文件
-  const downloadFile = (content: string, fileName: string, mimeType: string = 'text/plain;charset=utf-8') => {
-    const blob = new Blob([content], { type: mimeType });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = fileName;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  };
-
-  // 导出文章为 zip 文件
-  const downloadMarkdownZip = async (articles: Article[]) => {
-    const zip = new JSZip();
-    const folder = zip.folder('data');
-
-    articles.forEach((article) => {
-      const markdown = generateMarkdown(article);
-      const safeTitle = article.title.replace(/[\\/:*?"<>|]/g, '_');
-      folder?.file(`${safeTitle}.md`, markdown);
-    });
-    zip.file('articles.json', JSON.stringify(articles, null, 2));
-    const blob = await zip.generateAsync({ type: 'blob' });
-    saveAs(blob, '导出文章_' + new Date().getTime() + '.zip');
-  };
-
   // 导出文章
-  const exportArticle = (id: number) => {
-    const article = articleList.filter((item) => item.id === id)[0];
-    const markdown = generateMarkdown(article);
-    downloadFile(markdown, `${article.title.replace(/[\\/:*?"<>|]/g, '_')}.md`);
+  const exportArticle = async (id: number) => {
+    await exportArticleDataAPI([id]);
   };
 
   // 导出选中
   const exportSelected = async () => {
-    const selectedArticles = articleList.filter((item: Article) => selectedRowKeys.includes(item.id as number));
+    if (!selectedRowKeys.length) return message.warning('请选择要导出的文章');
 
-    if (!selectedArticles.length) return message.warning('请选择要导出的文章');
-
-    await downloadMarkdownZip(selectedArticles);
+    await exportArticleDataAPI(selectedRowKeys.map((id) => Number(id)));
   };
 
   // 删除选中
@@ -572,10 +403,10 @@ export default () => {
   const exportAll = async () => {
     try {
       setLoading(true);
-      const { data } = await getArticleListAPI({});
-      downloadMarkdownZip(data);
+      await exportArticleDataAPI([]);
     } catch (error) {
       console.error(error);
+      message.error('导出失败');
     } finally {
       setLoading(false);
     }
@@ -596,24 +427,20 @@ export default () => {
   // JSON 模板
   const downloadJsonTemplate = () => {
     const data = {
-      title: '示例文章标题',
-      description: '文章描述',
-      content: '# 正文内容',
-      cover: '',
-      createTime: Date.now().toString(),
-      cateList: [{ id: 1, name: '示例分类' }],
-      tagList: [{ id: 2, name: '示例标签' }],
-      config: {
-        status: 'default',
-        password: '',
-        isDraft: 0,
-        isEncrypt: 0,
-        isDel: 0,
+      frontMatter: {
+        title: '示例文章标题',
+        description: '文章描述',
+        cover: '',
+        date: Date.now().toString(),
+        categories: ['示例分类'],
+        tags: ['示例标签'],
       },
+      content: '# 正文内容',
     };
     const blob = new Blob([JSON.stringify(data, null, 2)], {
       type: 'application/json',
     });
+
     const url = URL.createObjectURL(blob);
 
     const a = document.createElement('a');
@@ -727,7 +554,7 @@ export default () => {
             <p className="text-sm text-[#999] text-center">仅支持 Markdown 或 JSON 格式</p>
           </div>
 
-          <input multiple type="file" onChange={handleFileInput} ref={fileInputRef} className="hidden" accept=".md" placeholder="请选择 Markdown 格式文件" />
+          <input multiple type="file" onChange={handleFileInput} ref={fileInputRef} className="hidden" accept=".md,.json" placeholder="请选择 Markdown 格式文件" />
 
           {fileList.length > 0 && (
             <div className="mt-4">
