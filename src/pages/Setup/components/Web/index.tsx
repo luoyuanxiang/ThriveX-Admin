@@ -5,6 +5,7 @@ import { Web } from '@/types/app/config';
 import { useWebStore } from '@/stores';
 import dayjs from 'dayjs';
 import { WebFormValues } from '@/pages/Setup/components/Web/type';
+import TextArea from 'antd/es/input/TextArea';
 
 export default () => {
   const [loading, setLoading] = useState(false);
@@ -46,7 +47,6 @@ export default () => {
       form.setFieldsValue(newInitialValues);
     } catch (error) {
       console.error(error);
-      setLoading(false);
     }
 
     setLoading(false);
@@ -159,10 +159,10 @@ export default () => {
             </Form.Item>
           </Col>
           <Col span={8}>
-            <Form.Item label="网站变灰日期：MM-dd" name="aaa" >
-              <Input.TextArea autoSize={{ minRows: 2, maxRows: 4 }} size="large" placeholder="请输入网站变灰日期" />
-              <Alert message="以换行分隔，每行表示一段文本" type="info" className="mt-2" />
+            <Form.Item label="网站变灰日期：MM-dd" name="grayscaleDates" >
+              <TextArea autoSize={{ minRows: 2, maxRows: 4 }} size="large" placeholder="请输入网站变灰日期" />
             </Form.Item>
+            <Alert message="以换行分隔，每行表示一段文本" type="info" className="mt-2" />
           </Col>
         </Row>
 
