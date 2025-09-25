@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { Button, Card, Dropdown, Form, Image, Input, message, Modal, notification, Pagination, Popconfirm, Select, Table, Tag } from 'antd';
 import { DeleteOutlined, DownloadOutlined, FormOutlined, InboxOutlined } from '@ant-design/icons';
@@ -32,6 +32,8 @@ export default () => {
   const [form] = Form.useForm();
   const web = useWebStore((state) => state.web);
   const [articleList, setArticleList] = useState<Article[]>([]);
+  // 获取导航函数
+  const navigate = useNavigate();
 
   const [total, setTotal] = useState<number>(0);
   const [paging, setPaging] = useState<Page>({
@@ -497,6 +499,9 @@ export default () => {
             </Form.Item>
           </Form>
           <div className="flex space-x-3 pl-32 pr-10">
+            <Button type="primary" className="mr-1" onClick={() => navigate('/create')}>
+              新增文章
+            </Button>
             <Dropdown.Button
               menu={{
                 items: [

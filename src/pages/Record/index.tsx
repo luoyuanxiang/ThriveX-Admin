@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Button, Card, DatePicker, Form, Image, Input, notification, Popconfirm, Table } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { DeleteOutlined, FormOutlined } from '@ant-design/icons';
 
@@ -22,6 +22,7 @@ export default () => {
   const [recordList, setRecordList] = useState<Record[]>([]);
   const [form] = Form.useForm();
   const { RangePicker } = DatePicker;
+  const navigate = useNavigate()
 
   const getRecordList = async () => {
     try {
@@ -145,21 +146,28 @@ export default () => {
       <Title value="说说管理" />
 
       <Card className="border-stroke my-2 overflow-scroll">
-        <Form form={form} layout="inline" onFinish={onFilterSubmit} autoComplete="off" className="flex-nowrap">
-          <Form.Item label="内容" name="content" className="min-w-[200px]">
-            <Input placeholder="请输入关键词" />
-          </Form.Item>
+        <div className="w-full flex justify-between">
+          <Form form={form} layout="inline" onFinish={onFilterSubmit} autoComplete="off" className="flex-nowrap">
+            <Form.Item label="内容" name="content" className="min-w-[200px]">
+              <Input placeholder="请输入关键词" />
+            </Form.Item>
 
-          <Form.Item label="时间范围" name="createTime" className="min-w-[250px]">
-            <RangePicker placeholder={['选择起始时间', '选择结束时间']} />
-          </Form.Item>
+            <Form.Item label="时间范围" name="createTime" className="min-w-[250px]">
+              <RangePicker placeholder={['选择起始时间', '选择结束时间']} />
+            </Form.Item>
 
-          <Form.Item className="pr-6">
-            <Button type="primary" htmlType="submit">
-              查询
+            <Form.Item className="pr-6">
+              <Button type="primary" htmlType="submit">
+                查询
+              </Button>
+            </Form.Item>
+          </Form>
+          <div className="flex space-x-3 pl-32 pr-10">
+            <Button type="primary" onClick={() => navigate('/create_record')}>
+              新增说说
             </Button>
-          </Form.Item>
-        </Form>
+          </div>
+        </div>
       </Card>
 
       <Card className={`${titleSty} min-h-[calc(100vh-270px)]`}>
