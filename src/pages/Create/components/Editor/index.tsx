@@ -3,7 +3,7 @@ import { Spin } from 'antd';
 import axios from 'axios';
 
 import { Editor } from '@bytemd/react';
-import plugins from './plugins';
+import plugins from './Plugins';
 import 'highlight.js/styles/vs2015.css';
 import 'bytemd/dist/index.css';
 import zh from 'bytemd/lib/locales/zh_Hans.json';
