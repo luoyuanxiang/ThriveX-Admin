@@ -60,7 +60,7 @@ export default function CodeModalPlugin(opts: CodeModalPluginOptions = {}): Byte
               return (
                 <Modal title={title} open={open} onOk={handleOk} onCancel={handleCancel} afterClose={afterClose} okText={okText} cancelText={cancelText} width={640}>
                   <Space direction="vertical" style={{ width: '100%' }}>
-                    <Select style={{ width: '100%' }} placeholder={languagePlaceholder} value={lang} onChange={setLang} allowClear>
+                    <Select showSearch={true} style={{ width: '100%' }} placeholder={languagePlaceholder} value={lang} onChange={setLang} allowClear>
                       {languages.map((l) => (
                         <Option key={l.value} value={l.value}>
                           {l.label}
