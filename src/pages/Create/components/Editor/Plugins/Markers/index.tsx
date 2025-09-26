@@ -1,4 +1,4 @@
-import type { BytemdPlugin } from 'bytemd';
+import type { BytemdPlugin, BytemdEditorContext } from 'bytemd';
 import { remarkMark } from 'remark-mark-highlight';
 
 import markerSvg from '@/pages/Create/components/Editor/Plugins/icon/marker.svg?raw';
@@ -12,7 +12,7 @@ const Markers = (): BytemdPlugin => {
         icon: markerSvg,
         handler: {
           type: 'action',
-          click: (ctx) => {
+          click: (ctx: BytemdEditorContext) => {
             ctx.wrapText('==', '==');
           },
         },

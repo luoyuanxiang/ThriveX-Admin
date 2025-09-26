@@ -16,5 +16,6 @@ import DouyinVideo from './RehypeDouyinVideo';
 import Markers from './Markers';
 import Callouts from './Callouts';
 import Material from './Material';
+import videoPlugin from './VideoInsertPlugin';
 
-export default [DouyinVideo(), gfm({ singleTilde: false }), Markers(), gemoji(), math(), highlight(), Callouts(), Material(), breaks(), frontmatter(), mediumZoom(), CodeModalPlugin()];
+export default [DouyinVideo(), videoPlugin(), gfm({ singleTilde: false }), Markers(), gemoji(), math(), highlight(), Callouts(), Material(), breaks(), frontmatter(), mediumZoom(), CodeModalPlugin()];
