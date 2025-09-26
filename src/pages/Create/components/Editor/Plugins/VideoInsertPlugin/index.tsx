@@ -7,7 +7,7 @@ import { BytemdEditorContext, BytemdPlugin } from 'bytemd';
 import videoSvg from './../icon/video.svg?raw'
 import { VideoPlatform, VIDEO_PLATFORMS } from './videoPlatforms.ts';
 
-type VideoType = typeof VIDEO_PLATFORMS[number]['label']
+type VideoType = typeof VIDEO_PLATFORMS[number]['value']
 
 /* ---------- 子组件：弹窗 ---------- */
 interface VideoModalProps {
@@ -57,7 +57,7 @@ const VideoModal: React.FC<VideoModalProps> = ({ onOk, onCancel }) => {
 
 /* ---------- 工具函数：生成 iframe ---------- */
 const buildIframeMd = (type: VideoType, id: string): string => {
-  const v: VideoPlatform | undefined = VIDEO_PLATFORMS.find((platform: VideoPlatform) => platform.label === type);
+  const v: VideoPlatform | undefined = VIDEO_PLATFORMS.find((platform: VideoPlatform) => platform.value === type);
   if (v?.pattern) {
     const url = v.pattern.replace('{{id}}', id);
     return `<iframe src="${url}" width="100%" height="400" frameborder="0" allowfullscreen></iframe>`;
